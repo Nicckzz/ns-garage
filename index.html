@@ -504,29 +504,32 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
       <div class="service-price" data-i18n="s2_price"></div>
     </div>
     <div class="service-card">
-      <span class="service-icon">🔮</span>
-      <div class="service-name" data-i18n="s3_name"></div>
-      <p class="service-desc" data-i18n="s3_desc"></p>
-      <div class="service-price" data-i18n="s3_price"></div>
-    </div>
-    <div class="service-card">
       <span class="service-icon">🛡️</span>
       <div class="service-name" data-i18n="s4_name"></div>
       <p class="service-desc" data-i18n="s4_desc"></p>
       <div class="service-price" data-i18n="s4_price"></div>
     </div>
     <div class="service-card">
-      <span class="service-icon">🏷️</span>
-      <div class="service-name" data-i18n="s5_name"></div>
-      <p class="service-desc" data-i18n="s5_desc"></p>
-      <div class="service-price" data-i18n="s5_price"></div>
+      <span class="service-icon">🔮</span>
+      <div class="service-name" data-i18n="s3_name"></div>
+      <p class="service-desc" data-i18n="s3_desc"></p>
+      <div class="service-price" data-i18n="s3_price"></div>
     </div>
     <div class="service-card">
-      <span class="service-icon">🚗</span>
-      <div class="service-name" data-i18n="s6_name"></div>
-      <p class="service-desc" data-i18n="s6_desc"></p>
-      <div class="service-price" data-i18n="s6_price"></div>
+      <span class="service-icon">🪄</span>
+      <div class="service-name">Polish / Paint Correction</div>
+      <p class="service-desc">Machine polish to remove swirl marks, scratches and oxidation. 1-stage or 2-stage options available.</p>
+      <div class="service-price">Starting at $350</div>
     </div>
+    <div class="service-card">
+      <span class="service-icon">💎</span>
+      <div class="service-name">Ceramic Coating</div>
+      <p class="service-desc">Ultimate paint protection with long-lasting ceramic layer. Mirror shine + hydrophobic properties.</p>
+      <div class="service-price">Starting at $1,000</div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:40px;">
+    <a href="services.html" style="display:inline-flex;align-items:center;gap:10px;background:var(--purple);color:#fff;padding:14px 36px;border-radius:8px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#a855f7'" onmouseout="this.style.background='#7c3aed'">View All Services & Pricing →</a>
   </div>
 </section>
 
@@ -865,12 +868,12 @@ const i18n = {
     stat_mobile_num: "Mobile", stat_mobile_label: "Vamos até você",
     srv_eyebrow: "O que fazemos", srv_title: "Nossos Serviços",
     srv_sub: "Detalhamento e customização de alta performance, executados com produtos premium.",
-    s1_name: "Detailing Exterior", s1_desc: "Lavagem completa, descontaminação, polish e aplicação de proteção. Acabamento impecável.", s1_price: "A partir de $149",
-    s2_name: "Detailing Interior", s2_desc: "Aspiração profunda, higienização de couro e tecido, sopro de ar comprimido em cada detalhe, limpeza de painel e vidros.", s2_price: "A partir de $129",
-    s3_name: "Window Tinting", s3_desc: "Película cerâmica ou high-performance. Proteção UV, privacidade e estética com garantia de qualidade.", s3_price: "A partir de $199",
-    s4_name: "Pacote Completo", s4_desc: "Exterior + interior em um único agendamento. Ideal para quem quer o carro em perfeitas condições.", s4_price: "A partir de $249",
+    s1_name: "Detailing Exterior", s1_desc: "Lavagem completa, descontaminação, polish e aplicação de proteção. Acabamento impecável.", s1_price: "A partir de $70",
+    s2_name: "Detailing Interior", s2_desc: "Aspiração profunda, higienização de couro e tecido, sopro de ar comprimido em cada detalhe, limpeza de painel e vidros.", s2_price: "A partir de $70",
+    s3_name: "Window Tinting", s3_desc: "Película cerâmica ou high-performance. Proteção UV, privacidade e estética com garantia de qualidade.", s3_price: "Quote",
+    s4_name: "Pacote Completo", s4_desc: "Exterior + interior em um único agendamento. Ideal para quem quer o carro em perfeitas condições.", s4_price: "A partir de $120",
     s5_name: "Programa Lojista", s5_desc: "Preços especiais para revendedoras e dealers. Programa de fidelidade com tarifas diferenciadas por volume.", s5_price: "Preço sob consulta",
-    s6_name: "Customização", s6_desc: "Projetos especiais de personalização do veículo. Nos chame para discutir o que você tem em mente.", s6_price: "Orçamento personalizado",
+    s6_name: "Customização", s6_desc: "Projetos especiais de personalização do veículo. Nos chame para discutir o que você tem em mente.", s6_price: "$99",
     gal_eyebrow: "Nosso trabalho", gal_title: "Galeria", gal_sub: "Resultados reais. Cada carro tratado com o máximo cuidado e atenção ao detalhe.",
     gal_featured: "Foto em destaque", gal_ext: "Exterior", gal_int: "Interior", gal_tint: "Window Tint", gal_prot: "Proteção", gal_custom: "Custom",
     gal_item1: "Detailing Completo", gal_item2: "Polish & Proteção", gal_item3: "Interior Detail", gal_item4: "Película Cerâmica", gal_item5: "Paint Protection", gal_item6: "Customização",
@@ -897,12 +900,12 @@ const i18n = {
     stat_mobile_num: "Mobile", stat_mobile_label: "We come to you",
     srv_eyebrow: "What we do", srv_title: "Our Services",
     srv_sub: "High-performance detailing and customization using premium products.",
-    s1_name: "Exterior Detailing", s1_desc: "Full wash, decontamination, polish, and protection application. Flawless finish inside and out.", s1_price: "Starting at $149",
-    s2_name: "Interior Detailing", s2_desc: "Deep vacuuming, leather and fabric sanitizing, compressed air blow-out in every detail, dashboard and glass cleaning.", s2_price: "Starting at $129",
-    s3_name: "Window Tinting", s3_desc: "Ceramic or high-performance film. UV protection, privacy, and aesthetics with quality guarantee.", s3_price: "Starting at $199",
-    s4_name: "Full Package", s4_desc: "Exterior + interior in a single appointment. Perfect for getting your car in pristine condition without hassle.", s4_price: "Starting at $249",
+    s1_name: "Exterior Detailing", s1_desc: "Full wash, decontamination, polish, and protection application. Flawless finish inside and out.", s1_price: "Starting at $70",
+    s2_name: "Interior Detailing", s2_desc: "Deep vacuuming, leather and fabric sanitizing, compressed air blow-out in every detail, dashboard and glass cleaning.", s2_price: "Starting at $70",
+    s3_name: "Window Tinting", s3_desc: "Ceramic or high-performance film. UV protection, privacy, and aesthetics with quality guarantee.", s3_price: "Quote",
+    s4_name: "Full Package", s4_desc: "Exterior + interior in a single appointment. Perfect for getting your car in pristine condition without hassle.", s4_price: "Starting at $120",
     s5_name: "Dealer Program", s5_desc: "Special pricing for dealerships and retailers. Loyalty program with volume-based rates.", s5_price: "Price on request",
-    s6_name: "Customization", s6_desc: "Special vehicle personalization projects. Reach out to discuss what you have in mind.", s6_price: "Custom quote",
+    s6_name: "Customization", s6_desc: "Special vehicle personalization projects. Reach out to discuss what you have in mind.", s6_price: "$99",
     gal_eyebrow: "Our work", gal_title: "Gallery", gal_sub: "Real results. Every car treated with maximum care and attention to detail.",
     gal_featured: "Featured photo", gal_ext: "Exterior", gal_int: "Interior", gal_tint: "Window Tint", gal_prot: "Protection", gal_custom: "Custom",
     gal_item1: "Full Detailing", gal_item2: "Polish & Protection", gal_item3: "Interior Detail", gal_item4: "Ceramic Film", gal_item5: "Paint Protection", gal_item6: "Customization",
@@ -929,12 +932,12 @@ const i18n = {
     stat_mobile_num: "Móvil", stat_mobile_label: "Vamos donde tú estés",
     srv_eyebrow: "Lo que hacemos", srv_title: "Nuestros Servicios",
     srv_sub: "Detallado y personalización de alto rendimiento con productos premium.",
-    s1_name: "Detailing Exterior", s1_desc: "Lavado completo, descontaminación, pulido y aplicación de protección. Acabado impecable.", s1_price: "Desde $149",
-    s2_name: "Detailing Interior", s2_desc: "Aspirado profundo, higienización de cuero y tela, soplado de aire comprimido en cada detalle, limpieza de tablero y vidrios.", s2_price: "Desde $129",
-    s3_name: "Polarizado", s3_desc: "Película cerámica o high-performance. Protección UV, privacidad y estética con garantía de calidad.", s3_price: "Desde $199",
-    s4_name: "Paquete Completo", s4_desc: "Exterior + interior en una sola cita. Ideal para quienes quieren el auto en perfectas condiciones sin complicaciones.", s4_price: "Desde $249",
+    s1_name: "Detailing Exterior", s1_desc: "Lavado completo, descontaminación, pulido y aplicación de protección. Acabado impecable.", s1_price: "Desde $70",
+    s2_name: "Detailing Interior", s2_desc: "Aspirado profundo, higienización de cuero y tela, soplado de aire comprimido en cada detalle, limpieza de tablero y vidrios.", s2_price: "Desde $70",
+    s3_name: "Polarizado", s3_desc: "Película cerámica o high-performance. Protección UV, privacidad y estética con garantía de calidad.", s3_price: "Quote",
+    s4_name: "Paquete Completo", s4_desc: "Exterior + interior en una sola cita. Ideal para quienes quieren el auto en perfectas condiciones sin complicaciones.", s4_price: "Desde $120",
     s5_name: "Programa Distribuidores", s5_desc: "Precios especiales para concesionarias y distribuidores. Programa de fidelidad con tarifas diferenciadas por volumen.", s5_price: "Precio a consultar",
-    s6_name: "Personalización", s6_desc: "Proyectos especiales de personalización del vehículo. Contáctanos para discutir lo que tienes en mente.", s6_price: "Presupuesto personalizado",
+    s6_name: "Personalización", s6_desc: "Proyectos especiales de personalización del vehículo. Contáctanos para discutir lo que tienes en mente.", s6_price: "$99",
     gal_eyebrow: "Nuestro trabajo", gal_title: "Galería", gal_sub: "Resultados reales. Cada auto tratado con el máximo cuidado y atención al detalle.",
     gal_featured: "Foto destacada", gal_ext: "Exterior", gal_int: "Interior", gal_tint: "Polarizado", gal_prot: "Protección", gal_custom: "Custom",
     gal_item1: "Detailing Completo", gal_item2: "Pulido & Protección", gal_item3: "Detailing Interior", gal_item4: "Película Cerámica", gal_item5: "Protección de pintura", gal_item6: "Personalización",
