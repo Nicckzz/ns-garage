@@ -10,17 +10,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
 #c { position:absolute; inset:0; width:100%; height:100%; display:block; cursor:grab; }
 #c:active { cursor:grabbing; }
 
-.view-toggle {
-  position:absolute; top:14px; left:50%; transform:translateX(-50%);
-  display:flex; gap:4px; background:rgba(20,20,20,0.95);
-  border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:4px; z-index:20;
-}
-.vbtn {
-  background:none; border:none; color:#777; font-size:0.82rem; font-weight:600;
-  padding:8px 26px; border-radius:7px; cursor:pointer; transition:all 0.2s; white-space:nowrap;
-}
-.vbtn.active { background:#7c3aed; color:#fff; }
-
 .hint {
   position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
   background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.07);
@@ -28,33 +17,32 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
   white-space:nowrap; z-index:20; pointer-events:none;
 }
 
-/* HOTSPOTS — positioned via JS */
+.loading {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; z-index:50;
+  background:#0d0d0d; gap:16px;
+}
+.loading-bar-wrap { width:200px; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; }
+.loading-bar { height:100%; background:linear-gradient(90deg,#7c3aed,#a855f7); border-radius:2px; transition:width 0.3s; width:0%; }
+.loading-text { color:#666; font-size:0.8rem; letter-spacing:1px; }
+
+/* HOTSPOTS */
 .hs {
   position:absolute; width:28px; height:28px;
   transform:translate(-50%,-50%); cursor:pointer; z-index:15;
-  pointer-events:all;
 }
-.hs-ring {
-  position:absolute; inset:0; border-radius:50%;
-  border:2px solid #a855f7; animation:hspulse 2s infinite;
-}
-.hs-dot {
-  position:absolute; inset:5px; border-radius:50%;
-  background:#a855f7; transition:transform 0.15s;
-}
+.hs-ring { position:absolute; inset:0; border-radius:50%; border:2px solid #a855f7; animation:hspulse 2s infinite; }
+.hs-dot { position:absolute; inset:5px; border-radius:50%; background:#a855f7; transition:transform 0.15s; }
 .hs:hover .hs-dot { transform:scale(1.5); }
 .hs-tip {
   position:absolute; left:34px; top:50%; transform:translateY(-50%);
-  background:rgba(124,58,237,0.95); color:#fff; font-size:0.65rem;
-  font-weight:700; padding:3px 10px; border-radius:20px;
-  white-space:nowrap; opacity:0; transition:opacity 0.2s;
-  pointer-events:none; letter-spacing:0.5px; text-transform:uppercase;
+  background:rgba(124,58,237,0.95); color:#fff; font-size:0.65rem; font-weight:700;
+  padding:3px 10px; border-radius:20px; white-space:nowrap; opacity:0;
+  transition:opacity 0.2s; pointer-events:none; letter-spacing:0.5px; text-transform:uppercase;
 }
 .hs:hover .hs-tip { opacity:1; }
-.hs.behind { opacity:0.25; pointer-events:none; }
-@keyframes hspulse {
-  0%{transform:scale(1);opacity:1} 100%{transform:scale(2.4);opacity:0}
-}
+.hs.behind { opacity:0.2; pointer-events:none; }
+@keyframes hspulse { 0%{transform:scale(1);opacity:1} 100%{transform:scale(2.4);opacity:0} }
 
 /* PANEL */
 .panel {
@@ -63,7 +51,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
   opacity:0; pointer-events:none; transition:opacity 0.25s;
 }
 .panel.open { opacity:1; pointer-events:all; }
-.p-back { position:absolute; inset:0; background:rgba(0,0,0,0.82); backdrop-filter:blur(8px); }
+.p-back { position:absolute; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); }
 .p-card {
   position:relative; z-index:1; background:#141414;
   border:1px solid #7c3aed; border-radius:14px; padding:28px;
@@ -74,23 +62,21 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
   border:1px solid rgba(255,255,255,0.08); color:#777;
   width:28px; height:28px; border-radius:50%; cursor:pointer;
   font-size:0.82rem; display:flex; align-items:center; justify-content:center;
-  transition:all 0.2s;
 }
 .p-close:hover { border-color:#7c3aed; color:#fff; }
 .p-icon { font-size:2rem; margin-bottom:8px; }
 .p-title { font-size:1.35rem; font-weight:700; color:#a855f7; margin-bottom:6px; }
 .p-desc { color:#777; font-size:0.84rem; line-height:1.75; margin-bottom:14px; }
 .p-video {
-  width:100%; aspect-ratio:16/9; background:#1a1a1a;
-  border-radius:8px; border:1px solid rgba(255,255,255,0.06);
-  display:flex; align-items:center; justify-content:center;
-  flex-direction:column; gap:6px; color:#444; font-size:0.78rem; margin-bottom:12px;
+  width:100%; aspect-ratio:16/9; background:#1a1a1a; border-radius:8px;
+  border:1px solid rgba(255,255,255,0.06); display:flex; align-items:center;
+  justify-content:center; flex-direction:column; gap:6px; color:#444;
+  font-size:0.78rem; margin-bottom:12px;
 }
 .p-price {
   display:inline-block; background:rgba(124,58,237,0.15);
   border:1px solid rgba(168,85,247,0.3); color:#a855f7;
-  padding:4px 14px; border-radius:20px; font-size:0.76rem;
-  font-weight:600; margin-bottom:14px;
+  padding:4px 14px; border-radius:20px; font-size:0.76rem; font-weight:600; margin-bottom:14px;
 }
 .p-cta {
   display:block; width:100%; text-align:center; background:#7c3aed;
@@ -103,13 +89,14 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
 <body>
 <canvas id="c"></canvas>
 
-<div class="view-toggle">
-  <button class="vbtn active" id="btn-ext" onclick="setView('exterior')">🚗 Exterior</button>
-  <button class="vbtn" id="btn-int" onclick="setView('interior')">🪑 Interior</button>
+<div class="loading" id="loading">
+  <div class="loading-text">LOADING MODEL</div>
+  <div class="loading-bar-wrap"><div class="loading-bar" id="loadBar"></div></div>
+  <div class="loading-text" id="loadPct">0%</div>
 </div>
+
 <div class="hint">🖱️ Drag to rotate · Scroll to zoom · Click dots for details</div>
 
-<!-- Panel -->
 <div class="panel" id="panel">
   <div class="p-back" onclick="closePanel()"></div>
   <div class="p-card">
@@ -124,28 +111,29 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
-// ─── SERVICE DATA ─────────────────────────────────────────────────────
 const DATA = {
-  wheel:     { icon:'🛞', title:'Wheel & Tire Detail',     price:'Included in Full Detail', desc:'Deep cleaning with specialized decontamination products. Removes brake dust, iron deposits and road grime — leaving your wheels spotless and protected.' },
-  hood:      { icon:'✨', title:'Hood Polish & Protection', price:'Starting at $149',        desc:'Multi-stage paint correction removing swirl marks and oxidation. Finished with ceramic coat for a mirror-like shine.' },
-  side:      { icon:'🪄', title:'Paint Correction',         price:'Starting at $149',        desc:'Full-body decontamination and machine polish using a dual-action polisher. We restore your car\'s factory gloss.' },
-  window:    { icon:'🔮', title:'Window Tinting',           price:'Starting at $199',        desc:'Ceramic or high-performance film. Blocks up to 99% UV rays, reduces heat and adds privacy with a clean, bubble-free finish.' },
-  seat:      { icon:'🪑', title:'Seat & Upholstery',        price:'Starting at $129',        desc:'Hot water extraction and steam cleaning for fabric. Leather gets conditioning treatment to restore suppleness and prevent cracking.' },
-  dashboard: { icon:'📟', title:'Dashboard Detail',         price:'Starting at $129',        desc:'Compressed air blow-out of every vent and crevice. All surfaces cleaned, conditioned and dressed.' },
-  carpet:    { icon:'🧹', title:'Carpet Steam Clean',       price:'Starting at $129',        desc:'Deep vacuum followed by steam extraction. Removes embedded dirt, stains and odors — leaving the cabin fresh.' }
+  wheel:   { icon:'🛞', title:'Wheel & Tire Detail',     price:'Included in Full Detail', desc:'Deep cleaning with specialized decontamination products. Removes brake dust, iron deposits and road grime — leaving your wheels spotless.' },
+  hood:    { icon:'✨', title:'Hood Polish & Protection', price:'Starting at $149',        desc:'Multi-stage paint correction removing swirl marks and oxidation. Finished with ceramic coat for a mirror-like shine.' },
+  side:    { icon:'🪄', title:'Paint Correction',         price:'Starting at $149',        desc:'Full-body decontamination and machine polish. We restore your car\'s factory gloss using a dual-action polisher.' },
+  window:  { icon:'🔮', title:'Window Tinting',           price:'Starting at $199',        desc:'Ceramic or high-performance film. Blocks up to 99% UV rays, reduces heat and adds privacy.' },
+  bumper:  { icon:'🛡️', title:'Bumper & Trim Detail',     price:'Included in Full Detail', desc:'Plastic restoration and deep cleaning of all bumpers and trim. UV protection applied to prevent fading.' },
 };
 
-// ─── THREE SETUP ──────────────────────────────────────────────────────
+// THREE SETUP
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.4;
+renderer.toneMappingExposure = 1.5;
+renderer.shadowMap.enabled = true;
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-camera.position.set(0, 1.8, 7.5);
+scene.background = new THREE.Color(0x0d0d0d);
+
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+camera.position.set(0, 2, 7);
 camera.lookAt(0, 0.5, 0);
 
 function resize() {
@@ -158,206 +146,146 @@ resize();
 window.addEventListener('resize', resize);
 
 // Lights
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const sun = new THREE.DirectionalLight(0xffffff, 2);
 sun.position.set(5, 10, 5);
+sun.castShadow = true;
 scene.add(sun);
-const pL = new THREE.PointLight(0x7c3aed, 4, 14);
+const fill = new THREE.DirectionalLight(0xffffff, 0.8);
+fill.position.set(-5, 3, -5);
+scene.add(fill);
+const pL = new THREE.PointLight(0x7c3aed, 4, 16);
 pL.position.set(-4, 3, -2);
 scene.add(pL);
 const pR = new THREE.PointLight(0xa855f7, 2, 10);
-pR.position.set(4, 1, 4);
+pR.position.set(4, 2, 4);
 scene.add(pR);
 
-// Materials
-const M = {
-  body:   new THREE.MeshStandardMaterial({color:0x0e0e1f, metalness:0.93, roughness:0.1}),
-  glass:  new THREE.MeshStandardMaterial({color:0x5010a0, metalness:0.05, roughness:0.05, transparent:true, opacity:0.52}),
-  tire:   new THREE.MeshStandardMaterial({color:0x080808, roughness:0.95}),
-  rim:    new THREE.MeshStandardMaterial({color:0xcccccc, metalness:0.98, roughness:0.07}),
-  chrome: new THREE.MeshStandardMaterial({color:0xdddddd, metalness:1, roughness:0.04}),
-  light:  new THREE.MeshStandardMaterial({color:0xffffff, emissive:0xffffff, emissiveIntensity:0.9}),
-  tail:   new THREE.MeshStandardMaterial({color:0xff1111, emissive:0xff0000, emissiveIntensity:0.7}),
-  seat:   new THREE.MeshStandardMaterial({color:0x18042a, roughness:0.8}),
-  dark:   new THREE.MeshStandardMaterial({color:0x0a0a0a, roughness:0.9}),
-};
+// Ground
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(20, 20),
+  new THREE.MeshStandardMaterial({ color:0x0a0a0a, metalness:0.1, roughness:0.8 })
+);
+ground.rotation.x = -Math.PI/2;
+ground.position.y = -0.01;
+ground.receiveShadow = true;
+scene.add(ground);
 
-// ─── BUILD EXTERIOR ───────────────────────────────────────────────────
-function buildExterior() {
-  const g = new THREE.Group();
-  const box = (w,h,d,mat,x,y,z) => {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
-    m.position.set(x,y,z); g.add(m);
-  };
+// Ground glow
+const glow = new THREE.Mesh(
+  new THREE.PlaneGeometry(6, 3),
+  new THREE.MeshBasicMaterial({ color:0x7c3aed, transparent:true, opacity:0.06 })
+);
+glow.rotation.x = -Math.PI/2;
+glow.position.y = 0.01;
+scene.add(glow);
 
-  box(4.3,0.54,1.88, M.body, 0,0.37,0);
-  box(4.1,0.30,1.80, M.body, 0,0.67,0);
-  box(2.5,0.74,1.68, M.body,-0.1,1.07,0);
-  box(1.75,0.10,1.80, M.body, 1.15,0.84,0);
-  box(0.95,0.10,1.80, M.body,-1.75,0.84,0);
-  box(0.30,0.34,1.90, M.chrome, 2.08,0.30,0);
-  box(0.30,0.34,1.90, M.chrome,-2.08,0.30,0);
+// LOAD MODEL
+let carModel = null;
+const loader = new THREE.GLTFLoader();
+loader.load(
+  'car.glb',
+  (gltf) => {
+    carModel = gltf.scene;
 
-  // Windshields
-  const wf = new THREE.Mesh(new THREE.PlaneGeometry(1.60,0.70), M.glass);
-  wf.position.set(0.98,1.02,0); wf.rotation.y=-1.27; g.add(wf);
-  const wr = new THREE.Mesh(new THREE.PlaneGeometry(1.40,0.64), M.glass);
-  wr.position.set(-1.12,1.02,0); wr.rotation.y=1.27; g.add(wr);
-  [-0.86,0.86].forEach(z=>{
-    const sw = new THREE.Mesh(new THREE.PlaneGeometry(2.0,0.60), M.glass);
-    sw.position.set(-0.1,1.07,z); sw.rotation.y = z>0?0:Math.PI; g.add(sw);
-  });
+    // Center and scale
+    const box = new THREE.Box3().setFromObject(carModel);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 3.5 / maxDim;
+    carModel.scale.setScalar(scale);
+    carModel.position.sub(center.multiplyScalar(scale));
+    carModel.position.y = 0;
 
-  // Lights
-  [[2.0,0.47,0.70,M.light],[2.0,0.47,-0.70,M.light]].forEach(([x,y,z,m])=>box(0.07,0.22,0.40,m,x,y,z));
-  [[-2.0,0.47,0.70,M.tail],[-2.0,0.47,-0.70,M.tail]].forEach(([x,y,z,m])=>box(0.07,0.22,0.40,m,x,y,z));
+    carModel.traverse(child => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        if (child.material) {
+          child.material.envMapIntensity = 1.2;
+        }
+      }
+    });
 
-  // Wheels
-  [[1.22,0,0.98],[1.22,0,-0.98],[-1.22,0,0.98],[-1.22,0,-0.98]].forEach(([x,y,z])=>{
-    const tire = new THREE.Mesh(new THREE.TorusGeometry(0.38,0.145,16,32), M.tire);
-    tire.rotation.y=Math.PI/2; tire.position.set(x,y,z); g.add(tire);
-    const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.30,0.30,0.14,16), M.rim);
-    rim.rotation.z=Math.PI/2; rim.position.set(x,y,z); g.add(rim);
-    for(let i=0;i<5;i++){
-      const sp=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.54,0.04),M.rim);
-      sp.position.set(x,y,z); sp.rotation.z=Math.PI/2; sp.rotation.x=(i/5)*Math.PI*2; g.add(sp);
-    }
-  });
+    scene.add(carModel);
+    document.getElementById('loading').style.display = 'none';
+    createHotspots();
+  },
+  (progress) => {
+    const pct = Math.round((progress.loaded / progress.total) * 100);
+    document.getElementById('loadBar').style.width = pct + '%';
+    document.getElementById('loadPct').textContent = pct + '%';
+  },
+  (err) => {
+    console.error(err);
+    document.getElementById('loading').innerHTML = '<div style="color:#a855f7;font-size:0.9rem;">Failed to load model</div>';
+  }
+);
 
-  // Ground glow
-  const glow=new THREE.Mesh(new THREE.PlaneGeometry(5.5,2.4),
-    new THREE.MeshBasicMaterial({color:0x7c3aed,transparent:true,opacity:0.06}));
-  glow.rotation.x=-Math.PI/2; glow.position.y=-0.39; g.add(glow);
-  return g;
-}
+// HOTSPOT DEFINITIONS (positions relative to car, will be scaled)
+const HOTSPOT_DEFS = [
+  { key:'wheel',  localPos: new THREE.Vector3( 0.85, -0.05,  0.90), label:'Wheel Detail' },
+  { key:'hood',   localPos: new THREE.Vector3( 0.90,  0.60,  0.00), label:'Hood Polish' },
+  { key:'side',   localPos: new THREE.Vector3( 0.00,  0.45,  0.85), label:'Paint Correction' },
+  { key:'window', localPos: new THREE.Vector3( 0.20,  0.85,  0.60), label:'Window Tinting' },
+  { key:'bumper', localPos: new THREE.Vector3( 1.10,  0.20,  0.00), label:'Bumper Detail' },
+];
 
-// ─── BUILD INTERIOR ───────────────────────────────────────────────────
-function buildInterior() {
-  const g = new THREE.Group();
-  const box=(w,h,d,mat,x,y,z)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);g.add(m);};
-
-  const fl=new THREE.Mesh(new THREE.PlaneGeometry(3.4,2.3),M.dark);fl.rotation.x=-Math.PI/2;fl.position.y=-0.22;g.add(fl);
-  const rf=new THREE.Mesh(new THREE.PlaneGeometry(3.4,2.3),new THREE.MeshStandardMaterial({color:0x111111,roughness:0.8}));rf.rotation.x=Math.PI/2;rf.position.y=1.12;g.add(rf);
-
-  [[0.32,0,0.44],[0.32,0,-0.44],[-0.62,0,0.44],[-0.62,0,-0.44]].forEach(([x,y,z])=>{
-    box(0.74,0.14,0.60,M.seat,x,y+0.07,z);
-    box(0.70,0.74,0.10,M.seat,x-0.32,y+0.44,z);
-    box(0.52,0.20,0.10,M.seat,x-0.32,y+0.86,z);
-  });
-
-  box(0.18,0.44,2.15,new THREE.MeshStandardMaterial({color:0x0d0d0d,metalness:0.3,roughness:0.7}),1.12,0.28,0);
-  const sw=new THREE.Mesh(new THREE.TorusGeometry(0.23,0.033,8,24),new THREE.MeshStandardMaterial({color:0x222222,metalness:0.5,roughness:0.4}));
-  sw.position.set(0.80,0.54,0.43);sw.rotation.y=-0.3;g.add(sw);
-  box(0.88,0.22,0.34,new THREE.MeshStandardMaterial({color:0x080808,metalness:0.4}),0,0.11,0);
-  [-0.88,0.88].forEach(z=>box(2.7,0.84,0.06,new THREE.MeshStandardMaterial({color:0x111111,roughness:0.8}),0,0.3,z));
-  return g;
-}
-
-const extCar = buildExterior();
-const intCar = buildInterior();
-intCar.visible = false;
-scene.add(extCar);
-scene.add(intCar);
-
-// ─── HOTSPOT SYSTEM (3D projected) ───────────────────────────────────
-// Each hotspot has a 3D position LOCAL to the car group
-const HOTSPOTS = {
-  exterior: [
-    { key:'wheel',  pos: new THREE.Vector3( 1.22, -0.0,  1.20), label:'Wheel Detail' },
-    { key:'hood',   pos: new THREE.Vector3( 1.40,  0.95, 0.00), label:'Hood Polish' },
-    { key:'side',   pos: new THREE.Vector3( 0.00,  0.68, 1.00), label:'Paint Correction' },
-    { key:'window', pos: new THREE.Vector3( 0.20,  1.20, 0.90), label:'Window Tinting' },
-  ],
-  interior: [
-    { key:'seat',      pos: new THREE.Vector3( 0.32, 0.20,  0.44), label:'Seat Cleaning' },
-    { key:'dashboard', pos: new THREE.Vector3( 1.10, 0.50,  0.00), label:'Dashboard Detail' },
-    { key:'carpet',    pos: new THREE.Vector3(-0.30,-0.10,  0.44), label:'Carpet Steam' },
-  ]
-};
-
-// Create DOM elements for hotspots
 const hsEls = {};
-Object.entries(HOTSPOTS).forEach(([view, spots]) => {
-  spots.forEach(hs => {
+function createHotspots() {
+  HOTSPOT_DEFS.forEach(hs => {
     const el = document.createElement('div');
     el.className = 'hs';
     el.id = 'hs-' + hs.key;
     el.innerHTML = `<div class="hs-ring"></div><div class="hs-dot"></div><div class="hs-tip">${hs.label}</div>`;
     el.addEventListener('click', () => openPanel(hs.key));
-    if (view === 'interior') el.style.display = 'none';
     document.body.appendChild(el);
-    hsEls[hs.key] = el;
+    hsEls[hs.key] = { el, localPos: hs.localPos };
   });
-});
-
-// Project 3D → 2D
-const _v3 = new THREE.Vector3();
-const _ndc = new THREE.Vector3();
-
-function projectHotspot(localPos, carGroup) {
-  // Transform local position to world position
-  _v3.copy(localPos).applyMatrix4(carGroup.matrixWorld);
-  // Project to NDC
-  _ndc.copy(_v3).project(camera);
-  const x = ( _ndc.x * 0.5 + 0.5) * window.innerWidth;
-  const y = (-_ndc.y * 0.5 + 0.5) * window.innerHeight;
-  const behind = _ndc.z > 1;
-  return { x, y, behind };
 }
 
+const _world = new THREE.Vector3();
+const _ndc   = new THREE.Vector3();
 function updateHotspots() {
-  const view = currentView;
-  const carGroup = view === 'exterior' ? extCar : intCar;
-  carGroup.updateMatrixWorld(true);
-
-  HOTSPOTS[view].forEach(hs => {
-    const el = hsEls[hs.key];
-    const { x, y, behind } = projectHotspot(hs.pos, carGroup);
-    el.style.left = x + 'px';
-    el.style.top  = y + 'px';
-    if (behind) { el.classList.add('behind'); }
-    else        { el.classList.remove('behind'); }
+  if (!carModel) return;
+  carModel.updateMatrixWorld(true);
+  HOTSPOT_DEFS.forEach(hs => {
+    const entry = hsEls[hs.key];
+    if (!entry) return;
+    _world.copy(hs.localPos).applyMatrix4(carModel.matrixWorld);
+    _ndc.copy(_world).project(camera);
+    const x = ( _ndc.x * 0.5 + 0.5) * window.innerWidth;
+    const y = (-_ndc.y * 0.5 + 0.5) * window.innerHeight;
+    entry.el.style.left = x + 'px';
+    entry.el.style.top  = y + 'px';
+    entry.el.classList.toggle('behind', _ndc.z > 1);
   });
 }
 
-// ─── ORBIT ────────────────────────────────────────────────────────────
-let drag=false, px=0, py=0, rotY=0.4, rotX=0.08, zoom=7.5, auto=true, aTimer=null;
+// ORBIT
+let drag=false, px=0, py=0, rotY=0.3, rotX=0.1, zoom=7, auto=true, aTimer=null;
 
 canvas.addEventListener('mousedown', e=>{ drag=true; px=e.clientX; py=e.clientY; auto=false; });
 window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
 canvas.addEventListener('mousemove', e=>{
   if(!drag) return;
-  rotY+=(e.clientX-px)*0.009; rotX+=(e.clientY-py)*0.004;
-  rotX=Math.max(-0.4,Math.min(0.5,rotX)); px=e.clientX; py=e.clientY;
+  rotY+=(e.clientX-px)*0.008; rotX+=(e.clientY-py)*0.004;
+  rotX=Math.max(-0.3,Math.min(0.5,rotX)); px=e.clientX; py=e.clientY;
 });
 canvas.addEventListener('wheel', e=>{
-  e.preventDefault();
-  zoom+=e.deltaY*0.008; zoom=Math.max(3.5,Math.min(11,zoom));
+  e.preventDefault(); zoom+=e.deltaY*0.01; zoom=Math.max(3,Math.min(12,zoom));
 },{passive:false});
 canvas.addEventListener('touchstart', e=>{ drag=true; px=e.touches[0].clientX; py=e.touches[0].clientY; auto=false; },{passive:true});
 window.addEventListener('touchend', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
 canvas.addEventListener('touchmove', e=>{
   if(!drag) return;
-  rotY+=(e.touches[0].clientX-px)*0.011; rotX+=(e.touches[0].clientY-py)*0.005;
-  rotX=Math.max(-0.4,Math.min(0.5,rotX)); px=e.touches[0].clientX; py=e.touches[0].clientY;
+  rotY+=(e.touches[0].clientX-px)*0.010; rotX+=(e.touches[0].clientY-py)*0.005;
+  rotX=Math.max(-0.3,Math.min(0.5,rotX)); px=e.touches[0].clientX; py=e.touches[0].clientY;
   e.preventDefault();
 },{passive:false});
 
-// ─── VIEW TOGGLE ──────────────────────────────────────────────────────
-let currentView = 'exterior';
-function setView(v) {
-  currentView = v;
-  document.getElementById('btn-ext').classList.toggle('active', v==='exterior');
-  document.getElementById('btn-int').classList.toggle('active', v==='interior');
-  extCar.visible = v==='exterior';
-  intCar.visible = v==='interior';
-  HOTSPOTS.exterior.forEach(h => hsEls[h.key].style.display = v==='exterior'?'block':'none');
-  HOTSPOTS.interior.forEach(h => hsEls[h.key].style.display = v==='interior'?'block':'none');
-  zoom = v==='interior' ? 4.5 : 7.5;
-  rotX = 0.08;
-}
-
-// ─── PANEL ────────────────────────────────────────────────────────────
+// PANEL
 function openPanel(key) {
   const d = DATA[key];
   document.getElementById('pIcon').textContent  = d.icon;
@@ -373,23 +301,17 @@ function closePanel() {
 }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePanel(); });
 
-// ─── ANIMATE ──────────────────────────────────────────────────────────
-let t = 0;
+// ANIMATE
+let t=0;
 function animate() {
   requestAnimationFrame(animate);
-  t += 0.004;
-  if(auto) rotY += 0.004;
-
-  extCar.rotation.y = rotY; extCar.rotation.x = rotX;
-  intCar.rotation.y = rotY; intCar.rotation.x = rotX;
-
-  camera.position.set(0, 1.8, zoom);
-  camera.lookAt(0, 0.5, 0);
-
-  pL.intensity = 3 + Math.sin(t) * 1;
-  renderer.render(scene, camera);
-
-  // Update hotspot positions AFTER render
+  t+=0.004;
+  if(auto && carModel) rotY+=0.004;
+  if(carModel) { carModel.rotation.y=rotY; carModel.rotation.x=rotX; }
+  camera.position.set(0,2,zoom);
+  camera.lookAt(0,0.5,0);
+  pL.intensity = 3+Math.sin(t)*1;
+  renderer.render(scene,camera);
   updateHotspots();
 }
 animate();
