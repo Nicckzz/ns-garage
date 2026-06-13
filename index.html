@@ -506,85 +506,17 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
   </div>
 </section>
 
-<section id="car-explorer">
-  <div class="explorer-header">
-    <div class="explorer-eyebrow">Explore o processo</div>
-    <h2 class="explorer-title">Detailing Interativo 3D</h2>
-    <p class="explorer-sub">Gire o veículo 360° e clique nos pontos para ver como cada área é tratada.</p>
+<!-- 3D EXPLORER -->
+<section id="car-explorer" style="padding:100px 5%; background: var(--bg);">
+  <div style="text-align:center; margin-bottom:40px;">
+    <div style="font-size:0.72rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--purple-light); margin-bottom:12px;">Explore o processo</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,5vw,3.5rem); letter-spacing:1px; margin-bottom:16px;">Detailing Interativo 3D</h2>
+    <p style="color:var(--muted); font-size:0.95rem; max-width:480px; margin:0 auto;">Gire o veículo 360° e clique nos pontos para ver como cada área é tratada.</p>
   </div>
-
-  <div class="view-toggle">
-    <button class="view-btn active" onclick="setView('exterior')">🚗 Exterior</button>
-    <button class="view-btn" onclick="setView('interior')">🪑 Interior</button>
-  </div>
-
-  <div class="canvas-wrapper" id="canvasWrapper">
-    <canvas id="car-canvas"></canvas>
-    <div class="ground"></div>
-
-    <!-- EXTERIOR HOTSPOTS -->
-    <div class="hotspot" id="hs-wheel-fr" style="left:72%;top:72%;" onclick="openPanel('wheel')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Wheel Detail</div>
-    </div>
-    <div class="hotspot" id="hs-hood" style="left:38%;top:30%;" onclick="openPanel('hood')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Hood Polish</div>
-    </div>
-    <div class="hotspot" id="hs-side" style="left:55%;top:50%;" onclick="openPanel('side')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Paint Correction</div>
-    </div>
-    <div class="hotspot" id="hs-window" style="left:50%;top:28%;" onclick="openPanel('window')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Window Tinting</div>
-    </div>
-
-    <!-- INTERIOR HOTSPOTS -->
-    <div class="hotspot" id="hs-seat" style="left:45%;top:45%;" onclick="openPanel('seat')" data-view="interior" style="display:none;">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Seat Cleaning</div>
-    </div>
-    <div class="hotspot" id="hs-dashboard" style="left:35%;top:35%;" onclick="openPanel('dashboard')" data-view="interior" style="display:none;">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Dashboard Detail</div>
-    </div>
-    <div class="hotspot" id="hs-carpet" style="left:55%;top:65%;" onclick="openPanel('carpet')" data-view="interior" style="display:none;">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Carpet Steam</div>
-    </div>
-
-    <div class="canvas-hint">🖱️ Drag to rotate · Scroll to zoom · Click dots for details</div>
+  <div style="max-width:900px; margin:0 auto; border-radius:16px; overflow:hidden; border:1px solid var(--border);">
+    <iframe src="car3d.html" style="width:100%; height:560px; border:none; display:block;" allow="autoplay"></iframe>
   </div>
 </section>
-
-<!-- SERVICE PANEL -->
-<div class="service-panel" id="servicePanel">
-  <div class="panel-backdrop" onclick="closePanel()"></div>
-  <div class="panel-card">
-    <button class="panel-close" onclick="closePanel()">✕</button>
-    <div class="panel-icon" id="panelIcon">🔧</div>
-    <div class="panel-title" id="panelTitle">Service</div>
-    <div class="panel-desc" id="panelDesc"></div>
-    <div class="panel-video" id="panelVideo">
-      <div class="panel-video-placeholder">
-        <span>🎬</span>
-        <span>Your process video goes here</span>
-      </div>
-    </div>
-    <div class="panel-price" id="panelPrice"></div>
-    <a href="#booking" class="panel-cta" onclick="closePanel()">Book This Service →</a>
-  </div>
-</div>
-
-
 
 <!-- FAQ -->
 <section id="faq">
@@ -796,7 +728,6 @@ function toggleFaq(el) {
 setLang('en');
 </script>
   <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 
 // ── DATA ──────────────────────────────────────────────────────────────
