@@ -134,8 +134,8 @@ scene.background = new THREE.Color(0x0d0d0d);
 scene.fog = new THREE.Fog(0x0d0d0d, 15, 40);
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-camera.position.set(0, 1.2, 7);
-camera.lookAt(0, 0.6, 0);
+camera.position.set(0, 1.0, 10);
+camera.lookAt(0, 0.5, 0);
 
 function resize() {
   const w = window.innerWidth, h = window.innerHeight;
@@ -181,7 +181,7 @@ loader.load(
     const center = bbox.getCenter(new THREE.Vector3());
     const size = bbox.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 5.5 / maxDim;
+    const scale = 3.8 / maxDim;
     carModel.scale.setScalar(scale);
     carModel.updateMatrixWorld(true);
     // Recompute after scale
@@ -217,12 +217,13 @@ loader.load(
 );
 
 // HOTSPOT DEFINITIONS (positions relative to car, will be scaled)
+// Positions tuned to BMW M3 Touring model
 const HOTSPOT_DEFS = [
-  { key:'wheel',  localPos: new THREE.Vector3( 0.85, -0.05,  0.90), label:'Wheel Detail' },
-  { key:'hood',   localPos: new THREE.Vector3( 0.90,  0.60,  0.00), label:'Hood Polish' },
-  { key:'side',   localPos: new THREE.Vector3( 0.00,  0.45,  0.85), label:'Paint Correction' },
-  { key:'window', localPos: new THREE.Vector3( 0.20,  0.85,  0.60), label:'Window Tinting' },
-  { key:'bumper', localPos: new THREE.Vector3( 1.10,  0.20,  0.00), label:'Bumper Detail' },
+  { key:'wheel',  localPos: new THREE.Vector3( 1.30,  0.10,  0.85), label:'Wheel Detail' },
+  { key:'hood',   localPos: new THREE.Vector3( 0.80,  0.72,  0.00), label:'Hood Polish' },
+  { key:'side',   localPos: new THREE.Vector3( 0.00,  0.50,  1.00), label:'Paint Correction' },
+  { key:'window', localPos: new THREE.Vector3( 0.10,  0.90,  0.70), label:'Window Tinting' },
+  { key:'bumper', localPos: new THREE.Vector3( 1.80,  0.30,  0.00), label:'Bumper Detail' },
 ];
 
 const hsEls = {};
@@ -257,7 +258,7 @@ function updateHotspots() {
 }
 
 // ORBIT
-let drag=false, px=0, py=0, rotY=0.3, rotX=0.1, zoom=7, auto=true, aTimer=null;
+let drag=false, px=0, py=0, rotY=0.3, rotX=0.1, zoom=10, auto=true, aTimer=null;
 
 canvas.addEventListener('mousedown', e=>{ drag=true; px=e.clientX; py=e.clientY; auto=false; });
 window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
@@ -299,8 +300,8 @@ function animate() {
   t+=0.004;
   if(auto && carModel) rotY+=0.004;
   if(carModel) { carModel.rotation.y=rotY; carModel.rotation.x=0.1; }
-  camera.position.set(0,1.2,zoom);
-  camera.lookAt(0,0.6,0);
+  camera.position.set(0,1.0,zoom);
+  camera.lookAt(0,0.5,0);
   rimL.intensity = 1.2+Math.sin(t)*0.4;
   renderer.render(scene,camera);
   updateHotspots();
