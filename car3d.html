@@ -130,11 +130,12 @@ body:active { cursor:grabbing; }
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 const DATA = {
-  wheel:   { icon:'🛞', title:'Wheel & Tire Detail',     price:'Included in Full Detail', desc:'Deep cleaning with specialized decontamination products. Removes brake dust, iron deposits and road grime — leaving your wheels spotless.' },
-  hood:    { icon:'✨', title:'Hood Polish & Protection', price:'Starting at $149',        desc:'Multi-stage paint correction removing swirl marks and oxidation. Finished with ceramic coat for a mirror-like shine.' },
-  side:    { icon:'🪄', title:'Paint Correction',         price:'Starting at $149',        desc:'Full-body decontamination and machine polish. We restore your car\'s factory gloss using a dual-action polisher.' },
-  window:  { icon:'🔮', title:'Window Tinting',           price:'Starting at $199',        desc:'Ceramic or high-performance film. Blocks up to 99% UV rays, reduces heat and adds privacy.' },
-  bumper:  { icon:'🛡️', title:'Bumper & Trim Detail',     price:'Included in Full Detail', desc:'Plastic restoration and deep cleaning of all bumpers and trim. UV protection applied to prevent fading.' },
+  glass:     { icon:'🪟', title:'Glass Decontamination',  price:'Starting at $49',         desc:'Full glass decontamination removing water spots, mineral deposits and road film. Leaves glass crystal clear with water-repellent coating.' },
+  wheel:     { icon:'🛞', title:'Wheel Detailing',         price:'Included in Full Detail', desc:'Deep cleaning of wheels and tires with specialized iron remover. Removes brake dust, road grime and iron deposits completely.' },
+  bumper:    { icon:'🛡️', title:'Bumper Detailing',        price:'Included in Full Detail', desc:'Deep clean and plastic restoration of all bumpers and trim. UV protectant applied to prevent fading and cracking.' },
+  prewash:   { icon:'🚿', title:'Pre-Wash & Wash',         price:'Included in Full Detail', desc:'Two-bucket method pre-wash to remove heavy contamination, followed by a thorough hand wash using pH-neutral soap to protect the paint.' },
+  paint:     { icon:'🪄', title:'Paint Correction',        price:'Starting at $149',        desc:'Machine polish to remove swirl marks, light scratches and oxidation. We restore your car's factory gloss using a dual-action polisher.' },
+  headlight: { icon:'💡', title:'Headlight Restoration',   price:'Starting at $79',         desc:'Sanding and polishing of oxidized or yellowed headlights. Restores full clarity and brightness, improving both appearance and night visibility.' },
 };
 
 // THREE SETUP
