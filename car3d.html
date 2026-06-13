@@ -176,20 +176,25 @@ loader.load(
   (gltf) => {
     carModel = gltf.scene;
 
-    // Center and scale properly
+    // Wrap in pivot group for proper centering
     const bbox = new THREE.Box3().setFromObject(carModel);
     const size = bbox.getSize(new THREE.Vector3());
     const center = bbox.getCenter(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
     const scale = 4.0 / maxDim;
 
-    // Move geometry to origin BEFORE adding to scene
-    carModel.position.set(
-      -center.x,
-      -bbox.min.y,
-      -center.z
-    );
-    carModel.scale.setScalar(scale);
+    // Create a pivot group
+    const pivot = new THREE.Group();
+    pivot.add(carModel);
+
+    // Offset the car inside the pivot to center it
+    carModel.position.set(-center.x, -bbox.min.y, -center.z);
+    pivot.scale.setScalar(scale);
+
+    // Replace carModel reference with pivot
+    scene.remove(carModel);
+    scene.add(pivot);
+    carModel = pivot;
 
     carModel.traverse(child => {
       if (child.isMesh) {
