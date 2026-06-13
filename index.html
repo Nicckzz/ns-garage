@@ -437,29 +437,14 @@ hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
 
 // Form
-function submitForm() {
-  const name = document.getElementById('fname').value.trim();
-  const phone = document.getElementById('fphone').value.trim();
-  const email = document.getElementById('femail').value.trim();
-  const service = document.getElementById('fservice').value;
-  if (!name || !phone || !email || !service) {
-    alert(i18n[currentLang].alert_required);
-    return;
-  }
-  document.getElementById('formBody').style.display = 'none';
-  document.getElementById('formSuccess').style.display = 'block';
-}
+function submitForm() { /* form replaced by Calendly */ }
 
 // Scroll shadow
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').style.boxShadow = window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
 });
 
-// Min date
-const dateInput = document.getElementById('fdate');
-const tomorrow = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1);
-dateInput.min = tomorrow.toISOString().split('T')[0];
+// Min date - form replaced by Calendly
 
 // Init
 setLang('en');
