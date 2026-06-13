@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NS Garage | Custom & Detailing</title>
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -123,6 +124,7 @@
     .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
     .footer-links a:hover { color: var(--purple-light); }
 
+    .calendly-wrap { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
     /* ── MOBILE ── */
     @media (max-width: 820px) {
       .nav-center { display: none; flex-direction: column; gap: 0; }
@@ -294,69 +296,8 @@
     <h2 class="section-title" data-i18n="book_title"></h2>
     <p class="section-sub" data-i18n="book_sub"></p>
   </div>
-  <div class="booking-wrap">
-    <div class="booking-info">
-      <h3 data-i18n="info_area_title"></h3>
-      <p data-i18n="info_area_text"></p>
-      <h3 data-i18n="info_hours_title"></h3>
-      <p data-i18n="info_hours_text"></p>
-      <h3 data-i18n="info_pay_title"></h3>
-      <p data-i18n="info_pay_text"></p>
-      <h3 data-i18n="info_cancel_title"></h3>
-      <p data-i18n="info_cancel_text"></p>
-    </div>
-    <div class="booking-form">
-      <div id="formBody">
-        <div class="form-row">
-          <div class="form-group">
-            <label data-i18n="f_name"></label>
-            <input type="text" id="fname" data-i18n-ph="f_name_ph" />
-          </div>
-          <div class="form-group">
-            <label data-i18n="f_phone"></label>
-            <input type="tel" id="fphone" placeholder="(407) 000-0000" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label data-i18n="f_email"></label>
-          <input type="email" id="femail" placeholder="email@example.com" />
-        </div>
-        <div class="form-group">
-          <label data-i18n="f_service"></label>
-          <select id="fservice">
-            <option value="" disabled selected data-i18n="f_service_ph"></option>
-            <option data-i18n="f_opt1"></option>
-            <option data-i18n="f_opt2"></option>
-            <option data-i18n="f_opt3"></option>
-            <option data-i18n="f_opt4"></option>
-            <option data-i18n="f_opt5"></option>
-            <option data-i18n="f_opt6"></option>
-            <option data-i18n="f_opt7"></option>
-          </select>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label data-i18n="f_car"></label>
-            <input type="text" id="fcar" data-i18n-ph="f_car_ph" />
-          </div>
-          <div class="form-group">
-            <label data-i18n="f_date"></label>
-            <input type="date" id="fdate" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label data-i18n="f_msg"></label>
-          <textarea id="fmsg" data-i18n-ph="f_msg_ph"></textarea>
-        </div>
-        <button class="form-submit" onclick="submitForm()" data-i18n="f_submit"></button>
-        <p class="form-disclaimer" data-i18n="f_disclaimer"></p>
-      </div>
-      <div class="form-success" id="formSuccess">
-        <div class="check">✅</div>
-        <h3 data-i18n="f_success_title"></h3>
-        <p data-i18n="f_success_text"></p>
-      </div>
-    </div>
+  <div class="calendly-wrap">
+    <div class="calendly-inline-widget" data-url="https://calendly.com/nicckpsn/30min?hide_gdpr_banner=1&background_color=141414&text_color=f5f5f5&primary_color=7c3aed" style="min-width:320px;height:700px;"></div>
   </div>
 </section>
 
@@ -523,5 +464,6 @@ dateInput.min = tomorrow.toISOString().split('T')[0];
 // Init
 setLang('en');
 </script>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </body>
 </html>
