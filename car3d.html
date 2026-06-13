@@ -222,13 +222,14 @@ loader.load(
 );
 
 // HOTSPOT DEFINITIONS (positions relative to car, will be scaled)
-// Positions tuned to BMW M3 Touring model
+// Positions for BMW M3 Touring - mapped to actual car parts
+// After centering: front of car is at +X, roof at +Y, right side at +Z
 const HOTSPOT_DEFS = [
-  { key:'wheel',  localPos: new THREE.Vector3( 1.30,  0.10,  0.85), label:'Wheel Detail' },
-  { key:'hood',   localPos: new THREE.Vector3( 0.80,  0.72,  0.00), label:'Hood Polish' },
-  { key:'side',   localPos: new THREE.Vector3( 0.00,  0.50,  1.00), label:'Paint Correction' },
-  { key:'window', localPos: new THREE.Vector3( 0.10,  0.90,  0.70), label:'Window Tinting' },
-  { key:'bumper', localPos: new THREE.Vector3( 1.80,  0.30,  0.00), label:'Bumper Detail' },
+  { key:'wheel',  localPos: new THREE.Vector3( 0.90,  0.22,  1.05), label:'Wheel Detail' },
+  { key:'hood',   localPos: new THREE.Vector3( 1.50,  0.78,  0.30), label:'Hood Polish' },
+  { key:'side',   localPos: new THREE.Vector3( 0.10,  0.55,  1.10), label:'Paint Correction' },
+  { key:'window', localPos: new THREE.Vector3( 0.30,  1.05,  0.80), label:'Window Tinting' },
+  { key:'bumper', localPos: new THREE.Vector3( 2.10,  0.38,  0.20), label:'Bumper Detail' },
 ];
 
 const hsEls = {};
@@ -263,7 +264,7 @@ function updateHotspots() {
 }
 
 // ORBIT
-let drag=false, px=0, py=0, rotY=0.3, rotX=0.1, zoom=9, auto=true, aTimer=null;
+let drag=false, px=0, py=0, rotY=0.3, rotX=0.1, zoom=5.5, auto=true, aTimer=null;
 
 canvas.addEventListener('mousedown', e=>{ drag=true; px=e.clientX; py=e.clientY; auto=false; });
 window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
@@ -272,7 +273,7 @@ canvas.addEventListener('mousemove', e=>{
   rotY+=(e.clientX-px)*0.008; px=e.clientX; py=e.clientY;
 });
 canvas.addEventListener('wheel', e=>{
-  e.preventDefault(); zoom+=e.deltaY*0.01; zoom=Math.max(3,Math.min(12,zoom));
+  e.preventDefault(); zoom+=e.deltaY*0.01; zoom=Math.max(2.5,Math.min(10,zoom));
 },{passive:false});
 canvas.addEventListener('touchstart', e=>{ drag=true; px=e.touches[0].clientX; py=e.touches[0].clientY; auto=false; },{passive:true});
 window.addEventListener('touchend', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
