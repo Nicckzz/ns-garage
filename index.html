@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NS Garage | Custom & Detailing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0d0d; --bg2: #141414; --bg3: #1a1a1a;
+      --purple: #7c3aed; --purple-light: #a855f7;
+      --purple-glow: rgba(124,58,237,0.18);
+      --white: #f5f5f5; --muted: #888;
+      --border: rgba(255,255,255,0.07);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 400; line-height: 1.6; overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 5%; background: rgba(13,13,13,0.88); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); gap: 16px; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 2px; color: var(--white); text-decoration: none; flex-shrink: 0; }
+    .nav-logo span { color: var(--purple-light); }
+    .nav-center { display: flex; gap: 28px; list-style: none; }
+    .nav-center a { color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-center a:hover { color: var(--white); }
+    .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .nav-cta { background: var(--purple); color: #fff !important; padding: 9px 18px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; text-decoration: none; letter-spacing: 0.5px; transition: background 0.2s; white-space: nowrap; }
+    .nav-cta:hover { background: var(--purple-light); }
+
+    /* Lang switcher */
+    .lang-switcher { display: flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
+    .lang-btn { background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 4px 8px; border-radius: 5px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+    .lang-btn:hover { color: var(--white); }
+    .lang-btn.active { background: var(--purple); color: #fff; }
+    .lang-btn .flag { font-size: 0.9rem; }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+
+    /* ── HERO ── */
+    #home { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 5% 80px; position: relative; overflow: hidden; }
+    .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .hero-bg { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(13,13,13,0.55) 0%, rgba(13,13,13,0.75) 60%, #0d0d0d 100%); }
+    .hero-overlay-purple { position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse 70% 50% at 50% 60%, rgba(124,58,237,0.18) 0%, transparent 70%); }
+    .hero-grid { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px); background-size: 60px 60px; }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
+    .hero-eyebrow { display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--purple-light); margin-bottom: 20px; border: 1px solid rgba(168,85,247,0.3); padding: 6px 16px; border-radius: 100px; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 10vw, 7.5rem); line-height: 0.95; letter-spacing: 2px; margin-bottom: 24px; }
+    .hero-title .accent { color: var(--purple-light); }
+    .hero-sub { font-size: 1.05rem; color: var(--muted); max-width: 520px; margin: 0 auto 40px; font-weight: 300; }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--purple); color: #fff; padding: 14px 32px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+    .btn-primary:hover { background: var(--purple-light); transform: translateY(-1px); }
+    .btn-ghost { border: 1px solid var(--border); color: var(--white); padding: 14px 32px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+    .btn-ghost:hover { border-color: var(--purple); background: var(--purple-glow); }
+    .hero-stats { display: flex; gap: 48px; justify-content: center; margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--purple-light); letter-spacing: 1px; }
+    .stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 5%; }
+    .section-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--purple-light); margin-bottom: 12px; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1; letter-spacing: 1px; margin-bottom: 16px; }
+    .section-sub { color: var(--muted); font-size: 0.95rem; max-width: 480px; font-weight: 300; }
+    .section-header { margin-bottom: 56px; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--bg2); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .service-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 32px; transition: border-color 0.3s, transform 0.3s; position: relative; overflow: hidden; }
+    .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--purple), var(--purple-light)); opacity: 0; transition: opacity 0.3s; }
+    .service-card:hover { border-color: var(--purple); transform: translateY(-4px); }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+    .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 10px; }
+    .service-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 20px; }
+    .service-price { font-size: 0.82rem; color: var(--purple-light); font-weight: 600; letter-spacing: 0.5px; }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--bg); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .gallery-item { background: var(--bg3); border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; position: relative; border: 1px solid var(--border); cursor: pointer; transition: transform 0.3s; }
+    .gallery-item:hover { transform: scale(1.02); }
+    .gallery-item.featured { grid-column: span 2; aspect-ratio: 16/9; }
+    .gallery-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--bg3) 0%, #1c1228 100%); }
+    .gallery-placeholder .icon { font-size: 2.5rem; opacity: 0.4; }
+    .gallery-placeholder .label { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(124,58,237,0.5) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 16px; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay span { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
+    .gallery-note { text-align: center; margin-top: 28px; color: var(--muted); font-size: 0.83rem; }
+
+    /* ── BOOKING ── */
+    #booking { background: var(--bg2); }
+    .booking-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .booking-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 6px; margin-top: 28px; color: var(--purple-light); }
+    .booking-info h3:first-child { margin-top: 0; }
+    .booking-info p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+    .booking-form { background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 36px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.92rem; outline: none; transition: border-color 0.2s; appearance: none; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--purple); }
+    .form-group select option { background: #1a1a1a; }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-submit { width: 100%; background: var(--purple); color: #fff; border: none; padding: 14px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px; letter-spacing: 0.5px; }
+    .form-submit:hover { background: var(--purple-light); }
+    .form-disclaimer { text-align: center; margin-top: 12px; font-size: 0.75rem; color: var(--muted); }
+    .form-success { display: none; text-align: center; padding: 40px 20px; }
+    .form-success .check { font-size: 3rem; margin-bottom: 16px; }
+    .form-success h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; margin-bottom: 8px; color: var(--purple-light); }
+    .form-success p { color: var(--muted); font-size: 0.9rem; }
+
+    /* ── FOOTER ── */
+    footer { background: #080808; border-top: 1px solid var(--border); padding: 48px 5%; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--white); }
+    .footer-logo span { color: var(--purple-light); }
+    .footer-copy { font-size: 0.8rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--purple-light); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 820px) {
+      .nav-center { display: none; flex-direction: column; gap: 0; }
+      .nav-center.open { display: flex; position: absolute; top: 100%; left: 0; right: 0; background: #0d0d0d; border-bottom: 1px solid var(--border); padding: 16px 5%; }
+      .nav-center.open li { border-bottom: 1px solid var(--border); }
+      .nav-center.open a { display: block; padding: 12px 0; }
+      .hamburger { display: flex; }
+      .nav-cta { display: none; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item.featured { grid-column: span 2; }
+      .booking-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item.featured { grid-column: span 1; aspect-ratio: 4/3; }
+      .hero-stats { gap: 28px; }
+      .lang-btn .flag { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">NS <span>Garage</span></a>
+  <ul class="nav-center" id="navLinks">
+    <li><a href="#home" data-i18n="nav_home"></a></li>
+    <li><a href="#services" data-i18n="nav_services"></a></li>
+    <li><a href="#gallery" data-i18n="nav_gallery"></a></li>
+    <li><a href="#booking" data-i18n="nav_book"></a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><span class="flag">🇧🇷</span> PT</button>
+      <button class="lang-btn" onclick="setLang('en')" id="btn-en"><span class="flag">🇺🇸</span> EN</button>
+      <button class="lang-btn" onclick="setLang('es')" id="btn-es"><span class="flag">🇪🇸</span> ES</button>
+    </div>
+    <a href="#booking" class="nav-cta" data-i18n="nav_book"></a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <!-- Vídeo de fundo — substitua o src pelo seu arquivo quando tiver -->
+  <video class="hero-video" autoplay muted loop playsinline crossorigin="anonymous">
+    <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=164&oauth2_token_id=57447761" type="video/mp4" />
+    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4" />
+  </video>
+  <div class="hero-bg"></div>
+  <div class="hero-overlay-purple"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-i18n="hero_eyebrow"></div>
+    <h1 class="hero-title">NS<br><span class="accent">Garage</span></h1>
+    <p class="hero-sub" data-i18n="hero_sub"></p>
+    <div class="hero-actions">
+      <a href="#booking" class="btn-primary" data-i18n="hero_cta_book"></a>
+      <a href="#services" class="btn-ghost" data-i18n="hero_cta_services"></a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">100+</div>
+        <div class="stat-label" data-i18n="stat_cars"></div>
+      </div>
+      <div>
+        <div class="stat-num">5★</div>
+        <div class="stat-label" data-i18n="stat_rating"></div>
+      </div>
+      <div>
+        <div class="stat-num" data-i18n="stat_mobile_num"></div>
+        <div class="stat-label" data-i18n="stat_mobile_label"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header">
+    <div class="section-eyebrow" data-i18n="srv_eyebrow"></div>
+    <h2 class="section-title" data-i18n="srv_title"></h2>
+    <p class="section-sub" data-i18n="srv_sub"></p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-icon">✨</span>
+      <div class="service-name" data-i18n="s1_name"></div>
+      <p class="service-desc" data-i18n="s1_desc"></p>
+      <div class="service-price" data-i18n="s1_price"></div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🪑</span>
+      <div class="service-name" data-i18n="s2_name"></div>
+      <p class="service-desc" data-i18n="s2_desc"></p>
+      <div class="service-price" data-i18n="s2_price"></div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔮</span>
+      <div class="service-name" data-i18n="s3_name"></div>
+      <p class="service-desc" data-i18n="s3_desc"></p>
+      <div class="service-price" data-i18n="s3_price"></div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🛡️</span>
+      <div class="service-name" data-i18n="s4_name"></div>
+      <p class="service-desc" data-i18n="s4_desc"></p>
+      <div class="service-price" data-i18n="s4_price"></div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏷️</span>
+      <div class="service-name" data-i18n="s5_name"></div>
+      <p class="service-desc" data-i18n="s5_desc"></p>
+      <div class="service-price" data-i18n="s5_price"></div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🚗</span>
+      <div class="service-name" data-i18n="s6_name"></div>
+      <p class="service-desc" data-i18n="s6_desc"></p>
+      <div class="service-price" data-i18n="s6_price"></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-header">
+    <div class="section-eyebrow" data-i18n="gal_eyebrow"></div>
+    <h2 class="section-title" data-i18n="gal_title"></h2>
+    <p class="section-sub" data-i18n="gal_sub"></p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item featured">
+      <div class="gallery-placeholder"><span class="icon">📸</span><span class="label" data-i18n="gal_featured"></span></div>
+      <div class="gallery-overlay"><span data-i18n="gal_item1"></span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder"><span class="icon">✨</span><span class="label" data-i18n="gal_ext"></span></div>
+      <div class="gallery-overlay"><span data-i18n="gal_item2"></span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder"><span class="icon">🪑</span><span class="label" data-i18n="gal_int"></span></div>
+      <div class="gallery-overlay"><span data-i18n="gal_item3"></span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder"><span class="icon">🔮</span><span class="label" data-i18n="gal_tint"></span></div>
+      <div class="gallery-overlay"><span data-i18n="gal_item4"></span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder"><span class="icon">🛡️</span><span class="label" data-i18n="gal_prot"></span></div>
+      <div class="gallery-overlay"><span data-i18n="gal_item5"></span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder"><span class="icon">🚗</span><span class="label" data-i18n="gal_custom"></span></div>
+      <div class="gallery-overlay"><span data-i18n="gal_item6"></span></div>
+    </div>
+  </div>
+  <p class="gallery-note" data-i18n="gal_note"></p>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="section-header">
+    <div class="section-eyebrow" data-i18n="book_eyebrow"></div>
+    <h2 class="section-title" data-i18n="book_title"></h2>
+    <p class="section-sub" data-i18n="book_sub"></p>
+  </div>
+  <div class="booking-wrap">
+    <div class="booking-info">
+      <h3 data-i18n="info_area_title"></h3>
+      <p data-i18n="info_area_text"></p>
+      <h3 data-i18n="info_hours_title"></h3>
+      <p data-i18n="info_hours_text"></p>
+      <h3 data-i18n="info_pay_title"></h3>
+      <p data-i18n="info_pay_text"></p>
+      <h3 data-i18n="info_cancel_title"></h3>
+      <p data-i18n="info_cancel_text"></p>
+    </div>
+    <div class="booking-form">
+      <div id="formBody">
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="f_name"></label>
+            <input type="text" id="fname" data-i18n-ph="f_name_ph" />
+          </div>
+          <div class="form-group">
+            <label data-i18n="f_phone"></label>
+            <input type="tel" id="fphone" placeholder="(407) 000-0000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="f_email"></label>
+          <input type="email" id="femail" placeholder="email@example.com" />
+        </div>
+        <div class="form-group">
+          <label data-i18n="f_service"></label>
+          <select id="fservice">
+            <option value="" disabled selected data-i18n="f_service_ph"></option>
+            <option data-i18n="f_opt1"></option>
+            <option data-i18n="f_opt2"></option>
+            <option data-i18n="f_opt3"></option>
+            <option data-i18n="f_opt4"></option>
+            <option data-i18n="f_opt5"></option>
+            <option data-i18n="f_opt6"></option>
+            <option data-i18n="f_opt7"></option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="f_car"></label>
+            <input type="text" id="fcar" data-i18n-ph="f_car_ph" />
+          </div>
+          <div class="form-group">
+            <label data-i18n="f_date"></label>
+            <input type="date" id="fdate" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="f_msg"></label>
+          <textarea id="fmsg" data-i18n-ph="f_msg_ph"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()" data-i18n="f_submit"></button>
+        <p class="form-disclaimer" data-i18n="f_disclaimer"></p>
+      </div>
+      <div class="form-success" id="formSuccess">
+        <div class="check">✅</div>
+        <h3 data-i18n="f_success_title"></h3>
+        <p data-i18n="f_success_text"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">NS <span>Garage</span></div>
+  <p class="footer-copy" data-i18n="footer_copy"></p>
+  <ul class="footer-links">
+    <li><a href="#home" data-i18n="nav_home"></a></li>
+    <li><a href="#services" data-i18n="nav_services"></a></li>
+    <li><a href="#gallery" data-i18n="nav_gallery"></a></li>
+    <li><a href="#booking" data-i18n="nav_book"></a></li>
+  </ul>
+</footer>
+
+<script>
+const i18n = {
+  pt: {
+    nav_home: "Home", nav_services: "Serviços", nav_gallery: "Galeria", nav_book: "Agendar",
+    hero_eyebrow: "Winter Garden, FL · Serviço Mobile",
+    hero_sub: "Custom & Detailing profissional até você. Exterior, interior, window tinting e muito mais.",
+    hero_cta_book: "Agendar agora", hero_cta_services: "Ver serviços",
+    stat_cars: "Carros detalhados", stat_rating: "Avaliação média",
+    stat_mobile_num: "Mobile", stat_mobile_label: "Vamos até você",
+    srv_eyebrow: "O que fazemos", srv_title: "Nossos Serviços",
+    srv_sub: "Detalhamento e customização de alta performance, executados com produtos premium.",
+    s1_name: "Detailing Exterior", s1_desc: "Lavagem completa, descontaminação, polish e aplicação de proteção. Acabamento impecável.", s1_price: "A partir de $149",
+    s2_name: "Detailing Interior", s2_desc: "Aspiração profunda, higienização de couro e tecido, sopro de ar comprimido em cada detalhe, limpeza de painel e vidros.", s2_price: "A partir de $129",
+    s3_name: "Window Tinting", s3_desc: "Película cerâmica ou high-performance. Proteção UV, privacidade e estética com garantia de qualidade.", s3_price: "A partir de $199",
+    s4_name: "Pacote Completo", s4_desc: "Exterior + interior em um único agendamento. Ideal para quem quer o carro em perfeitas condições.", s4_price: "A partir de $249",
+    s5_name: "Programa Lojista", s5_desc: "Preços especiais para revendedoras e dealers. Programa de fidelidade com tarifas diferenciadas por volume.", s5_price: "Preço sob consulta",
+    s6_name: "Customização", s6_desc: "Projetos especiais de personalização do veículo. Nos chame para discutir o que você tem em mente.", s6_price: "Orçamento personalizado",
+    gal_eyebrow: "Nosso trabalho", gal_title: "Galeria", gal_sub: "Resultados reais. Cada carro tratado com o máximo cuidado e atenção ao detalhe.",
+    gal_featured: "Foto em destaque", gal_ext: "Exterior", gal_int: "Interior", gal_tint: "Window Tint", gal_prot: "Proteção", gal_custom: "Custom",
+    gal_item1: "Detailing Completo", gal_item2: "Polish & Proteção", gal_item3: "Interior Detail", gal_item4: "Película Cerâmica", gal_item5: "Paint Protection", gal_item6: "Customização",
+    gal_note: "📱 Siga @nsgarage no Instagram para ver mais resultados",
+    book_eyebrow: "Agende seu serviço", book_title: "Booking", book_sub: "Preencha o formulário e entraremos em contato para confirmar data e horário.",
+    info_area_title: "📍 Área de Atendimento", info_area_text: "Atendemos Winter Garden e região de Orlando. Serviço 100% mobile — vamos até você.",
+    info_hours_title: "⏰ Horários", info_hours_text: "Segunda a Sábado, das 8h às 18h. Agendamentos com antecedência mínima de 24h.",
+    info_pay_title: "💳 Pagamento", info_pay_text: "50% de depósito no agendamento. Saldo no dia do serviço. Aceitamos Zelle, Cash e cartão.",
+    info_cancel_title: "🔄 Cancelamentos", info_cancel_text: "Reagendamentos com no mínimo 24h de antecedência. Depósito não reembolsável em cancelamentos de última hora.",
+    f_name: "Nome", f_name_ph: "Seu nome", f_phone: "Telefone", f_email: "E-mail", f_service: "Serviço", f_service_ph: "Selecione um serviço",
+    f_opt1: "Detailing Exterior", f_opt2: "Detailing Interior", f_opt3: "Window Tinting — Cerâmico", f_opt4: "Window Tinting — High Performance", f_opt5: "Pacote Completo", f_opt6: "Programa Lojista", f_opt7: "Customização / Outro",
+    f_car: "Veículo", f_car_ph: "Ex: Honda Civic 2021", f_date: "Data preferida", f_msg: "Mensagem (opcional)", f_msg_ph: "Detalhes adicionais, endereço de atendimento...",
+    f_submit: "Enviar solicitação →", f_disclaimer: "Entraremos em contato em até 2h para confirmar o agendamento.",
+    f_success_title: "Solicitação enviada!", f_success_text: "Obrigado! Entraremos em contato em breve para confirmar seu agendamento.",
+    footer_copy: "© 2025 NS Garage · Winter Garden, FL · Todos os direitos reservados",
+    alert_required: "Por favor, preencha os campos obrigatórios: nome, telefone, e-mail e serviço."
+  },
+  en: {
+    nav_home: "Home", nav_services: "Services", nav_gallery: "Gallery", nav_book: "Book Now",
+    hero_eyebrow: "Winter Garden, FL · Mobile Service",
+    hero_sub: "Professional Custom & Detailing that comes to you. Exterior, interior, window tinting and more.",
+    hero_cta_book: "Book Now", hero_cta_services: "Our Services",
+    stat_cars: "Cars detailed", stat_rating: "Average rating",
+    stat_mobile_num: "Mobile", stat_mobile_label: "We come to you",
+    srv_eyebrow: "What we do", srv_title: "Our Services",
+    srv_sub: "High-performance detailing and customization using premium products.",
+    s1_name: "Exterior Detailing", s1_desc: "Full wash, decontamination, polish, and protection application. Flawless finish inside and out.", s1_price: "Starting at $149",
+    s2_name: "Interior Detailing", s2_desc: "Deep vacuuming, leather and fabric sanitizing, compressed air blow-out in every detail, dashboard and glass cleaning.", s2_price: "Starting at $129",
+    s3_name: "Window Tinting", s3_desc: "Ceramic or high-performance film. UV protection, privacy, and aesthetics with quality guarantee.", s3_price: "Starting at $199",
+    s4_name: "Full Package", s4_desc: "Exterior + interior in a single appointment. Perfect for getting your car in pristine condition without hassle.", s4_price: "Starting at $249",
+    s5_name: "Dealer Program", s5_desc: "Special pricing for dealerships and retailers. Loyalty program with volume-based rates.", s5_price: "Price on request",
+    s6_name: "Customization", s6_desc: "Special vehicle personalization projects. Reach out to discuss what you have in mind.", s6_price: "Custom quote",
+    gal_eyebrow: "Our work", gal_title: "Gallery", gal_sub: "Real results. Every car treated with maximum care and attention to detail.",
+    gal_featured: "Featured photo", gal_ext: "Exterior", gal_int: "Interior", gal_tint: "Window Tint", gal_prot: "Protection", gal_custom: "Custom",
+    gal_item1: "Full Detailing", gal_item2: "Polish & Protection", gal_item3: "Interior Detail", gal_item4: "Ceramic Film", gal_item5: "Paint Protection", gal_item6: "Customization",
+    gal_note: "📱 Follow @nsgarage on Instagram to see more results",
+    book_eyebrow: "Schedule your service", book_title: "Booking", book_sub: "Fill out the form and we'll get in touch to confirm your date and time.",
+    info_area_title: "📍 Service Area", info_area_text: "We serve Winter Garden and the greater Orlando area. 100% mobile service — we come to you.",
+    info_hours_title: "⏰ Hours", info_hours_text: "Monday to Saturday, 8am to 6pm. Bookings require at least 24h notice.",
+    info_pay_title: "💳 Payment", info_pay_text: "50% deposit at booking. Balance due on service day. We accept Zelle, Cash, and card.",
+    info_cancel_title: "🔄 Cancellations", info_cancel_text: "Rescheduling requires at least 24h notice. Deposits are non-refundable for last-minute cancellations.",
+    f_name: "Name", f_name_ph: "Your name", f_phone: "Phone", f_email: "Email", f_service: "Service", f_service_ph: "Select a service",
+    f_opt1: "Exterior Detailing", f_opt2: "Interior Detailing", f_opt3: "Window Tinting — Ceramic", f_opt4: "Window Tinting — High Performance", f_opt5: "Full Package", f_opt6: "Dealer Program", f_opt7: "Customization / Other",
+    f_car: "Vehicle", f_car_ph: "e.g. Honda Civic 2021", f_date: "Preferred date", f_msg: "Message (optional)", f_msg_ph: "Additional details, service address...",
+    f_submit: "Send request →", f_disclaimer: "We'll reach out within 2 hours to confirm your appointment.",
+    f_success_title: "Request sent!", f_success_text: "Thank you! We'll be in touch shortly to confirm your booking.",
+    footer_copy: "© 2025 NS Garage · Winter Garden, FL · All rights reserved",
+    alert_required: "Please fill in the required fields: name, phone, email, and service."
+  },
+  es: {
+    nav_home: "Inicio", nav_services: "Servicios", nav_gallery: "Galería", nav_book: "Reservar",
+    hero_eyebrow: "Winter Garden, FL · Servicio Móvil",
+    hero_sub: "Custom & Detailing profesional que llega hasta ti. Exterior, interior, polarizado y mucho más.",
+    hero_cta_book: "Reservar ahora", hero_cta_services: "Ver servicios",
+    stat_cars: "Autos detallados", stat_rating: "Calificación promedio",
+    stat_mobile_num: "Móvil", stat_mobile_label: "Vamos donde tú estés",
+    srv_eyebrow: "Lo que hacemos", srv_title: "Nuestros Servicios",
+    srv_sub: "Detallado y personalización de alto rendimiento con productos premium.",
+    s1_name: "Detailing Exterior", s1_desc: "Lavado completo, descontaminación, pulido y aplicación de protección. Acabado impecable.", s1_price: "Desde $149",
+    s2_name: "Detailing Interior", s2_desc: "Aspirado profundo, higienización de cuero y tela, soplado de aire comprimido en cada detalle, limpieza de tablero y vidrios.", s2_price: "Desde $129",
+    s3_name: "Polarizado", s3_desc: "Película cerámica o high-performance. Protección UV, privacidad y estética con garantía de calidad.", s3_price: "Desde $199",
+    s4_name: "Paquete Completo", s4_desc: "Exterior + interior en una sola cita. Ideal para quienes quieren el auto en perfectas condiciones sin complicaciones.", s4_price: "Desde $249",
+    s5_name: "Programa Distribuidores", s5_desc: "Precios especiales para concesionarias y distribuidores. Programa de fidelidad con tarifas diferenciadas por volumen.", s5_price: "Precio a consultar",
+    s6_name: "Personalización", s6_desc: "Proyectos especiales de personalización del vehículo. Contáctanos para discutir lo que tienes en mente.", s6_price: "Presupuesto personalizado",
+    gal_eyebrow: "Nuestro trabajo", gal_title: "Galería", gal_sub: "Resultados reales. Cada auto tratado con el máximo cuidado y atención al detalle.",
+    gal_featured: "Foto destacada", gal_ext: "Exterior", gal_int: "Interior", gal_tint: "Polarizado", gal_prot: "Protección", gal_custom: "Custom",
+    gal_item1: "Detailing Completo", gal_item2: "Pulido & Protección", gal_item3: "Detailing Interior", gal_item4: "Película Cerámica", gal_item5: "Protección de pintura", gal_item6: "Personalización",
+    gal_note: "📱 Síguenos en Instagram @nsgarage para ver más resultados",
+    book_eyebrow: "Agenda tu servicio", book_title: "Reservas", book_sub: "Completa el formulario y nos pondremos en contacto para confirmar fecha y hora.",
+    info_area_title: "📍 Área de Servicio", info_area_text: "Atendemos Winter Garden y el área de Orlando. Servicio 100% móvil — vamos donde tú estés.",
+    info_hours_title: "⏰ Horarios", info_hours_text: "Lunes a Sábado, de 8am a 6pm. Las reservas requieren al menos 24h de anticipación.",
+    info_pay_title: "💳 Pago", info_pay_text: "50% de depósito al reservar. Saldo el día del servicio. Aceptamos Zelle, efectivo y tarjeta.",
+    info_cancel_title: "🔄 Cancelaciones", info_cancel_text: "Reprogramaciones con al menos 24h de anticipación. El depósito no es reembolsable en cancelaciones de último momento.",
+    f_name: "Nombre", f_name_ph: "Tu nombre", f_phone: "Teléfono", f_email: "Correo", f_service: "Servicio", f_service_ph: "Selecciona un servicio",
+    f_opt1: "Detailing Exterior", f_opt2: "Detailing Interior", f_opt3: "Polarizado — Cerámico", f_opt4: "Polarizado — High Performance", f_opt5: "Paquete Completo", f_opt6: "Programa Distribuidores", f_opt7: "Personalización / Otro",
+    f_car: "Vehículo", f_car_ph: "Ej: Honda Civic 2021", f_date: "Fecha preferida", f_msg: "Mensaje (opcional)", f_msg_ph: "Detalles adicionales, dirección de servicio...",
+    f_submit: "Enviar solicitud →", f_disclaimer: "Nos pondremos en contacto en 2 horas para confirmar la cita.",
+    f_success_title: "¡Solicitud enviada!", f_success_text: "¡Gracias! Nos pondremos en contacto pronto para confirmar tu reserva.",
+    footer_copy: "© 2025 NS Garage · Winter Garden, FL · Todos los derechos reservados",
+    alert_required: "Por favor completa los campos obligatorios: nombre, teléfono, correo y servicio."
+  }
+};
+
+let currentLang = 'pt';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang][key] !== undefined) el.textContent = i18n[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (i18n[lang][key] !== undefined) el.placeholder = i18n[lang][key];
+  });
+  ['pt','en','es'].forEach(l => document.getElementById('btn-'+l).classList.remove('active'));
+  document.getElementById('btn-'+lang).classList.add('active');
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en';
+}
+
+// Hamburger
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+// Form
+function submitForm() {
+  const name = document.getElementById('fname').value.trim();
+  const phone = document.getElementById('fphone').value.trim();
+  const email = document.getElementById('femail').value.trim();
+  const service = document.getElementById('fservice').value;
+  if (!name || !phone || !email || !service) {
+    alert(i18n[currentLang].alert_required);
+    return;
+  }
+  document.getElementById('formBody').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+
+// Scroll shadow
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').style.boxShadow = window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
+});
+
+// Min date
+const dateInput = document.getElementById('fdate');
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+dateInput.min = tomorrow.toISOString().split('T')[0];
+
+// Init
+setLang('pt');
+</script>
+</body>
+</html>
