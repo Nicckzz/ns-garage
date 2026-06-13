@@ -126,11 +126,12 @@ const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.5;
+renderer.toneMappingExposure = 1.0;
 renderer.shadowMap.enabled = true;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0d0d0d);
+scene.fog = new THREE.Fog(0x0d0d0d, 15, 40);
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
 camera.position.set(0, 1.5, 8);
@@ -146,7 +147,7 @@ resize();
 window.addEventListener('resize', resize);
 
 // Lights
-scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+scene.add(new THREE.AmbientLight(0xffffff, 1.0));
 const sun = new THREE.DirectionalLight(0xffffff, 2);
 sun.position.set(5, 10, 5);
 sun.castShadow = true;
@@ -154,12 +155,16 @@ scene.add(sun);
 const fill = new THREE.DirectionalLight(0xffffff, 0.8);
 fill.position.set(-5, 3, -5);
 scene.add(fill);
-const pL = new THREE.PointLight(0x7c3aed, 2, 16);
-pL.position.set(-4, 3, -2);
+const pL = new THREE.PointLight(0xffffff, 1.5, 20);
+pL.position.set(-5, 4, -2);
 scene.add(pL);
-const pR = new THREE.PointLight(0xa855f7, 1, 10);
-pR.position.set(4, 2, 4);
+const pR = new THREE.PointLight(0xffffff, 1.0, 15);
+pR.position.set(5, 2, 4);
 scene.add(pR);
+// Subtle purple rim light only
+const rimL = new THREE.PointLight(0x7c3aed, 1.5, 8);
+rimL.position.set(0, -0.5, -4);
+scene.add(rimL);
 
 // Ground
 const ground = new THREE.Mesh(
@@ -189,18 +194,19 @@ loader.load(
     carModel = gltf.scene;
 
     // Center and scale
-    const box = new THREE.Box3().setFromObject(carModel);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
+    const bbox = new THREE.Box3().setFromObject(carModel);
+    const center = bbox.getCenter(new THREE.Vector3());
+    const size = bbox.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
     const scale = 4.5 / maxDim;
     carModel.scale.setScalar(scale);
-    // Center horizontally
-    carModel.position.x = -center.x * scale;
-    carModel.position.z = -center.z * scale;
-    // Place on ground
-    const minY = box.min.y * scale;
-    carModel.position.y = -minY;
+    carModel.updateMatrixWorld(true);
+    // Recompute after scale
+    const bbox2 = new THREE.Box3().setFromObject(carModel);
+    const center2 = bbox2.getCenter(new THREE.Vector3());
+    carModel.position.x -= center2.x;
+    carModel.position.z -= center2.z;
+    carModel.position.y -= bbox2.min.y;
 
     carModel.traverse(child => {
       if (child.isMesh) {
@@ -314,7 +320,7 @@ function animate() {
   if(carModel) { carModel.rotation.y=rotY; carModel.rotation.x=rotX; }
   camera.position.set(0,1.5,zoom);
   camera.lookAt(0,0.8,0);
-  pL.intensity = 3+Math.sin(t)*1;
+  rimL.intensity = 1.2+Math.sin(t)*0.4;
   renderer.render(scene,camera);
   updateHotspots();
 }
