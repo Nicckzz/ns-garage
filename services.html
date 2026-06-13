@@ -119,8 +119,9 @@
 </div>
 
 <div class="vehicle-bar">
-  <button class="v-btn active" onclick="setVehicle('sedan',this)">🚗 Sedan / Coupe</button>
-  <button class="v-btn" onclick="setVehicle('suv',this)">🚙 SUV / Crossover</button>
+  <button class="v-btn active" onclick="setVehicle('coupe',this)">🚘 Coupe / 2-door</button>
+  <button class="v-btn" onclick="setVehicle('sedan',this)">🚗 Sedan / 5-door</button>
+  <button class="v-btn" onclick="setVehicle('suv',this)">🚙 SUV / Compact SUV</button>
   <button class="v-btn" onclick="setVehicle('truck',this)">🛻 Truck / Van</button>
 </div>
 
@@ -136,9 +137,10 @@
 </footer>
 
 <script>
-let currentVehicle = 'sedan';
+let currentVehicle = 'coupe';
 
 const VEHICLES = {
+  coupe: '🚘 Coupe',
   sedan: '🚗 Sedan',
   suv:   '🚙 SUV',
   truck: '🛻 Truck'
@@ -151,21 +153,21 @@ const SERVICES = [
     icon: '✨',
     name: 'Exterior Detailing',
     desc: 'Full exterior decontamination, hand wash, clay bar treatment, polish, and protection. Your paint restored to showroom condition.',
-    pricing: { sedan: '$149', suv: '$179', truck: '$199' }
+    pricing: { coupe: '$70', sedan: '$75', suv: '$80', truck: '$85' }
   },
   {
     id: 'interior',
     icon: '🪑',
     name: 'Interior Detailing',
     desc: 'Deep interior cleaning using compressed air, steam, and professional products. Every surface restored and protected.',
-    pricing: { sedan: '$129', suv: '$149', truck: '$169' }
+    pricing: { coupe: '$70', sedan: '$75', suv: '$80', truck: '$85' }
   },
   {
     id: 'full',
     icon: '🛡️',
     name: 'Full Detail Package',
     desc: 'Complete exterior and interior detailing in one appointment. Best value for a full vehicle transformation.',
-    pricing: { sedan: '$249', suv: '$299', truck: '$329' }
+    pricing: { coupe: '$120', sedan: '$130', suv: '$140', truck: '$150' }
   },
   {
     id: 'tinting',
@@ -174,8 +176,8 @@ const SERVICES = [
     desc: 'Professional window film installation for UV protection, heat rejection, and privacy.',
     type: 'options',
     options: [
-      { label: 'Ceramic', pricing: { sedan: '$349', suv: '$399', truck: '$429' } },
-      { label: 'High Performance', pricing: { sedan: '$199', suv: '$249', truck: '$279' } },
+      { label: 'Ceramic', pricing: { coupe: 'Quote', sedan: 'Quote', suv: 'Quote', truck: 'Quote' } },
+      { label: 'High Performance', pricing: { coupe: 'Quote', sedan: 'Quote', suv: 'Quote', truck: 'Quote' } },
     ],
     defaultOption: 0
   },
@@ -184,7 +186,7 @@ const SERVICES = [
     icon: '💡',
     name: 'Headlight Restoration',
     desc: 'Multi-stage sanding and polishing to restore yellowed or oxidized headlights to full clarity and brightness.',
-    pricing: { sedan: '$79', suv: '$79', truck: '$89' }
+    pricing: { coupe: '$99', sedan: '$99', suv: '$99', truck: '$99' }
   },
   {
     id: 'polish',
@@ -193,17 +195,17 @@ const SERVICES = [
     desc: 'Machine polish to eliminate swirl marks, scratches, and oxidation. Choose the level of correction needed.',
     type: 'options',
     options: [
-      { label: '1-Stage', pricing: { sedan: '$149', suv: '$179', truck: '$199' } },
-      { label: '2-Stage', pricing: { sedan: '$249', suv: '$299', truck: '$329' } },
+      { label: '1-Stage', pricing: { coupe: '$350', sedan: '$400', suv: '$450', truck: '$500' } },
+      { label: '2-Stage', pricing: { coupe: '$600', sedan: '$700', suv: '$800', truck: '$950' } },
     ],
     defaultOption: 0
   },
   {
     id: 'ceramic',
     icon: '💎',
-    name: 'Ceramic Coating',
-    desc: 'Long-term paint protection with a hydrophobic ceramic layer. Enhances gloss, repels water, and protects against contaminants.',
-    pricing: { sedan: '$499', suv: '$599', truck: '$649' }
+    name: 'Ceramic Coating Package',
+    desc: 'Ultimate paint protection — 2-stage paint correction + ceramic coating. Mirror shine + long-lasting protection.',
+    pricing: { coupe: '$1,000', sedan: '$1,150', suv: '$1,300', truck: '$1,500' }
   },
   {
     id: 'shampoo',
@@ -212,11 +214,11 @@ const SERVICES = [
     desc: 'Deep cleaning of upholstery using hot water extraction and steam. Select which areas you need treated.',
     type: 'shampoo',
     items: [
-      { label: 'Front Seats',     prices: { sedan: 50, suv: 60, truck: 60 } },
-      { label: 'Rear Seats',      prices: { sedan: 50, suv: 60, truck: 60 } },
-      { label: 'Carpet / Floor',  prices: { sedan: 60, suv: 70, truck: 70 } },
-      { label: 'Roof Lining',     prices: { sedan: 60, suv: 70, truck: 70 } },
-      { label: 'Trunk / Cargo',   prices: { sedan: 40, suv: 50, truck: 50 } },
+      { label: 'Front Seats',     prices: { coupe: 50, sedan: 50, suv: 60, truck: 60 } },
+      { label: 'Rear Seats',      prices: { coupe: 50, sedan: 50, suv: 60, truck: 60 } },
+      { label: 'Carpet / Floor',  prices: { coupe: 60, sedan: 60, suv: 70, truck: 70 } },
+      { label: 'Roof Lining',     prices: { coupe: 60, sedan: 60, suv: 70, truck: 70 } },
+      { label: 'Trunk / Cargo',   prices: { coupe: 40, sedan: 40, suv: 50, truck: 50 } },
     ]
   },
 ];
