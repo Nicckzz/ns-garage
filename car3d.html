@@ -3,430 +3,181 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NS Garage — 3D Car Explorer</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>NS Garage 3D</title>
 <style>
-:root {
-  --bg: #0d0d0d; --bg2: #141414; --bg3: #1a1a1a;
-  --purple: #7c3aed; --purple-light: #a855f7;
-  --white: #f5f5f5; --muted: #888;
-  --border: rgba(255,255,255,0.07);
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0d0d0d; overflow:hidden; font-family:'DM Sans',sans-serif; }
+#c { display:block; width:100vw; height:100vh; }
+
+.view-toggle {
+  position:absolute; top:16px; left:50%; transform:translateX(-50%);
+  display:flex; gap:4px; background:rgba(26,26,26,0.95);
+  border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:4px; z-index:20;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+.vbtn {
+  background:none; border:none; color:#888; font-size:0.82rem; font-weight:600;
+  padding:8px 22px; border-radius:7px; cursor:pointer; transition:all 0.2s;
+  font-family:sans-serif;
+}
+.vbtn.active { background:#7c3aed; color:#fff; }
 
-/* SECTION */
-#car-explorer { min-height: 100vh; padding: 80px 5%; display: flex; flex-direction: column; align-items: center; }
-.explorer-header { text-align: center; margin-bottom: 40px; }
-.explorer-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--purple-light); margin-bottom: 10px; }
-.explorer-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 1px; margin-bottom: 12px; }
-.explorer-sub { color: var(--muted); font-size: 0.9rem; max-width: 480px; margin: 0 auto; }
-
-/* VIEW TOGGLE */
-.view-toggle { display: flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 4px; margin-bottom: 32px; }
-.view-btn { background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 10px 28px; border-radius: 7px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
-.view-btn.active { background: var(--purple); color: #fff; }
-
-/* CANVAS WRAPPER */
-.canvas-wrapper { position: relative; width: 100%; max-width: 900px; height: 500px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: radial-gradient(ellipse at 50% 80%, rgba(124,58,237,0.12) 0%, #0a0a0f 70%); }
-#car-canvas { width: 100%; height: 100%; display: block; cursor: grab; }
-#car-canvas:active { cursor: grabbing; }
+.hint {
+  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.07);
+  border-radius:20px; padding:5px 14px; font-size:0.7rem; color:#666;
+  white-space:nowrap; z-index:20;
+}
 
 /* HOTSPOTS */
-.hotspot { position: absolute; width: 28px; height: 28px; transform: translate(-50%, -50%); cursor: pointer; z-index: 10; }
-.hotspot-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--purple-light); animation: hotspot-pulse 2s infinite; }
-.hotspot-dot { position: absolute; inset: 6px; border-radius: 50%; background: var(--purple-light); transition: transform 0.2s; }
-.hotspot:hover .hotspot-dot { transform: scale(1.3); }
-.hotspot-label { position: absolute; left: 36px; top: 50%; transform: translateY(-50%); background: rgba(124,58,237,0.9); color: #fff; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; letter-spacing: 0.5px; text-transform: uppercase; }
-.hotspot:hover .hotspot-label { opacity: 1; }
-@keyframes hotspot-pulse {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(2); opacity: 0; }
+.hs {
+  position:absolute; width:26px; height:26px;
+  transform:translate(-50%,-50%); cursor:pointer; z-index:15;
+}
+.hs-ring {
+  position:absolute; inset:0; border-radius:50%;
+  border:2px solid #a855f7; animation:pulse 2s infinite;
+}
+.hs-dot {
+  position:absolute; inset:5px; border-radius:50%;
+  background:#a855f7; transition:transform 0.2s;
+}
+.hs:hover .hs-dot { transform:scale(1.4); }
+.hs-tip {
+  position:absolute; left:32px; top:50%; transform:translateY(-50%);
+  background:rgba(124,58,237,0.95); color:#fff; font-size:0.68rem;
+  font-weight:600; padding:3px 10px; border-radius:20px;
+  white-space:nowrap; opacity:0; transition:opacity 0.2s;
+  pointer-events:none; letter-spacing:0.5px; text-transform:uppercase;
+}
+.hs:hover .hs-tip { opacity:1; }
+@keyframes pulse {
+  0%{transform:scale(1);opacity:1}
+  100%{transform:scale(2.2);opacity:0}
 }
 
-/* INSTRUCTIONS */
-.canvas-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); border: 1px solid var(--border); border-radius: 20px; padding: 6px 16px; font-size: 0.73rem; color: var(--muted); white-space: nowrap; backdrop-filter: blur(8px); }
-
 /* PANEL */
-.service-panel { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-.service-panel.open { opacity: 1; pointer-events: all; }
-.panel-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); }
-.panel-card { position: relative; z-index: 1; background: var(--bg2); border: 1px solid var(--purple); border-radius: 16px; padding: 36px; max-width: 520px; width: 100%; box-shadow: 0 0 60px rgba(124,58,237,0.3); }
-.panel-close { position: absolute; top: 16px; right: 16px; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.panel-close:hover { border-color: var(--purple); color: var(--white); }
-.panel-icon { font-size: 2.5rem; margin-bottom: 12px; }
-.panel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; color: var(--purple-light); margin-bottom: 8px; }
-.panel-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; }
-.panel-video { width: 100%; aspect-ratio: 16/9; background: var(--bg3); border-radius: 10px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; color: var(--muted); font-size: 0.82rem; margin-bottom: 20px; overflow: hidden; }
-.panel-video video { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
-.panel-video-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.panel-video-placeholder span { font-size: 2rem; }
-.panel-price { display: inline-block; background: var(--purple-glow); border: 1px solid rgba(168,85,247,0.3); color: var(--purple-light); padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; margin-bottom: 20px; }
-.panel-cta { display: block; width: 100%; text-align: center; background: var(--purple); color: #fff; padding: 13px; border-radius: 8px; font-weight: 600; font-size: 0.92rem; text-decoration: none; transition: background 0.2s; }
-.panel-cta:hover { background: var(--purple-light); }
-
-/* GROUND REFLECTION */
-.ground { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(0deg, rgba(124,58,237,0.08) 0%, transparent 100%); pointer-events: none; }
+.panel {
+  position:absolute; inset:0; z-index:100;
+  display:flex; align-items:center; justify-content:center; padding:16px;
+  opacity:0; pointer-events:none; transition:opacity 0.3s;
+}
+.panel.open { opacity:1; pointer-events:all; }
+.p-back { position:absolute; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); }
+.p-card {
+  position:relative; z-index:1; background:#141414;
+  border:1px solid #7c3aed; border-radius:14px; padding:28px;
+  max-width:420px; width:100%; box-shadow:0 0 40px rgba(124,58,237,0.3);
+}
+.p-close {
+  position:absolute; top:12px; right:12px; background:#1a1a1a;
+  border:1px solid rgba(255,255,255,0.07); color:#888;
+  width:28px; height:28px; border-radius:50%; cursor:pointer;
+  font-size:0.85rem; display:flex; align-items:center; justify-content:center;
+}
+.p-icon { font-size:2rem; margin-bottom:8px; }
+.p-title { font-size:1.4rem; font-weight:700; color:#a855f7; margin-bottom:6px; }
+.p-desc { color:#888; font-size:0.85rem; line-height:1.7; margin-bottom:16px; }
+.p-video {
+  width:100%; aspect-ratio:16/9; background:#1a1a1a;
+  border-radius:8px; border:1px solid rgba(255,255,255,0.07);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:8px; color:#555; font-size:0.8rem; margin-bottom:14px;
+}
+.p-price {
+  display:inline-block; background:rgba(124,58,237,0.15);
+  border:1px solid rgba(168,85,247,0.3); color:#a855f7;
+  padding:4px 14px; border-radius:20px; font-size:0.78rem;
+  font-weight:600; margin-bottom:16px;
+}
+.p-cta {
+  display:block; width:100%; text-align:center; background:#7c3aed;
+  color:#fff; padding:11px; border-radius:8px; font-weight:600;
+  font-size:0.88rem; text-decoration:none; border:none; cursor:pointer;
+}
+.p-cta:hover { background:#a855f7; }
 </style>
 </head>
 <body>
 
-<section id="car-explorer">
-  <div class="explorer-header">
-    <div class="explorer-eyebrow">Explore o processo</div>
-    <h2 class="explorer-title">Detailing Interativo 3D</h2>
-    <p class="explorer-sub">Gire o veículo 360° e clique nos pontos para ver como cada área é tratada.</p>
-  </div>
+<canvas id="c"></canvas>
 
-  <div class="view-toggle">
-    <button class="view-btn active" onclick="setView('exterior')">🚗 Exterior</button>
-    <button class="view-btn" onclick="setView('interior')">🪑 Interior</button>
-  </div>
+<div class="view-toggle">
+  <button class="vbtn active" id="btn-ext" onclick="setView('exterior')">🚗 Exterior</button>
+  <button class="vbtn" id="btn-int" onclick="setView('interior')">🪑 Interior</button>
+</div>
 
-  <div class="canvas-wrapper" id="canvasWrapper">
-    <canvas id="car-canvas"></canvas>
-    <div class="ground"></div>
+<div class="hint">🖱️ Drag to rotate · Scroll to zoom · Click dots</div>
 
-    <!-- EXTERIOR HOTSPOTS -->
-    <div class="hotspot" id="hs-wheel-fr" style="left:72%;top:72%;" onclick="openPanel('wheel')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Wheel Detail</div>
-    </div>
-    <div class="hotspot" id="hs-hood" style="left:38%;top:30%;" onclick="openPanel('hood')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Hood Polish</div>
-    </div>
-    <div class="hotspot" id="hs-side" style="left:55%;top:50%;" onclick="openPanel('side')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Paint Correction</div>
-    </div>
-    <div class="hotspot" id="hs-window" style="left:50%;top:28%;" onclick="openPanel('window')" data-view="exterior">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Window Tinting</div>
-    </div>
+<!-- EXTERIOR HOTSPOTS -->
+<div class="hs" id="hs-wheel" style="left:71%;top:70%;" onclick="openPanel('wheel')">
+  <div class="hs-ring"></div><div class="hs-dot"></div>
+  <div class="hs-tip">Wheel Detail</div>
+</div>
+<div class="hs" id="hs-hood" style="left:30%;top:32%;" onclick="openPanel('hood')">
+  <div class="hs-ring"></div><div class="hs-dot"></div>
+  <div class="hs-tip">Hood Polish</div>
+</div>
+<div class="hs" id="hs-side" style="left:52%;top:52%;" onclick="openPanel('side')">
+  <div class="hs-ring"></div><div class="hs-dot"></div>
+  <div class="hs-tip">Paint Correction</div>
+</div>
+<div class="hs" id="hs-win" style="left:48%;top:30%;" onclick="openPanel('window')">
+  <div class="hs-ring"></div><div class="hs-dot"></div>
+  <div class="hs-tip">Window Tinting</div>
+</div>
 
-    <!-- INTERIOR HOTSPOTS -->
-    <div class="hotspot" id="hs-seat" style="left:45%;top:45%;" onclick="openPanel('seat')" data-view="interior" style="display:none;">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Seat Cleaning</div>
-    </div>
-    <div class="hotspot" id="hs-dashboard" style="left:35%;top:35%;" onclick="openPanel('dashboard')" data-view="interior" style="display:none;">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Dashboard Detail</div>
-    </div>
-    <div class="hotspot" id="hs-carpet" style="left:55%;top:65%;" onclick="openPanel('carpet')" data-view="interior" style="display:none;">
-      <div class="hotspot-ring"></div>
-      <div class="hotspot-dot"></div>
-      <div class="hotspot-label">Carpet Steam</div>
-    </div>
+<!-- INTERIOR HOTSPOTS (hidden by default) -->
+<div class="hs" id="hs-seat" style="left:45%;top:55%;display:none;" onclick="openPanel('seat')">
+  <div class="hs-ring"></div><div class="hs-dot"></div>
+  <div class="hs-tip">Seat Cleaning</div>
+</div>
+<div class="hs" id="hs-dash" style="left:35%;top:38%;display:none;" onclick="openPanel('dashboard')">
+  <div class="hs-ring"></div><div class="hs-dot"></div>
+  <div class="hs-tip">Dashboard Detail</div>
+</div>
+<div class="hs" id="hs-carpet" style="left:58%;top:68%;display:none;" onclick="openPanel('carpet')">
+  <div class="hs-ring"></div><div class="hs-dot"></div>
+  <div class="hs-tip">Carpet Steam</div>
+</div>
 
-    <div class="canvas-hint">🖱️ Drag to rotate · Scroll to zoom · Click dots for details</div>
-  </div>
-</section>
-
-<!-- SERVICE PANEL -->
-<div class="service-panel" id="servicePanel">
-  <div class="panel-backdrop" onclick="closePanel()"></div>
-  <div class="panel-card">
-    <button class="panel-close" onclick="closePanel()">✕</button>
-    <div class="panel-icon" id="panelIcon">🔧</div>
-    <div class="panel-title" id="panelTitle">Service</div>
-    <div class="panel-desc" id="panelDesc"></div>
-    <div class="panel-video" id="panelVideo">
-      <div class="panel-video-placeholder">
-        <span>🎬</span>
-        <span>Your process video goes here</span>
-      </div>
-    </div>
-    <div class="panel-price" id="panelPrice"></div>
-    <a href="#booking" class="panel-cta" onclick="closePanel()">Book This Service →</a>
+<!-- PANEL -->
+<div class="panel" id="panel">
+  <div class="p-back" onclick="closePanel()"></div>
+  <div class="p-card">
+    <button class="p-close" onclick="closePanel()">✕</button>
+    <div class="p-icon" id="pIcon">🔧</div>
+    <div class="p-title" id="pTitle">Service</div>
+    <div class="p-desc" id="pDesc"></div>
+    <div class="p-video" id="pVideo"><span style="font-size:1.8rem">🎬</span><span>Video coming soon</span></div>
+    <div class="p-price" id="pPrice"></div>
+    <button class="p-cta" onclick="closePanel(); window.parent.document.getElementById('booking').scrollIntoView();">Book This Service →</button>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────
-const services = {
-  wheel: {
-    icon: '🛞', title: 'Wheel & Tire Detail',
-    desc: 'Deep cleaning of wheels and tires using specialized decontamination products. We remove brake dust, iron deposits, and road grime — leaving your wheels spotless and protected.',
-    price: 'Included in Full Detail', video: null
-  },
-  hood: {
-    icon: '✨', title: 'Hood Polish & Protection',
-    desc: 'Multi-stage paint correction on the hood — removing swirl marks, light scratches, and oxidation. Finished with a ceramic or carnauba wax coat for a mirror-like shine.',
-    price: 'Starting at $149', video: null
-  },
-  side: {
-    icon: '🪄', title: 'Paint Correction',
-    desc: 'Full-body paint decontamination and machine polish. We use a dual-action polisher to safely remove surface defects and restore your car\'s factory gloss.',
-    price: 'Starting at $149', video: null
-  },
-  window: {
-    icon: '🔮', title: 'Window Tinting',
-    desc: 'Ceramic or high-performance window film installation. Blocks up to 99% of UV rays, reduces heat, and adds privacy — all with a clean, bubble-free finish.',
-    price: 'Starting at $199', video: null
-  },
-  seat: {
-    icon: '🪑', title: 'Seat & Upholstery Cleaning',
-    desc: 'Hot water extraction and steam cleaning for fabric seats. Leather seats get conditioning treatment to restore suppleness and prevent cracking.',
-    price: 'Starting at $129', video: null
-  },
-  dashboard: {
-    icon: '📟', title: 'Dashboard & Panel Detail',
-    desc: 'Compressed air blow-out of every vent and crevice. All surfaces cleaned, conditioned, and dressed — from the steering wheel to every button and screen.',
-    price: 'Starting at $129', video: null
-  },
-  carpet: {
-    icon: '🧹', title: 'Carpet & Floor Steam Clean',
-    desc: 'Deep vacuum followed by steam extraction on all carpets and floor mats. Removes embedded dirt, stains, and odors — leaving the cabin fresh and clean.',
-    price: 'Starting at $129', video: null
-  }
+const DATA = {
+  wheel:     { icon:'🛞', title:'Wheel & Tire Detail',    price:'Included in Full Detail', desc:'Deep cleaning of wheels and tires using specialized decontamination products. We remove brake dust, iron deposits, and road grime — leaving your wheels spotless and protected.' },
+  hood:      { icon:'✨', title:'Hood Polish & Protection', price:'Starting at $149',        desc:'Multi-stage paint correction on the hood — removing swirl marks and oxidation. Finished with a ceramic coat for a mirror-like shine.' },
+  side:      { icon:'🪄', title:'Paint Correction',        price:'Starting at $149',        desc:'Full-body paint decontamination and machine polish. We restore your car\'s factory gloss using a dual-action polisher.' },
+  window:    { icon:'🔮', title:'Window Tinting',          price:'Starting at $199',        desc:'Ceramic or high-performance film. Blocks up to 99% UV rays, reduces heat and adds privacy — clean bubble-free finish.' },
+  seat:      { icon:'🪑', title:'Seat & Upholstery',       price:'Starting at $129',        desc:'Hot water extraction and steam cleaning for fabric seats. Leather gets conditioning treatment to restore suppleness.' },
+  dashboard: { icon:'📟', title:'Dashboard Detail',        price:'Starting at $129',        desc:'Compressed air blow-out of every vent and crevice. All surfaces cleaned, conditioned and dressed.' },
+  carpet:    { icon:'🧹', title:'Carpet Steam Clean',      price:'Starting at $129',        desc:'Deep vacuum followed by steam extraction on all carpets. Removes embedded dirt, stains and odors.' }
 };
 
-// ── THREE.JS SETUP ─────────────────────────────────────────────────────
-const canvas = document.getElementById('car-canvas');
-const wrapper = document.getElementById('canvasWrapper');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.shadowMap.enabled = true;
+// ── RENDERER ──────────────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
+renderer.toneMappingExposure = 1.3;
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-camera.position.set(0, 1.5, 5);
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
 
-// Lights
-const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(ambient);
-const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-dirLight.position.set(5, 8, 5);
-dirLight.castShadow = true;
-scene.add(dirLight);
-const purpleLight = new THREE.PointLight(0x7c3aed, 2, 10);
-purpleLight.position.set(-3, 2, -2);
-scene.add(purpleLight);
-const fillLight = new THREE.PointLight(0xa855f7, 1, 8);
-fillLight.position.set(3, 1, 3);
-scene.add(fillLight);
-
-// ── CAR MODEL (procedural) ────────────────────────────────────────────
-function buildCar() {
-  const car = new THREE.Group();
-
-  const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, metalness: 0.9, roughness: 0.15 });
-  const glassMat = new THREE.MeshStandardMaterial({ color: 0x7c3aed, metalness: 0.1, roughness: 0.05, transparent: true, opacity: 0.6 });
-  const tireMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0, roughness: 0.9 });
-  const rimMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.95, roughness: 0.1 });
-  const lightMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.5 });
-  const chromeMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 1, roughness: 0.05 });
-
-  // Main body lower
-  const bodyLow = new THREE.Mesh(new THREE.BoxGeometry(4, 0.5, 1.8), bodyMat);
-  bodyLow.position.set(0, 0.35, 0);
-  car.add(bodyLow);
-
-  // Body mid
-  const bodyMid = new THREE.Mesh(new THREE.BoxGeometry(3.8, 0.3, 1.75), bodyMat);
-  bodyMid.position.set(0, 0.65, 0);
-  car.add(bodyMid);
-
-  // Cabin
-  const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.7, 1.6), bodyMat);
-  cabin.position.set(-0.1, 1.05, 0);
-  car.add(cabin);
-
-  // Windshield front
-  const wsFront = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 0.65), glassMat);
-  wsFront.position.set(0.9, 1.0, 0);
-  wsFront.rotation.y = -Math.PI / 2.5;
-  car.add(wsFront);
-
-  // Windshield rear
-  const wsRear = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.6), glassMat);
-  wsRear.position.set(-1.05, 1.0, 0);
-  wsRear.rotation.y = Math.PI / 2.5;
-  car.add(wsRear);
-
-  // Side windows
-  [-0.75, 0.75].forEach(z => {
-    const sw = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 0.55), glassMat);
-    sw.position.set(-0.1, 1.05, z * 0.82);
-    sw.rotation.y = z > 0 ? 0 : Math.PI;
-    car.add(sw);
-  });
-
-  // Hood
-  const hood = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.08, 1.75), bodyMat);
-  hood.position.set(1.1, 0.82, 0);
-  car.add(hood);
-
-  // Trunk
-  const trunk = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.08, 1.75), bodyMat);
-  trunk.position.set(-1.7, 0.82, 0);
-  car.add(trunk);
-
-  // Front bumper
-  const fBumper = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 1.8), chromeMat);
-  fBumper.position.set(2.0, 0.3, 0);
-  car.add(fBumper);
-
-  // Rear bumper
-  const rBumper = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 1.8), chromeMat);
-  rBumper.position.set(-2.0, 0.3, 0);
-  car.add(rBumper);
-
-  // Headlights
-  [[1.98, 0.45, 0.65], [1.98, 0.45, -0.65]].forEach(([x,y,z]) => {
-    const hl = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.18, 0.35), lightMat);
-    hl.position.set(x, y, z);
-    car.add(hl);
-  });
-
-  // Taillights
-  [[-1.98, 0.45, 0.65], [-1.98, 0.45, -0.65]].forEach(([x,y,z]) => {
-    const tl = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.18, 0.35), new THREE.MeshStandardMaterial({ color: 0xff2222, emissive: 0xff0000, emissiveIntensity: 0.4 }));
-    tl.position.set(x, y, z);
-    car.add(tl);
-  });
-
-  // Wheels
-  const wheelPositions = [
-    [1.2, 0, 0.95], [1.2, 0, -0.95],
-    [-1.2, 0, 0.95], [-1.2, 0, -0.95]
-  ];
-  wheelPositions.forEach(([x, y, z]) => {
-    const tireG = new THREE.TorusGeometry(0.36, 0.14, 16, 32);
-    const tire = new THREE.Mesh(tireG, tireMat);
-    tire.rotation.y = Math.PI / 2;
-    tire.position.set(x, y, z);
-    car.add(tire);
-
-    const rimG = new THREE.CylinderGeometry(0.28, 0.28, 0.12, 16);
-    const rim = new THREE.Mesh(rimG, rimMat);
-    rim.rotation.z = Math.PI / 2;
-    rim.position.set(x, y, z);
-    car.add(rim);
-
-    // Spokes
-    for (let i = 0; i < 5; i++) {
-      const spoke = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.5, 0.04), rimMat);
-      spoke.position.set(x, y, z);
-      spoke.rotation.z = Math.PI / 2;
-      spoke.rotation.x = (i / 5) * Math.PI * 2;
-      car.add(spoke);
-    }
-  });
-
-  // Ground shadow plane
-  const shadowPlane = new THREE.Mesh(
-    new THREE.PlaneGeometry(5, 2.5),
-    new THREE.MeshBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.08 })
-  );
-  shadowPlane.rotation.x = -Math.PI / 2;
-  shadowPlane.position.y = -0.37;
-  car.add(shadowPlane);
-
-  return car;
-}
-
-// Interior model
-function buildInterior() {
-  const interior = new THREE.Group();
-  const mat = (color, metal=0, rough=0.5) => new THREE.MeshStandardMaterial({ color, metalness: metal, roughness: rough });
-
-  // Seats
-  const seatMat = mat(0x1a0a2e, 0.1, 0.8);
-  [[0.3, 0.1, 0.4], [0.3, 0.1, -0.4], [-0.5, 0.1, 0.4], [-0.5, 0.1, -0.4]].forEach(([x,y,z]) => {
-    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.15, 0.6), seatMat);
-    seat.position.set(x, y, z);
-    interior.add(seat);
-    const back = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.7, 0.1), seatMat);
-    back.position.set(x - 0.3, y + 0.4, z);
-    interior.add(back);
-  });
-
-  // Dashboard
-  const dash = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.4, 2.0), mat(0x111111, 0.3, 0.7));
-  dash.position.set(1.1, 0.3, 0);
-  interior.add(dash);
-
-  // Steering wheel
-  const swRim = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.03, 8, 24), mat(0x222222, 0.5, 0.3));
-  swRim.position.set(0.8, 0.5, 0.4);
-  swRim.rotation.y = -0.3;
-  interior.add(swRim);
-
-  // Center console
-  const console_ = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.2, 0.3), mat(0x0d0d0d, 0.4, 0.6));
-  console_.position.set(0, 0.1, 0);
-  interior.add(console_);
-
-  // Floor
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(3, 2), mat(0x0a0a0a, 0, 0.9));
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -0.2;
-  interior.add(floor);
-
-  // Roof
-  const roof = new THREE.Mesh(new THREE.PlaneGeometry(3, 2), mat(0x111111, 0, 0.8));
-  roof.rotation.x = Math.PI / 2;
-  roof.position.y = 1.0;
-  interior.add(roof);
-
-  return interior;
-}
-
-const exteriorCar = buildCar();
-const interiorCar = buildInterior();
-scene.add(exteriorCar);
-interiorCar.visible = false;
-scene.add(interiorCar);
-
-// ── ORBIT CONTROLS (manual) ───────────────────────────────────────────
-let isDragging = false, prevX = 0, prevY = 0;
-let rotY = 0.3, rotX = 0.1, zoom = 5;
-let autoRotate = true, autoTimer = null;
-
-canvas.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; prevY = e.clientY; autoRotate = false; });
-canvas.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  rotY += (e.clientX - prevX) * 0.01;
-  rotX += (e.clientY - prevY) * 0.005;
-  rotX = Math.max(-0.4, Math.min(0.6, rotX));
-  prevX = e.clientX; prevY = e.clientY;
-  clearTimeout(autoTimer);
-  autoTimer = setTimeout(() => autoRotate = true, 3000);
-});
-canvas.addEventListener('mouseup', () => isDragging = false);
-canvas.addEventListener('mouseleave', () => isDragging = false);
-canvas.addEventListener('wheel', e => {
-  zoom += e.deltaY * 0.01;
-  zoom = Math.max(2.5, Math.min(8, zoom));
-});
-
-// Touch
-canvas.addEventListener('touchstart', e => { isDragging = true; prevX = e.touches[0].clientX; prevY = e.touches[0].clientY; autoRotate = false; });
-canvas.addEventListener('touchmove', e => {
-  if (!isDragging) return;
-  rotY += (e.touches[0].clientX - prevX) * 0.012;
-  rotX += (e.touches[0].clientY - prevY) * 0.006;
-  rotX = Math.max(-0.4, Math.min(0.6, rotX));
-  prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
-  e.preventDefault();
-}, { passive: false });
-canvas.addEventListener('touchend', () => isDragging = false);
-
-// ── RESIZE ────────────────────────────────────────────────────────────
 function resize() {
-  const w = wrapper.clientWidth, h = wrapper.clientHeight;
+  const w = window.innerWidth, h = window.innerHeight;
   renderer.setSize(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
@@ -434,69 +185,200 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-// ── ANIMATE ───────────────────────────────────────────────────────────
-let clock = 0;
-function animate() {
-  requestAnimationFrame(animate);
-  clock += 0.005;
-  if (autoRotate) rotY += 0.004;
+// ── LIGHTS ────────────────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const dir = new THREE.DirectionalLight(0xffffff, 1.5);
+dir.position.set(5, 8, 4);
+scene.add(dir);
+const pL = new THREE.PointLight(0x7c3aed, 3, 12);
+pL.position.set(-3, 3, -2);
+scene.add(pL);
+const pR = new THREE.PointLight(0xa855f7, 1.5, 8);
+pR.position.set(3, 1, 3);
+scene.add(pR);
 
-  const pivot = currentView === 'exterior' ? exteriorCar : interiorCar;
-  pivot.rotation.y = rotY;
-  pivot.rotation.x = rotX;
+// ── MATERIALS ─────────────────────────────────────────────────────────
+const M = {
+  body:   new THREE.MeshStandardMaterial({ color:0x111122, metalness:0.92, roughness:0.12 }),
+  glass:  new THREE.MeshStandardMaterial({ color:0x5020a0, metalness:0.05, roughness:0.05, transparent:true, opacity:0.55 }),
+  tire:   new THREE.MeshStandardMaterial({ color:0x0a0a0a, roughness:0.95 }),
+  rim:    new THREE.MeshStandardMaterial({ color:0xcccccc, metalness:0.98, roughness:0.08 }),
+  chrome: new THREE.MeshStandardMaterial({ color:0xdddddd, metalness:1, roughness:0.05 }),
+  light:  new THREE.MeshStandardMaterial({ color:0xffffff, emissive:0xffffff, emissiveIntensity:0.8 }),
+  tail:   new THREE.MeshStandardMaterial({ color:0xff1111, emissive:0xff0000, emissiveIntensity:0.6 }),
+  seat:   new THREE.MeshStandardMaterial({ color:0x1a0530, roughness:0.8 }),
+  dash:   new THREE.MeshStandardMaterial({ color:0x0d0d0d, metalness:0.3, roughness:0.7 }),
+};
 
-  camera.position.x = Math.sin(0) * zoom * 0.1;
-  camera.position.y = 1.5 + rotX * 2;
-  camera.position.z = zoom;
-  camera.lookAt(0, 0.5, 0);
+// ── BUILD EXTERIOR ────────────────────────────────────────────────────
+function buildExterior() {
+  const g = new THREE.Group();
 
-  purpleLight.intensity = 1.5 + Math.sin(clock) * 0.5;
-  renderer.render(scene, camera);
+  // Body layers
+  const add = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x,y,z); g.add(m); return m; };
+
+  add(new THREE.BoxGeometry(4.2, 0.52, 1.85), M.body, 0, 0.36, 0);    // lower body
+  add(new THREE.BoxGeometry(4.0, 0.28, 1.78), M.body, 0, 0.66, 0);    // mid body
+  add(new THREE.BoxGeometry(2.4, 0.72, 1.65), M.body, -0.1, 1.06, 0); // cabin
+
+  // Hood & trunk
+  add(new THREE.BoxGeometry(1.7, 0.09, 1.78), M.body,  1.15, 0.82, 0);
+  add(new THREE.BoxGeometry(0.9, 0.09, 1.78), M.body, -1.75, 0.82, 0);
+
+  // Bumpers
+  add(new THREE.BoxGeometry(0.28, 0.32, 1.86), M.chrome,  2.06, 0.3, 0);
+  add(new THREE.BoxGeometry(0.28, 0.32, 1.86), M.chrome, -2.06, 0.3, 0);
+
+  // Windshields
+  const wsFront = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 0.68), M.glass);
+  wsFront.position.set(0.95, 1.01, 0); wsFront.rotation.y = -1.26; g.add(wsFront);
+  const wsRear  = new THREE.Mesh(new THREE.PlaneGeometry(1.35, 0.62), M.glass);
+  wsRear.position.set(-1.1, 1.01, 0);  wsRear.rotation.y  =  1.26; g.add(wsRear);
+
+  // Side windows
+  [-0.84, 0.84].forEach(z => {
+    const sw = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 0.58), M.glass);
+    sw.position.set(-0.1, 1.06, z); sw.rotation.y = z > 0 ? 0 : Math.PI; g.add(sw);
+  });
+
+  // Headlights & taillights
+  [[1.99,0.46, 0.68,M.light],[1.99,0.46,-0.68,M.light]].forEach(([x,y,z,m])=>
+    add(new THREE.BoxGeometry(0.07,0.2,0.38), m, x, y, z));
+  [[-1.99,0.46,0.68,M.tail],[-1.99,0.46,-0.68,M.tail]].forEach(([x,y,z,m])=>
+    add(new THREE.BoxGeometry(0.07,0.2,0.38), m, x, y, z));
+
+  // Wheels
+  [[1.2,0,0.96],[1.2,0,-0.96],[-1.2,0,0.96],[-1.2,0,-0.96]].forEach(([x,y,z])=>{
+    const tire = new THREE.Mesh(new THREE.TorusGeometry(0.37,0.14,16,32), M.tire);
+    tire.rotation.y = Math.PI/2; tire.position.set(x,y,z); g.add(tire);
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.29,0.29,0.13,16), M.rim);
+    rim.rotation.z = Math.PI/2; rim.position.set(x,y,z); g.add(rim);
+    for(let i=0;i<5;i++){
+      const sp = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.52,0.04), M.rim);
+      sp.position.set(x,y,z); sp.rotation.z=Math.PI/2; sp.rotation.x=(i/5)*Math.PI*2; g.add(sp);
+    }
+  });
+
+  // Ground glow
+  const glow = new THREE.Mesh(new THREE.PlaneGeometry(5,2.2),
+    new THREE.MeshBasicMaterial({color:0x7c3aed,transparent:true,opacity:0.07}));
+  glow.rotation.x = -Math.PI/2; glow.position.y = -0.38; g.add(glow);
+
+  return g;
 }
-animate();
+
+// ── BUILD INTERIOR ────────────────────────────────────────────────────
+function buildInterior() {
+  const g = new THREE.Group();
+  const add = (geo,mat,x,y,z) => { const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); g.add(m); };
+
+  // Floor / roof
+  add(new THREE.PlaneGeometry(3.2,2.2), new THREE.MeshStandardMaterial({color:0x080808,roughness:0.9}), 0,-0.22,0);
+  const fl = g.children[g.children.length-1]; fl.rotation.x=-Math.PI/2;
+  add(new THREE.PlaneGeometry(3.2,2.2), new THREE.MeshStandardMaterial({color:0x111111,roughness:0.8}), 0,1.1,0);
+  const rf = g.children[g.children.length-1]; rf.rotation.x=Math.PI/2;
+
+  // Seats
+  [[0.3,0,0.42],[0.3,0,-0.42],[-0.6,0,0.42],[-0.6,0,-0.42]].forEach(([x,y,z])=>{
+    add(new THREE.BoxGeometry(0.72,0.14,0.58), M.seat, x,y+0.07,z);
+    add(new THREE.BoxGeometry(0.68,0.72,0.1),  M.seat, x-0.3,y+0.43,z);
+    // headrest
+    add(new THREE.BoxGeometry(0.5,0.2,0.1), M.seat, x-0.3,y+0.85,z);
+  });
+
+  // Dashboard
+  add(new THREE.BoxGeometry(0.18,0.42,2.1), M.dash, 1.1,0.28,0);
+  add(new THREE.BoxGeometry(0.12,0.1,1.8),  new THREE.MeshStandardMaterial({color:0x1a0a2e,metalness:0.5}), 0.95,0.52,0);
+
+  // Steering wheel
+  const sw = new THREE.Mesh(new THREE.TorusGeometry(0.22,0.03,8,24), new THREE.MeshStandardMaterial({color:0x222222,metalness:0.5,roughness:0.4}));
+  sw.position.set(0.78,0.52,0.42); sw.rotation.y=-0.3; g.add(sw);
+
+  // Center console
+  add(new THREE.BoxGeometry(0.85,0.22,0.32), new THREE.MeshStandardMaterial({color:0x0a0a0a,metalness:0.4}), 0,0.11,0);
+
+  // Door panels
+  [-0.86,0.86].forEach(z=>{
+    add(new THREE.BoxGeometry(2.6,0.8,0.06), new THREE.MeshStandardMaterial({color:0x111111,roughness:0.8}), 0,0.3,z);
+  });
+
+  return g;
+}
+
+const extCar = buildExterior();
+const intCar = buildInterior();
+intCar.visible = false;
+scene.add(extCar); scene.add(intCar);
+
+// ── ORBIT ─────────────────────────────────────────────────────────────
+let drag=false, px=0, py=0, rotY=0.4, rotX=0.08, zoom=5.2, auto=true, aTimer=null;
+
+canvas.addEventListener('mousedown', e=>{ drag=true; px=e.clientX; py=e.clientY; auto=false; });
+window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3000); });
+canvas.addEventListener('mousemove', e=>{
+  if(!drag) return;
+  rotY += (e.clientX-px)*0.010; rotX += (e.clientY-py)*0.005;
+  rotX = Math.max(-0.45, Math.min(0.55, rotX)); px=e.clientX; py=e.clientY;
+});
+canvas.addEventListener('wheel', e=>{ zoom+=e.deltaY*0.008; zoom=Math.max(2.8,Math.min(8,zoom)); },{passive:true});
+canvas.addEventListener('touchstart', e=>{ drag=true; px=e.touches[0].clientX; py=e.touches[0].clientY; auto=false; },{passive:true});
+canvas.addEventListener('touchend', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3000); });
+canvas.addEventListener('touchmove', e=>{
+  if(!drag) return;
+  rotY+=(e.touches[0].clientX-px)*0.012; rotX+=(e.touches[0].clientY-py)*0.006;
+  rotX=Math.max(-0.45,Math.min(0.55,rotX)); px=e.touches[0].clientX; py=e.touches[0].clientY;
+  e.preventDefault();
+},{passive:false});
 
 // ── VIEW TOGGLE ───────────────────────────────────────────────────────
 let currentView = 'exterior';
 function setView(v) {
   currentView = v;
-  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-
-  exteriorCar.visible = v === 'exterior';
-  interiorCar.visible = v === 'interior';
-
-  document.querySelectorAll('.hotspot[data-view="exterior"]').forEach(h => h.style.display = v === 'exterior' ? 'block' : 'none');
-  document.querySelectorAll('.hotspot[data-view="interior"]').forEach(h => h.style.display = v === 'interior' ? 'block' : 'none');
-
-  camera.position.z = v === 'interior' ? 3.5 : 5;
-  zoom = v === 'interior' ? 3.5 : 5;
+  document.getElementById('btn-ext').classList.toggle('active', v==='exterior');
+  document.getElementById('btn-int').classList.toggle('active', v==='interior');
+  extCar.visible = v==='exterior';
+  intCar.visible = v==='interior';
+  ['hs-wheel','hs-hood','hs-side','hs-win'].forEach(id=>
+    document.getElementById(id).style.display = v==='exterior'?'block':'none');
+  ['hs-seat','hs-dash','hs-carpet'].forEach(id=>
+    document.getElementById(id).style.display = v==='interior'?'block':'none');
+  zoom = v==='interior' ? 3.8 : 5.2;
+  camera.position.y = v==='interior' ? 0.5 : 1.5;
 }
 
 // ── PANEL ─────────────────────────────────────────────────────────────
 function openPanel(key) {
-  const s = services[key];
-  document.getElementById('panelIcon').textContent = s.icon;
-  document.getElementById('panelTitle').textContent = s.title;
-  document.getElementById('panelDesc').textContent = s.desc;
-  document.getElementById('panelPrice').textContent = s.price;
-
-  const videoEl = document.getElementById('panelVideo');
-  if (s.video) {
-    videoEl.innerHTML = `<video src="${s.video}" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;border-radius:10px;"></video>`;
-  } else {
-    videoEl.innerHTML = `<div class="panel-video-placeholder"><span>🎬</span><span>Your ${s.title} video goes here</span></div>`;
-  }
-
-  document.getElementById('servicePanel').classList.add('open');
-  autoRotate = false;
+  const d = DATA[key];
+  document.getElementById('pIcon').textContent  = d.icon;
+  document.getElementById('pTitle').textContent = d.title;
+  document.getElementById('pDesc').textContent  = d.desc;
+  document.getElementById('pPrice').textContent = d.price;
+  document.getElementById('panel').classList.add('open');
+  auto = false;
 }
-
 function closePanel() {
-  document.getElementById('servicePanel').classList.remove('open');
-  setTimeout(() => autoRotate = true, 1000);
+  document.getElementById('panel').classList.remove('open');
+  setTimeout(()=>auto=true, 800);
 }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePanel(); });
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+// ── ANIMATE ───────────────────────────────────────────────────────────
+let t = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  t += 0.004;
+  if(auto) rotY += 0.004;
+
+  const pivot = currentView==='exterior' ? extCar : intCar;
+  extCar.rotation.y = rotY; extCar.rotation.x = rotX;
+  intCar.rotation.y = rotY; intCar.rotation.x = rotX;
+
+  camera.position.set(0, currentView==='interior'?0.5:1.5, zoom);
+  camera.lookAt(0, currentView==='interior'?0.3:0.5, 0);
+  pL.intensity = 2.5 + Math.sin(t)*0.8;
+  renderer.render(scene, camera);
+}
+animate();
 </script>
 </body>
 </html>
