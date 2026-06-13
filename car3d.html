@@ -10,6 +10,18 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
 #c { position:absolute; inset:0; width:100%; height:100%; display:block; cursor:grab; }
 #c:active { cursor:grabbing; }
 
+
+.debug-info {
+  position:absolute; top:14px; right:14px; background:rgba(0,0,0,0.85);
+  border:1px solid #7c3aed; border-radius:8px; padding:10px 14px;
+  font-size:0.7rem; color:#a855f7; z-index:30; display:none;
+  font-family:monospace; line-height:1.8;
+}
+.debug-btn {
+  position:absolute; top:14px; left:14px; background:rgba(124,58,237,0.3);
+  border:1px solid #7c3aed; border-radius:6px; padding:6px 12px;
+  font-size:0.7rem; color:#a855f7; z-index:30; cursor:pointer;
+}
 .hint {
   position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
   background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.07);
@@ -97,6 +109,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-
 
 <div class="hint">🖱️ Drag to rotate · Scroll to zoom · Click dots for details</div>
 
+
+<button class="debug-btn" onclick="toggleDebug()">🎯 Debug Mode</button>
+<div class="debug-info" id="debugInfo">Click on car to get coords</div>
 <div class="panel" id="panel">
   <div class="p-back" onclick="closePanel()"></div>
   <div class="p-card">
@@ -222,15 +237,14 @@ loader.load(
 );
 
 // HOTSPOT DEFINITIONS (positions relative to car, will be scaled)
-// BMW M3 Touring - front faces viewer at rotY=PI
-// front = -X, rear = +X, roof = +Y, right side = +Z
+// Positions carefully mapped from actual screenshot
 const HOTSPOT_DEFS = [
-  { key:'prewash',   localPos: new THREE.Vector3( 0.20,  1.30,  0.30), label:'Pre-Wash & Wash' },
-  { key:'paint',     localPos: new THREE.Vector3(-1.30,  0.72,  0.45), label:'Paint Correction' },
-  { key:'glass',     localPos: new THREE.Vector3( 1.00,  0.88,  0.70), label:'Glass Decontamination' },
-  { key:'wheel',     localPos: new THREE.Vector3(-1.20,  0.18,  0.90), label:'Wheel Detailing' },
-  { key:'headlight', localPos: new THREE.Vector3(-2.00,  0.55,  0.55), label:'Headlight Restoration' },
-  { key:'bumper',    localPos: new THREE.Vector3(-1.90,  0.22,  0.50), label:'Bumper Detailing' },
+  { key:'prewash',   localPos: new THREE.Vector3( 0.00,  1.45,  0.00), label:'Pre-Wash & Wash' },
+  { key:'paint',     localPos: new THREE.Vector3(-0.80,  0.85,  0.20), label:'Paint Correction' },
+  { key:'glass',     localPos: new THREE.Vector3( 1.20,  0.92,  0.65), label:'Glass Decontamination' },
+  { key:'wheel',     localPos: new THREE.Vector3(-1.35,  0.22,  0.85), label:'Wheel Detailing' },
+  { key:'headlight', localPos: new THREE.Vector3(-1.85,  0.58,  0.70), label:'Headlight Restoration' },
+  { key:'bumper',    localPos: new THREE.Vector3(-1.95,  0.28,  0.35), label:'Bumper Detailing' },
 ];
 
 const hsEls = {};
@@ -299,6 +313,36 @@ function closePanel() {
   setTimeout(()=>auto=true,800);
 }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePanel(); });
+
+
+// DEBUG RAYCASTER
+let debugMode = false;
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function toggleDebug() {
+  debugMode = !debugMode;
+  document.getElementById('debugInfo').style.display = debugMode ? 'block' : 'none';
+  document.querySelector('.debug-btn').style.background = debugMode ? 'rgba(124,58,237,0.8)' : 'rgba(124,58,237,0.3)';
+}
+
+canvas.addEventListener('click', (e) => {
+  if (!debugMode || !carModel) return;
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const hits = raycaster.intersectObject(carModel, true);
+  if (hits.length > 0) {
+    const p = hits[0].point;
+    // Convert world point to local space of carModel
+    const local = carModel.worldToLocal(p.clone());
+    document.getElementById('debugInfo').innerHTML = 
+      `World: ${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)}<br>` +
+      `Local: <b>${local.x.toFixed(2)}, ${local.y.toFixed(2)}, ${local.z.toFixed(2)}</b>`;
+    console.log(`Local coords: new THREE.Vector3(${local.x.toFixed(2)}, ${local.y.toFixed(2)}, ${local.z.toFixed(2)})`);
+  }
+});
 
 // ANIMATE
 let t=0;
