@@ -237,14 +237,14 @@ loader.load(
 );
 
 // HOTSPOT DEFINITIONS (positions relative to car, will be scaled)
-// Positions carefully mapped from actual screenshot
+// Exact coords from raycaster debug clicks
 const HOTSPOT_DEFS = [
-  { key:'prewash',   localPos: new THREE.Vector3( 0.00,  1.45,  0.00), label:'Pre-Wash & Wash' },
-  { key:'paint',     localPos: new THREE.Vector3(-0.80,  0.85,  0.20), label:'Paint Correction' },
-  { key:'glass',     localPos: new THREE.Vector3( 1.20,  0.92,  0.65), label:'Glass Decontamination' },
-  { key:'wheel',     localPos: new THREE.Vector3(-1.35,  0.22,  0.85), label:'Wheel Detailing' },
-  { key:'headlight', localPos: new THREE.Vector3(-1.85,  0.58,  0.70), label:'Headlight Restoration' },
-  { key:'bumper',    localPos: new THREE.Vector3(-1.95,  0.28,  0.35), label:'Bumper Detailing' },
+  { key:'glass',     localPos: new THREE.Vector3( 2.44,  2.12, -7.93), label:'Glass Decontamination' },
+  { key:'wheel',     localPos: new THREE.Vector3(-3.26,  1.16,  4.86), label:'Wheel Detailing' },
+  { key:'bumper',    localPos: new THREE.Vector3(-0.69,  1.37, -8.73), label:'Bumper Detailing' },
+  { key:'prewash',   localPos: new THREE.Vector3(-0.22,  4.83, -0.75), label:'Pre-Wash & Wash' },
+  { key:'paint',     localPos: new THREE.Vector3(-0.00,  3.17, -6.42), label:'Paint Correction' },
+  { key:'headlight', localPos: new THREE.Vector3(-2.56,  2.16, -7.84), label:'Headlight Restoration' },
 ];
 
 const hsEls = {};
