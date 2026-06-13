@@ -222,14 +222,15 @@ loader.load(
 );
 
 // HOTSPOT DEFINITIONS (positions relative to car, will be scaled)
-// BMW M3 Touring - corrected positions from screenshot
-// Front = +X, Top = +Y, Right side = +Z
+// BMW M3 Touring - positions mapped from annotated screenshot
+// Front of car = +X, Roof = +Y, Right/visible side = +Z
 const HOTSPOT_DEFS = [
-  { key:'wheel',  localPos: new THREE.Vector3(-1.20,  0.20,  0.85), label:'Wheel Detail' },
-  { key:'hood',   localPos: new THREE.Vector3( 1.60,  0.65,  0.40), label:'Hood Polish' },
-  { key:'side',   localPos: new THREE.Vector3( 0.00,  0.42,  0.95), label:'Paint Correction' },
-  { key:'window', localPos: new THREE.Vector3( 0.50,  0.90,  0.75), label:'Window Tinting' },
-  { key:'bumper', localPos: new THREE.Vector3( 2.20,  0.28,  0.30), label:'Bumper Detail' },
+  { key:'prewash',   localPos: new THREE.Vector3(-0.20,  1.30,  0.50), label:'Pre-Wash & Wash' },
+  { key:'paint',     localPos: new THREE.Vector3( 1.30,  0.72,  0.45), label:'Paint Correction' },
+  { key:'glass',     localPos: new THREE.Vector3(-1.40,  0.88,  0.70), label:'Glass Decontamination' },
+  { key:'wheel',     localPos: new THREE.Vector3( 1.20,  0.18,  0.90), label:'Wheel Detailing' },
+  { key:'headlight', localPos: new THREE.Vector3( 2.10,  0.55,  0.55), label:'Headlight Restoration' },
+  { key:'bumper',    localPos: new THREE.Vector3( 2.00,  0.22,  0.40), label:'Bumper Detailing' },
 ];
 
 const hsEls = {};
