@@ -36,9 +36,9 @@
 
     /* Lang switcher */
     .lang-switcher { display: flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
-    .lang-btn { background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 4px 8px; border-radius: 5px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
-    .lang-btn:hover { color: var(--white); }
-    .lang-btn.active { background: var(--purple); color: #fff; }
+    .lang-btn { background: none; border: none; font-size: 1.3rem; padding: 4px 6px; border-radius: 5px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; opacity: 0.6; }
+    .lang-btn:hover { opacity: 1; }
+    .lang-btn.active { background: var(--purple); opacity: 1; border-radius: 5px; }
     .lang-btn .flag { font-size: 0.9rem; }
 
     /* Hamburger */
@@ -297,6 +297,104 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
       to { width: 100%; }
     }
 
+
+    /* ── BOOKING FORM ── */
+    .booking-container { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: start; max-width: 1100px; margin: 0 auto; }
+    .booking-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 6px; margin-top: 28px; color: var(--purple-light); }
+    .booking-info h3:first-child { margin-top: 0; }
+    .booking-info p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+
+    /* STEPS */
+    .bform { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .bform-steps { display: flex; border-bottom: 1px solid var(--border); }
+    .bstep { flex: 1; padding: 14px 8px; text-align: center; font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; cursor: default; }
+    .bstep.active { color: var(--purple-light); border-bottom-color: var(--purple-light); }
+    .bstep.done { color: var(--purple); }
+
+    .bform-body { padding: 32px; }
+    .bpanel { display: none; }
+    .bpanel.active { display: block; }
+
+    /* VEHICLE / SERVICE GRID */
+    .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .opt-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .opt-card:hover { border-color: var(--purple); }
+    .opt-card.selected { border-color: var(--purple); background: var(--purple-glow); }
+    .opt-card .oc-icon { font-size: 1.8rem; margin-bottom: 6px; }
+    .opt-card .oc-name { font-size: 0.82rem; font-weight: 600; color: var(--white); }
+    .opt-card .oc-price { font-size: 0.75rem; color: var(--purple-light); margin-top: 3px; }
+
+    /* SERVICE LIST */
+    .service-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .srv-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .srv-item:hover { border-color: var(--purple); }
+    .srv-item.selected { border-color: var(--purple); background: var(--purple-glow); }
+    .srv-item-left { display: flex; align-items: center; gap: 10px; }
+    .srv-item-icon { font-size: 1.3rem; }
+    .srv-item-name { font-size: 0.88rem; font-weight: 600; }
+    .srv-item-price { font-size: 0.78rem; color: var(--purple-light); font-weight: 600; white-space: nowrap; }
+
+    /* SUB OPTIONS */
+    .sub-opts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding: 0 16px 12px 42px; }
+    .sub-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; font-weight: 600; padding: 5px 12px; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+    .sub-btn.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+    /* SHAMPOO CHECKS */
+    .shampoo-checks { padding: 8px 16px 12px 42px; display: flex; flex-direction: column; gap: 6px; }
+    .shampoo-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .shampoo-check input { accent-color: var(--purple); width: 15px; height: 15px; cursor: pointer; }
+    .shampoo-check label { font-size: 0.82rem; color: var(--muted); cursor: pointer; }
+
+    /* CALENDAR */
+    .cal-wrap { margin-bottom: 24px; }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .cal-nav { background: var(--bg2); border: 1px solid var(--border); color: var(--white); width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: all 0.2s; }
+    .cal-nav:hover { border-color: var(--purple); }
+    .cal-month { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 1px; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day-name { text-align: center; font-size: 0.65rem; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; padding: 4px 0; }
+    .cal-day { text-align: center; padding: 8px 4px; border-radius: 6px; font-size: 0.82rem; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+    .cal-day:hover:not(.disabled):not(.empty) { border-color: var(--purple); color: var(--white); }
+    .cal-day.selected { background: var(--purple); color: #fff; border-color: var(--purple); }
+    .cal-day.disabled { color: #333; cursor: default; }
+    .cal-day.empty { cursor: default; }
+    .cal-day.today { color: var(--purple-light); font-weight: 700; }
+
+    /* CONTACT */
+    .bfield { margin-bottom: 16px; }
+    .bfield label { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .bfield input, .bfield textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+    .bfield input:focus, .bfield textarea:focus { border-color: var(--purple); }
+    .bfield textarea { resize: vertical; min-height: 80px; }
+    .bfield-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* SUMMARY */
+    .summary-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 20px; }
+    .summary-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-label { color: var(--muted); }
+    .summary-val { color: var(--white); font-weight: 600; }
+
+    /* NAV BUTTONS */
+    .bform-nav { display: flex; gap: 10px; margin-top: 8px; }
+    .btn-back { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); padding: 12px 24px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-back:hover { border-color: var(--purple); color: var(--white); }
+    .btn-next { flex: 1; background: var(--purple); color: #fff; border: none; padding: 12px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-next:hover { background: var(--purple-light); }
+    .btn-next:disabled { background: #333; cursor: default; }
+
+    /* SUCCESS */
+    .bform-success { display: none; text-align: center; padding: 48px 32px; }
+    .bform-success .check { font-size: 3rem; margin-bottom: 16px; }
+    .bform-success h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; color: var(--purple-light); margin-bottom: 8px; }
+    .bform-success p { color: var(--muted); font-size: 0.9rem; }
+
+    @media (max-width: 820px) {
+      .booking-container { grid-template-columns: 1fr; gap: 40px; }
+      .option-grid { grid-template-columns: 1fr 1fr; }
+      .bfield-row { grid-template-columns: 1fr; }
+    }
+
     /* ── MOBILE ── */
     @media (max-width: 820px) {
       .nav-center { display: none; flex-direction: column; gap: 0; }
@@ -340,9 +438,9 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
   </ul>
   <div class="nav-right">
     <div class="lang-switcher">
-      <button class="lang-btn" onclick="setLang('pt')" id="btn-pt"><span class="flag">🇧🇷</span> PT</button>
-      <button class="lang-btn active" onclick="setLang('en')" id="btn-en"><span class="flag">🇺🇸</span> EN</button>
-      <button class="lang-btn" onclick="setLang('es')" id="btn-es"><span class="flag">🇪🇸</span> ES</button>
+      <button class="lang-btn" onclick="setLang('pt')" id="btn-pt" title="Português">🇧🇷</button>
+      <button class="lang-btn active" onclick="setLang('en')" id="btn-en" title="English">🇺🇸</button>
+      <button class="lang-btn" onclick="setLang('es')" id="btn-es" title="Español">🇪🇸</button>
     </div>
     <a href="#booking" class="nav-cta" data-i18n="nav_book"></a>
   </div>
@@ -482,14 +580,140 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
 </section>
 
 <!-- BOOKING -->
-<section id="booking">
-  <div class="section-header">
+<section id="booking" style="background: var(--bg2); padding: 100px 5%;">
+  <div class="section-header" style="margin-bottom:48px;">
     <div class="section-eyebrow" data-i18n="book_eyebrow"></div>
     <h2 class="section-title" data-i18n="book_title"></h2>
     <p class="section-sub" data-i18n="book_sub"></p>
   </div>
-  <div class="calendly-wrap">
-    <div class="calendly-inline-widget" data-url="https://calendly.com/nicckpsn/30min?hide_gdpr_banner=1&background_color=141414&text_color=f5f5f5&primary_color=7c3aed" style="min-width:320px;height:700px;"></div>
+  <div class="booking-container">
+    <div class="booking-info">
+      <h3>📍 Service Area</h3>
+      <p>We serve Winter Garden and the greater Orlando area. 100% mobile — we come to you.</p>
+      <h3>⏰ Hours</h3>
+      <p>Monday to Saturday, 8am to 6pm. At least 24h notice required.</p>
+      <h3>💳 Payment</h3>
+      <p>50% deposit at booking. Balance due on service day. Zelle, Cash and card accepted.</p>
+      <h3>🔄 Cancellations</h3>
+      <p>Rescheduling requires at least 24h notice. Deposits non-refundable for last-minute cancellations.</p>
+    </div>
+
+    <div class="bform" id="bform">
+      <!-- Steps indicator -->
+      <div class="bform-steps">
+        <div class="bstep active" id="step-1">1. Vehicle</div>
+        <div class="bstep" id="step-2">2. Service</div>
+        <div class="bstep" id="step-3">3. Date</div>
+        <div class="bstep" id="step-4">4. Contact</div>
+      </div>
+
+      <div class="bform-body" id="bform-body">
+        <!-- STEP 1: Vehicle -->
+        <div class="bpanel active" id="panel-1">
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:20px;">Select your vehicle type to see accurate pricing.</p>
+          <div class="option-grid">
+            <div class="opt-card" onclick="selectVehicle('coupe','🚘','Coupe / 2-door')">
+              <div class="oc-icon">🚘</div>
+              <div class="oc-name">Coupe / 2-door</div>
+            </div>
+            <div class="opt-card" onclick="selectVehicle('sedan','🚗','Sedan / 5-door')">
+              <div class="oc-icon">🚗</div>
+              <div class="oc-name">Sedan / 5-door</div>
+            </div>
+            <div class="opt-card" onclick="selectVehicle('suv','🚙','SUV / Compact SUV')">
+              <div class="oc-icon">🚙</div>
+              <div class="oc-name">SUV / Compact SUV</div>
+            </div>
+            <div class="opt-card" onclick="selectVehicle('truck','🛻','Truck / Van')">
+              <div class="oc-icon">🛻</div>
+              <div class="oc-name">Truck / Van</div>
+            </div>
+          </div>
+          <div class="bform-nav">
+            <button class="btn-next" id="btn-next-1" onclick="goStep(2)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Service -->
+        <div class="bpanel" id="panel-2">
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:20px;">Select the service you need.</p>
+          <div class="service-list" id="service-list"></div>
+          <div class="bform-nav">
+            <button class="btn-back" onclick="goStep(1)">← Back</button>
+            <button class="btn-next" id="btn-next-2" onclick="goStep(3)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Date -->
+        <div class="bpanel" id="panel-3">
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:20px;">Choose your preferred date.</p>
+          <div class="cal-wrap">
+            <div class="cal-header">
+              <button class="cal-nav" onclick="calPrev()">‹</button>
+              <div class="cal-month" id="cal-month"></div>
+              <button class="cal-nav" onclick="calNext()">›</button>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+          </div>
+          <div class="bform-nav">
+            <button class="btn-back" onclick="goStep(2)">← Back</button>
+            <button class="btn-next" id="btn-next-3" onclick="goStep(4)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Contact -->
+        <div class="bpanel" id="panel-4">
+          <!-- Summary -->
+          <div class="summary-box" id="booking-summary"></div>
+
+          <form id="booking-form" action="https://formspree.io/f/xykabddy" method="POST">
+            <input type="hidden" name="vehicle" id="f-vehicle">
+            <input type="hidden" name="service" id="f-service">
+            <input type="hidden" name="service_option" id="f-service-option">
+            <input type="hidden" name="date" id="f-date">
+            <input type="hidden" name="price" id="f-price">
+
+            <div class="bfield-row">
+              <div class="bfield">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Your name" required>
+              </div>
+              <div class="bfield">
+                <label>Phone</label>
+                <input type="tel" name="phone" placeholder="(407) 000-0000" required>
+              </div>
+            </div>
+            <div class="bfield">
+              <label>Email</label>
+              <input type="email" name="email" placeholder="your@email.com" required>
+            </div>
+            <div class="bfield">
+              <label>Vehicle (Year / Make / Model)</label>
+              <input type="text" name="vehicle_detail" placeholder="e.g. 2021 BMW M3" required>
+            </div>
+            <div class="bfield">
+              <label>Service Address</label>
+              <input type="text" name="address" placeholder="Where should we come?" required>
+            </div>
+            <div class="bfield">
+              <label>Notes (optional)</label>
+              <textarea name="notes" placeholder="Any additional details..."></textarea>
+            </div>
+            <div class="bform-nav">
+              <button type="button" class="btn-back" onclick="goStep(3)">← Back</button>
+              <button type="submit" class="btn-next">Send Request →</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div class="bform-success" id="bform-success">
+        <div class="check">✅</div>
+        <h3>Request Sent!</h3>
+        <p>Thank you! We'll contact you within 2 hours to confirm your booking.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -798,7 +1022,236 @@ function toggleFaq(el) {
     }, 2800);
   })();
 
-  // Init
+  
+// ── BOOKING FORM ──────────────────────────────────────────────────────
+const BOOK_SERVICES = [
+  { id:'exterior', icon:'✨', name:'Exterior Detailing',     prices:{coupe:'$70',sedan:'$75',suv:'$80',truck:'$85'} },
+  { id:'interior', icon:'🪑', name:'Interior Detailing',     prices:{coupe:'$70',sedan:'$75',suv:'$80',truck:'$85'} },
+  { id:'full',     icon:'🛡️', name:'Full Detail Package',    prices:{coupe:'$120',sedan:'$130',suv:'$140',truck:'$150'} },
+  { id:'tinting',  icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'},
+    opts:['Ceramic','High Performance'] },
+  { id:'headlight',icon:'💡', name:'Headlight Restoration',  prices:{coupe:'$99',sedan:'$99',suv:'$99',truck:'$99'} },
+  { id:'polish',   icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'$350',sedan:'$400',suv:'$450',truck:'$500'},
+    opts:['1-Stage','2-Stage'], optPrices:{
+      '1-Stage':{coupe:'$350',sedan:'$400',suv:'$450',truck:'$500'},
+      '2-Stage':{coupe:'$600',sedan:'$700',suv:'$800',truck:'$950'}
+    }},
+  { id:'ceramic',  icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'$1,000',sedan:'$1,150',suv:'$1,300',truck:'$1,500'} },
+  { id:'shampoo',  icon:'🧴', name:'Shampoo Detailing',      prices:{coupe:'Custom',sedan:'Custom',suv:'Custom',truck:'Custom'},
+    shampoo:[
+      {label:'Front Seats',    p:{coupe:50,sedan:50,suv:60,truck:60}},
+      {label:'Rear Seats',     p:{coupe:50,sedan:50,suv:60,truck:60}},
+      {label:'Carpet / Floor', p:{coupe:60,sedan:60,suv:70,truck:70}},
+      {label:'Roof Lining',    p:{coupe:60,sedan:60,suv:70,truck:70}},
+      {label:'Trunk / Cargo',  p:{coupe:40,sedan:40,suv:50,truck:50}},
+    ]}
+];
+
+let bState = { vehicle:'', vehicleLabel:'', service:null, serviceOpt:'', shampooSel:[], date:'', step:1 };
+
+function selectVehicle(v, icon, label) {
+  bState.vehicle = v; bState.vehicleLabel = label;
+  document.querySelectorAll('#panel-1 .opt-card').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('btn-next-1').disabled = false;
+  renderServiceList();
+}
+
+function renderServiceList() {
+  const v = bState.vehicle;
+  const list = document.getElementById('service-list');
+  list.innerHTML = BOOK_SERVICES.map(s => {
+    const price = s.prices[v];
+    let subHTML = '';
+    if (s.opts) {
+      subHTML = `<div class="sub-opts" id="subopts-${s.id}">
+        ${s.opts.map((o,i) => `<button class="sub-btn ${i===0?'active':''}" onclick="selectSubOpt(event,'${s.id}','${o}')">${o}</button>`).join('')}
+      </div>`;
+    }
+    if (s.shampoo) {
+      subHTML = `<div class="shampoo-checks" id="shampoo-${s.id}">
+        ${s.shampoo.map((item,i) => `
+          <div class="shampoo-check">
+            <input type="checkbox" id="sc-${i}" onchange="toggleShampooItem(${i})">
+            <label for="sc-${i}">${item.label} <span style="color:var(--purple-light)">+$${item.p[v]}</span></label>
+          </div>`).join('')}
+      </div>`;
+    }
+    return `
+      <div>
+        <div class="srv-item ${bState.service===s.id?'selected':''}" onclick="selectService('${s.id}')">
+          <div class="srv-item-left">
+            <span class="srv-item-icon">${s.icon}</span>
+            <span class="srv-item-name">${s.name}</span>
+          </div>
+          <span class="srv-item-price">${price}</span>
+        </div>
+        ${bState.service === s.id ? subHTML : ''}
+      </div>`;
+  }).join('');
+
+  // Re-init shampoo checkboxes
+  bState.shampooSel.forEach(i => {
+    const cb = document.getElementById('sc-'+i);
+    if (cb) cb.checked = true;
+  });
+
+  // Set default sub option
+  if (bState.service) {
+    const s = BOOK_SERVICES.find(x=>x.id===bState.service);
+    if (s && s.opts && !bState.serviceOpt) bState.serviceOpt = s.opts[0];
+  }
+}
+
+function selectService(id) {
+  bState.service = id; bState.serviceOpt = ''; bState.shampooSel = [];
+  const s = BOOK_SERVICES.find(x=>x.id===id);
+  if (s && s.opts) bState.serviceOpt = s.opts[0];
+  document.getElementById('btn-next-2').disabled = false;
+  renderServiceList();
+}
+
+function selectSubOpt(e, id, opt) {
+  e.stopPropagation();
+  bState.serviceOpt = opt;
+  document.querySelectorAll(`#subopts-${id} .sub-btn`).forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+}
+
+function toggleShampooItem(i) {
+  const idx = bState.shampooSel.indexOf(i);
+  if (idx === -1) bState.shampooSel.push(i);
+  else bState.shampooSel.splice(idx, 1);
+  updateShampooPrice();
+}
+
+function updateShampooPrice() {
+  const s = BOOK_SERVICES.find(x=>x.id==='shampoo');
+  const total = bState.shampooSel.reduce((sum,i) => sum + s.shampoo[i].p[bState.vehicle], 0);
+  const el = document.querySelector('.srv-item.selected .srv-item-price');
+  if (el) el.textContent = total > 0 ? '$'+total : 'Custom';
+}
+
+// CALENDAR
+let calDate = new Date();
+calDate.setDate(1);
+
+function renderCal() {
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+
+  document.getElementById('cal-month').textContent = months[calDate.getMonth()] + ' ' + calDate.getFullYear();
+
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
+  const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0).getDate();
+
+  let html = days.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+  for (let i=0; i<firstDay; i++) html += '<div class="cal-day empty"></div>';
+
+  for (let d=1; d<=daysInMonth; d++) {
+    const date = new Date(calDate.getFullYear(), calDate.getMonth(), d);
+    const isSun = date.getDay() === 0;
+    const isPast = date < tomorrow;
+    const dateStr = date.toISOString().split('T')[0];
+    const isSelected = bState.date === dateStr;
+    const isToday = date.toDateString() === today.toDateString();
+    const cls = [
+      'cal-day',
+      isPast || isSun ? 'disabled' : '',
+      isSelected ? 'selected' : '',
+      isToday ? 'today' : ''
+    ].filter(Boolean).join(' ');
+    const click = (!isPast && !isSun) ? `onclick="selectDate('${dateStr}')"` : '';
+    html += `<div class="${cls}" ${click}>${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+function calPrev() {
+  calDate.setMonth(calDate.getMonth()-1);
+  const today = new Date(); today.setDate(1); today.setHours(0,0,0,0);
+  if (calDate < today) calDate = new Date(today);
+  renderCal();
+}
+function calNext() { calDate.setMonth(calDate.getMonth()+1); renderCal(); }
+
+function selectDate(d) {
+  bState.date = d;
+  document.getElementById('btn-next-3').disabled = false;
+  renderCal();
+}
+
+// STEPS
+function goStep(n) {
+  bState.step = n;
+  document.querySelectorAll('.bpanel').forEach((p,i) => p.classList.toggle('active', i===n-1));
+  document.querySelectorAll('.bstep').forEach((s,i) => {
+    s.classList.remove('active','done');
+    if (i===n-1) s.classList.add('active');
+    else if (i<n-1) s.classList.add('done');
+  });
+  if (n===3) renderCal();
+  if (n===4) renderSummary();
+}
+
+function renderSummary() {
+  const s = BOOK_SERVICES.find(x=>x.id===bState.service);
+  let price = s ? s.prices[bState.vehicle] : '-';
+  if (s && s.optPrices && bState.serviceOpt) price = s.optPrices[bState.serviceOpt][bState.vehicle];
+  if (s && s.shampoo) {
+    const total = bState.shampooSel.reduce((sum,i) => sum + s.shampoo[i].p[bState.vehicle], 0);
+    price = total > 0 ? '$'+total : 'Custom';
+  }
+  const optLabel = bState.serviceOpt ? ` — ${bState.serviceOpt}` : '';
+  const shampooItems = s && s.shampoo && bState.shampooSel.length > 0
+    ? bState.shampooSel.map(i => s.shampoo[i].label).join(', ') : '';
+
+  document.getElementById('booking-summary').innerHTML = `
+    <div class="summary-row"><span class="summary-label">Vehicle</span><span class="summary-val">${bState.vehicleLabel}</span></div>
+    <div class="summary-row"><span class="summary-label">Service</span><span class="summary-val">${s ? s.name+optLabel : '-'}</span></div>
+    ${shampooItems ? `<div class="summary-row"><span class="summary-label">Areas</span><span class="summary-val">${shampooItems}</span></div>` : ''}
+    <div class="summary-row"><span class="summary-label">Date</span><span class="summary-val">${bState.date}</span></div>
+    <div class="summary-row"><span class="summary-label">Estimated Price</span><span class="summary-val" style="color:var(--purple-light)">${price}</span></div>
+  `;
+
+  // Fill hidden fields
+  document.getElementById('f-vehicle').value = bState.vehicleLabel;
+  document.getElementById('f-service').value = s ? s.name : '';
+  document.getElementById('f-service-option').value = bState.serviceOpt || (shampooItems || '');
+  document.getElementById('f-date').value = bState.date;
+  document.getElementById('f-price').value = price;
+}
+
+// FORM SUBMIT
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('booking-form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('[type=submit]');
+      btn.textContent = 'Sending...'; btn.disabled = true;
+      try {
+        const res = await fetch(form.action, {
+          method:'POST', body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          document.getElementById('bform-body').style.display = 'none';
+          document.querySelector('.bform-steps').style.display = 'none';
+          document.getElementById('bform-success').style.display = 'block';
+        } else {
+          btn.textContent = 'Error — try again'; btn.disabled = false;
+        }
+      } catch(err) {
+        btn.textContent = 'Error — try again'; btn.disabled = false;
+      }
+    });
+  }
+});
+
+// Init
 setLang('en');
 </script>
   <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
