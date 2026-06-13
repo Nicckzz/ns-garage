@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -159,8 +159,8 @@
   </ul>
   <div class="nav-right">
     <div class="lang-switcher">
-      <button class="lang-btn active" onclick="setLang('pt')" id="btn-pt"><span class="flag">🇧🇷</span> PT</button>
-      <button class="lang-btn" onclick="setLang('en')" id="btn-en"><span class="flag">🇺🇸</span> EN</button>
+      <button class="lang-btn" onclick="setLang('pt')" id="btn-pt"><span class="flag">🇧🇷</span> PT</button>
+      <button class="lang-btn active" onclick="setLang('en')" id="btn-en"><span class="flag">🇺🇸</span> EN</button>
       <button class="lang-btn" onclick="setLang('es')" id="btn-es"><span class="flag">🇪🇸</span> ES</button>
     </div>
     <a href="#booking" class="nav-cta" data-i18n="nav_book"></a>
@@ -521,7 +521,7 @@ tomorrow.setDate(tomorrow.getDate() + 1);
 dateInput.min = tomorrow.toISOString().split('T')[0];
 
 // Init
-setLang('pt');
+setLang('en');
 </script>
 </body>
 </html>
