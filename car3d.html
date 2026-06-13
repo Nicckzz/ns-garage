@@ -311,7 +311,7 @@ intCar.visible = false;
 scene.add(extCar); scene.add(intCar);
 
 // ── ORBIT ─────────────────────────────────────────────────────────────
-let drag=false, px=0, py=0, rotY=0.4, rotX=0.08, zoom=5.2, auto=true, aTimer=null;
+let drag=false, px=0, py=0, rotY=0.4, rotX=0.08, zoom=6.5, auto=true, aTimer=null;
 
 canvas.addEventListener('mousedown', e=>{ drag=true; px=e.clientX; py=e.clientY; auto=false; });
 window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3000); });
@@ -320,7 +320,7 @@ canvas.addEventListener('mousemove', e=>{
   rotY += (e.clientX-px)*0.010; rotX += (e.clientY-py)*0.005;
   rotX = Math.max(-0.45, Math.min(0.55, rotX)); px=e.clientX; py=e.clientY;
 });
-canvas.addEventListener('wheel', e=>{ zoom+=e.deltaY*0.008; zoom=Math.max(2.8,Math.min(8,zoom)); },{passive:true});
+canvas.addEventListener('wheel', e=>{ e.preventDefault(); zoom+=e.deltaY*0.008; zoom=Math.max(2.8,Math.min(8,zoom)); },{passive:false});
 canvas.addEventListener('touchstart', e=>{ drag=true; px=e.touches[0].clientX; py=e.touches[0].clientY; auto=false; },{passive:true});
 canvas.addEventListener('touchend', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3000); });
 canvas.addEventListener('touchmove', e=>{
