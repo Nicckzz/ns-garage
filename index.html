@@ -152,6 +152,42 @@
     .insta-follow-btn { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: opacity 0.2s, transform 0.2s; }
     .insta-follow-btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .insta-follow-btn svg { width: 20px; height: 20px; fill: #fff; }
+
+    /* ── REVIEWS ── */
+    #reviews { background: var(--bg); }
+    .reviews-top { display: flex; align-items: center; gap: 40px; margin-bottom: 48px; flex-wrap: wrap; }
+    .review-score { text-align: center; }
+    .review-score .big-num { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--purple-light); line-height: 1; }
+    .review-score .stars { color: #fbbf24; font-size: 1.4rem; letter-spacing: 2px; }
+    .review-score .total { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+    .review-divider { width: 1px; height: 80px; background: var(--border); }
+    .review-cta-text { color: var(--muted); font-size: 0.95rem; max-width: 340px; line-height: 1.7; }
+    .review-cta-text a { color: var(--purple-light); text-decoration: none; font-weight: 600; }
+    .review-cta-text a:hover { text-decoration: underline; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .review-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: border-color 0.3s; }
+    .review-card:hover { border-color: var(--purple); }
+    .review-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .review-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--purple-light)); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
+    .review-name { font-weight: 600; font-size: 0.92rem; }
+    .review-date { font-size: 0.75rem; color: var(--muted); }
+    .review-stars { color: #fbbf24; font-size: 0.9rem; margin-bottom: 10px; }
+    .review-text { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+    .review-google-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 36px; background: var(--bg3); border: 1px solid var(--border); color: var(--white); padding: 12px 24px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+    .review-google-btn:hover { border-color: var(--purple); background: var(--purple-glow); }
+    .review-google-btn svg { width: 18px; height: 18px; }
+
+    /* ── FAQ ── */
+    #faq { background: var(--bg2); }
+    .faq-list { max-width: 780px; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color 0.3s; }
+    .faq-item.open { border-color: var(--purple); }
+    .faq-question { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; gap: 16px; }
+    .faq-question span { font-weight: 600; font-size: 0.95rem; }
+    .faq-icon { font-size: 1.2rem; color: var(--purple-light); transition: transform 0.3s; flex-shrink: 0; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+    .faq-answer p { padding: 0 24px 20px; color: var(--muted); font-size: 0.9rem; line-height: 1.8; }
     /* ── MOBILE ── */
     @media (max-width: 820px) {
       .nav-center { display: none; flex-direction: column; gap: 0; }
@@ -334,6 +370,56 @@
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-header">
+    <div class="section-eyebrow">O que dizem sobre nós</div>
+    <h2 class="section-title">Google Reviews</h2>
+  </div>
+  <div class="reviews-top">
+    <div class="review-score">
+      <div class="big-num">5.0</div>
+      <div class="stars">★★★★★</div>
+      <div class="total">Google Reviews</div>
+    </div>
+    <div class="review-divider"></div>
+    <div class="review-cta-text">
+      Satisfação total dos nossos clientes. Veja as avaliações reais no Google ou deixe a sua após o serviço.<br><br>
+      <a href="https://share.google/bULVZ8Hgw1uFcONOb" target="_blank">⭐ Ver todas as avaliações no Google →</a>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-card-top">
+        <div class="review-avatar">JM</div>
+        <div><div class="review-name">João M.</div><div class="review-date">Há 2 semanas</div></div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Serviço incrível! Meu carro ficou como novo. Pontual, profissional e atencioso aos detalhes. Recomendo muito!"</p>
+    </div>
+    <div class="review-card">
+      <div class="review-card-top">
+        <div class="review-avatar">AS</div>
+        <div><div class="review-name">Ana S.</div><div class="review-date">Há 1 mês</div></div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Window tinting ficou perfeito! Ótimo preço, ótimo acabamento. Já indiquei para vários amigos."</p>
+    </div>
+    <div class="review-card">
+      <div class="review-card-top">
+        <div class="review-avatar">CR</div>
+        <div><div class="review-name">Carlos R.</div><div class="review-date">Há 3 semanas</div></div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Full detailing top demais. Interior ficou impecável, exterior brilhando. Super profissional e veio até minha casa!"</p>
+    </div>
+  </div>
+  <a href="https://share.google/bULVZ8Hgw1uFcONOb" target="_blank" class="review-google-btn">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+    Deixar uma avaliação no Google
+  </a>
+</section>
+
 <!-- INSTAGRAM -->
 <section id="instagram">
   <div class="section-header">
@@ -354,6 +440,52 @@
       <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       Seguir @detailing.ns
     </a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header">
+    <div class="section-eyebrow">Dúvidas frequentes</div>
+    <h2 class="section-title">FAQ</h2>
+    <p class="section-sub">Respondemos as perguntas mais comuns dos nossos clientes.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How long does the service take?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><p>It depends on the service. A full detailing takes between 1.5 to 3 hours depending on the condition of the vehicle.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Do you work on weekends?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><p>Yes! We make exceptions on weekends. Just send us a text or WhatsApp message to schedule.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>What payment methods do you accept?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><p>We accept bank transfer, Zelle, and cash.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>What happens if it rains during the service?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><p>If it rains, we wait 20–30 minutes for it to pass. If the rain continues, the remaining service is covered by the client. It is the client's responsibility to check the weather before scheduling.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>How much notice do I need to cancel?</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><p>Clients must notify us at least 24 hours before the scheduled service. Since we block that time slot exclusively for you, last-minute cancellations mean we lose that appointment. The deposit is non-refundable in these cases.</p></div>
+    </div>
   </div>
 </section>
 
@@ -501,6 +633,21 @@ window.addEventListener('scroll', () => {
 });
 
 // Min date - form replaced by Calendly
+
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const answer = item.querySelector('.faq-answer');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-answer').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
 
 // Init
 setLang('en');
