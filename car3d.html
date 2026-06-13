@@ -7,8 +7,9 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { width:100%; height:100%; overflow:hidden; background:#0d0d0d; font-family:sans-serif; }
-#c { position:absolute; inset:0; width:100%; height:100%; display:block; cursor:grab; }
-#c:active { cursor:grabbing; }
+#c { position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; }
+body { cursor:grab; }
+body:active { cursor:grabbing; }
 
 
 .debug-info {
@@ -283,9 +284,9 @@ function updateHotspots() {
 let drag=false, px=0, py=0, rotY=Math.PI+0.5, rotX=0.1, zoom=5.5, auto=true, aTimer=null;
 
 let moved = false;
-canvas.addEventListener('mousedown', e=>{ drag=true; moved=false; px=e.clientX; py=e.clientY; auto=false; });
+document.addEventListener('mousedown', e=>{ drag=true; moved=false; px=e.clientX; py=e.clientY; auto=false; });
 window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
-canvas.addEventListener('mousemove', e=>{
+document.addEventListener('mousemove', e=>{
   if(!drag) return;
   moved = true;
   rotY+=(e.clientX-px)*0.008; px=e.clientX; py=e.clientY;
@@ -293,9 +294,9 @@ canvas.addEventListener('mousemove', e=>{
 canvas.addEventListener('wheel', e=>{
   e.preventDefault(); zoom+=e.deltaY*0.01; zoom=Math.max(2.5,Math.min(10,zoom));
 },{passive:false});
-canvas.addEventListener('touchstart', e=>{ drag=true; px=e.touches[0].clientX; py=e.touches[0].clientY; auto=false; },{passive:true});
+document.addEventListener('touchstart', e=>{ drag=true; px=e.touches[0].clientX; py=e.touches[0].clientY; auto=false; },{passive:true});
 window.addEventListener('touchend', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
-canvas.addEventListener('touchmove', e=>{
+document.addEventListener('touchmove', e=>{
   if(!drag) return;
   rotY+=(e.touches[0].clientX-px)*0.010; px=e.touches[0].clientX; py=e.touches[0].clientY;
   e.preventDefault();
@@ -329,7 +330,7 @@ function toggleDebug() {
   document.querySelector('.debug-btn').style.background = debugMode ? 'rgba(124,58,237,0.8)' : 'rgba(124,58,237,0.3)';
 }
 
-canvas.addEventListener('click', (e) => {
+document.addEventListener('click', (e) => {
   if (!debugMode || !carModel) return;
   const rect = canvas.getBoundingClientRect();
   mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
