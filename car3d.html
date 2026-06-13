@@ -126,7 +126,7 @@ const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.0;
+renderer.toneMappingExposure = 1.2;
 renderer.shadowMap.enabled = true;
 
 const scene = new THREE.Scene();
@@ -134,8 +134,8 @@ scene.background = new THREE.Color(0x0d0d0d);
 scene.fog = new THREE.Fog(0x0d0d0d, 15, 40);
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-camera.position.set(0, 1.5, 8);
-camera.lookAt(0, 0.8, 0);
+camera.position.set(0, 1.2, 7);
+camera.lookAt(0, 0.6, 0);
 
 function resize() {
   const w = window.innerWidth, h = window.innerHeight;
@@ -147,7 +147,7 @@ resize();
 window.addEventListener('resize', resize);
 
 // Lights
-scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
 const sun = new THREE.DirectionalLight(0xffffff, 2);
 sun.position.set(5, 10, 5);
 sun.castShadow = true;
@@ -166,24 +166,7 @@ const rimL = new THREE.PointLight(0x7c3aed, 1.5, 8);
 rimL.position.set(0, -0.5, -4);
 scene.add(rimL);
 
-// Ground
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(30, 30),
-  new THREE.MeshStandardMaterial({ color:0x111111, metalness:0.3, roughness:0.7 })
-);
-ground.rotation.x = -Math.PI/2;
-ground.position.y = 0;
-ground.receiveShadow = true;
-scene.add(ground);
 
-// Ground glow
-const glow = new THREE.Mesh(
-  new THREE.PlaneGeometry(7, 4),
-  new THREE.MeshBasicMaterial({ color:0x7c3aed, transparent:true, opacity:0.04 })
-);
-glow.rotation.x = -Math.PI/2;
-glow.position.y = 0.01;
-scene.add(glow);
 
 // LOAD MODEL
 let carModel = null;
@@ -198,7 +181,7 @@ loader.load(
     const center = bbox.getCenter(new THREE.Vector3());
     const size = bbox.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 4.5 / maxDim;
+    const scale = 5.5 / maxDim;
     carModel.scale.setScalar(scale);
     carModel.updateMatrixWorld(true);
     // Recompute after scale
@@ -280,8 +263,7 @@ canvas.addEventListener('mousedown', e=>{ drag=true; px=e.clientX; py=e.clientY;
 window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
 canvas.addEventListener('mousemove', e=>{
   if(!drag) return;
-  rotY+=(e.clientX-px)*0.008; rotX+=(e.clientY-py)*0.004;
-  rotX=Math.max(-0.3,Math.min(0.5,rotX)); px=e.clientX; py=e.clientY;
+  rotY+=(e.clientX-px)*0.008; px=e.clientX; py=e.clientY;
 });
 canvas.addEventListener('wheel', e=>{
   e.preventDefault(); zoom+=e.deltaY*0.01; zoom=Math.max(3,Math.min(12,zoom));
@@ -290,8 +272,7 @@ canvas.addEventListener('touchstart', e=>{ drag=true; px=e.touches[0].clientX; p
 window.addEventListener('touchend', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
 canvas.addEventListener('touchmove', e=>{
   if(!drag) return;
-  rotY+=(e.touches[0].clientX-px)*0.010; rotX+=(e.touches[0].clientY-py)*0.005;
-  rotX=Math.max(-0.3,Math.min(0.5,rotX)); px=e.touches[0].clientX; py=e.touches[0].clientY;
+  rotY+=(e.touches[0].clientX-px)*0.010; px=e.touches[0].clientX; py=e.touches[0].clientY;
   e.preventDefault();
 },{passive:false});
 
@@ -317,9 +298,9 @@ function animate() {
   requestAnimationFrame(animate);
   t+=0.004;
   if(auto && carModel) rotY+=0.004;
-  if(carModel) { carModel.rotation.y=rotY; carModel.rotation.x=rotX; }
-  camera.position.set(0,1.5,zoom);
-  camera.lookAt(0,0.8,0);
+  if(carModel) { carModel.rotation.y=rotY; carModel.rotation.x=0.1; }
+  camera.position.set(0,1.2,zoom);
+  camera.lookAt(0,0.6,0);
   rimL.intensity = 1.2+Math.sin(t)*0.4;
   renderer.render(scene,camera);
   updateHotspots();
