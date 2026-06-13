@@ -133,8 +133,8 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0d0d0d);
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-camera.position.set(0, 2, 7);
-camera.lookAt(0, 0.5, 0);
+camera.position.set(0, 1.5, 8);
+camera.lookAt(0, 0.8, 0);
 
 function resize() {
   const w = window.innerWidth, h = window.innerHeight;
@@ -154,27 +154,27 @@ scene.add(sun);
 const fill = new THREE.DirectionalLight(0xffffff, 0.8);
 fill.position.set(-5, 3, -5);
 scene.add(fill);
-const pL = new THREE.PointLight(0x7c3aed, 4, 16);
+const pL = new THREE.PointLight(0x7c3aed, 2, 16);
 pL.position.set(-4, 3, -2);
 scene.add(pL);
-const pR = new THREE.PointLight(0xa855f7, 2, 10);
+const pR = new THREE.PointLight(0xa855f7, 1, 10);
 pR.position.set(4, 2, 4);
 scene.add(pR);
 
 // Ground
 const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(20, 20),
-  new THREE.MeshStandardMaterial({ color:0x0a0a0a, metalness:0.1, roughness:0.8 })
+  new THREE.PlaneGeometry(30, 30),
+  new THREE.MeshStandardMaterial({ color:0x111111, metalness:0.3, roughness:0.7 })
 );
 ground.rotation.x = -Math.PI/2;
-ground.position.y = -0.01;
+ground.position.y = 0;
 ground.receiveShadow = true;
 scene.add(ground);
 
 // Ground glow
 const glow = new THREE.Mesh(
-  new THREE.PlaneGeometry(6, 3),
-  new THREE.MeshBasicMaterial({ color:0x7c3aed, transparent:true, opacity:0.06 })
+  new THREE.PlaneGeometry(7, 4),
+  new THREE.MeshBasicMaterial({ color:0x7c3aed, transparent:true, opacity:0.04 })
 );
 glow.rotation.x = -Math.PI/2;
 glow.position.y = 0.01;
@@ -193,10 +193,14 @@ loader.load(
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 3.5 / maxDim;
+    const scale = 4.5 / maxDim;
     carModel.scale.setScalar(scale);
-    carModel.position.sub(center.multiplyScalar(scale));
-    carModel.position.y = 0;
+    // Center horizontally
+    carModel.position.x = -center.x * scale;
+    carModel.position.z = -center.z * scale;
+    // Place on ground
+    const minY = box.min.y * scale;
+    carModel.position.y = -minY;
 
     carModel.traverse(child => {
       if (child.isMesh) {
@@ -308,8 +312,8 @@ function animate() {
   t+=0.004;
   if(auto && carModel) rotY+=0.004;
   if(carModel) { carModel.rotation.y=rotY; carModel.rotation.x=rotX; }
-  camera.position.set(0,2,zoom);
-  camera.lookAt(0,0.5,0);
+  camera.position.set(0,1.5,zoom);
+  camera.lookAt(0,0.8,0);
   pL.intensity = 3+Math.sin(t)*1;
   renderer.render(scene,camera);
   updateHotspots();
