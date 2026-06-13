@@ -222,15 +222,15 @@ loader.load(
 );
 
 // HOTSPOT DEFINITIONS (positions relative to car, will be scaled)
-// BMW M3 Touring - positions mapped from annotated screenshot
-// Front of car = +X, Roof = +Y, Right/visible side = +Z
+// BMW M3 Touring - front faces viewer at rotY=PI
+// front = -X, rear = +X, roof = +Y, right side = +Z
 const HOTSPOT_DEFS = [
-  { key:'prewash',   localPos: new THREE.Vector3(-0.20,  1.30,  0.50), label:'Pre-Wash & Wash' },
-  { key:'paint',     localPos: new THREE.Vector3( 1.30,  0.72,  0.45), label:'Paint Correction' },
-  { key:'glass',     localPos: new THREE.Vector3(-1.40,  0.88,  0.70), label:'Glass Decontamination' },
-  { key:'wheel',     localPos: new THREE.Vector3( 1.20,  0.18,  0.90), label:'Wheel Detailing' },
-  { key:'headlight', localPos: new THREE.Vector3( 2.10,  0.55,  0.55), label:'Headlight Restoration' },
-  { key:'bumper',    localPos: new THREE.Vector3( 2.00,  0.22,  0.40), label:'Bumper Detailing' },
+  { key:'prewash',   localPos: new THREE.Vector3( 0.20,  1.30,  0.30), label:'Pre-Wash & Wash' },
+  { key:'paint',     localPos: new THREE.Vector3(-1.30,  0.72,  0.45), label:'Paint Correction' },
+  { key:'glass',     localPos: new THREE.Vector3( 1.00,  0.88,  0.70), label:'Glass Decontamination' },
+  { key:'wheel',     localPos: new THREE.Vector3(-1.20,  0.18,  0.90), label:'Wheel Detailing' },
+  { key:'headlight', localPos: new THREE.Vector3(-2.00,  0.55,  0.55), label:'Headlight Restoration' },
+  { key:'bumper',    localPos: new THREE.Vector3(-1.90,  0.22,  0.50), label:'Bumper Detailing' },
 ];
 
 const hsEls = {};
@@ -265,7 +265,7 @@ function updateHotspots() {
 }
 
 // ORBIT
-let drag=false, px=0, py=0, rotY=0.3, rotX=0.1, zoom=5.5, auto=true, aTimer=null;
+let drag=false, px=0, py=0, rotY=Math.PI+0.5, rotX=0.1, zoom=5.5, auto=true, aTimer=null;
 
 canvas.addEventListener('mousedown', e=>{ drag=true; px=e.clientX; py=e.clientY; auto=false; });
 window.addEventListener('mouseup', ()=>{ drag=false; clearTimeout(aTimer); aTimer=setTimeout(()=>auto=true,3500); });
