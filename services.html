@@ -173,21 +173,21 @@ const SERVICES = [
     icon: '✨',
     name: 'Exterior Detailing',
     desc: 'Full exterior decontamination, hand wash, clay bar treatment, polish, and protection. Your paint restored to showroom condition.',
-    pricing: { coupe: '$70', sedan: '$75', suv: '$80', truck: '$85' }
+    pricing: { coupe: '€70', sedan: '€75', suv: '€80', truck: '€85' }
   },
   {
     id: 'interior',
     icon: '🪑',
     name: 'Interior Detailing',
     desc: 'Deep interior cleaning using compressed air, steam, and professional products. Every surface restored and protected.',
-    pricing: { coupe: '$70', sedan: '$75', suv: '$80', truck: '$85' }
+    pricing: { coupe: '€70', sedan: '€75', suv: '€80', truck: '€85' }
   },
   {
     id: 'full',
     icon: '🛡️',
     name: 'Full Detail Package',
     desc: 'Complete exterior and interior detailing in one appointment. Best value for a full vehicle transformation.',
-    pricing: { coupe: '$120', sedan: '$130', suv: '$140', truck: '$150' }
+    pricing: { coupe: '€120', sedan: '€130', suv: '€140', truck: '€150' }
   },
   {
     id: 'tinting',
@@ -206,7 +206,7 @@ const SERVICES = [
     icon: '💡',
     name: 'Headlight Restoration',
     desc: 'Multi-stage sanding and polishing to restore yellowed or oxidized headlights to full clarity and brightness.',
-    pricing: { coupe: '$99', sedan: '$99', suv: '$99', truck: '$99' }
+    pricing: { coupe: '€99', sedan: '€99', suv: '€99', truck: '€99' }
   },
   {
     id: 'polish',
@@ -215,8 +215,8 @@ const SERVICES = [
     desc: 'Machine polish to eliminate swirl marks, scratches, and oxidation. Choose the level of correction needed.',
     type: 'options',
     options: [
-      { label: '1-Stage', pricing: { coupe: '$350', sedan: '$400', suv: '$450', truck: '$500' } },
-      { label: '2-Stage', pricing: { coupe: '$600', sedan: '$700', suv: '$800', truck: '$950' } },
+      { label: '1-Stage', pricing: { coupe: '€350', sedan: '€400', suv: '€450', truck: '€500' } },
+      { label: '2-Stage', pricing: { coupe: '€600', sedan: '€700', suv: '€800', truck: '€950' } },
     ],
     defaultOption: 0
   },
@@ -225,7 +225,7 @@ const SERVICES = [
     icon: '💎',
     name: 'Ceramic Coating Package',
     desc: 'Ultimate paint protection — 2-stage paint correction + ceramic coating. Mirror shine + long-lasting protection.',
-    pricing: { coupe: '$1,000', sedan: '$1,150', suv: '$1,300', truck: '$1,500' }
+    pricing: { coupe: '€1,000', sedan: '€1,150', suv: '€1,300', truck: '€1,500' }
   },
   {
     id: 'shampoo',
@@ -273,12 +273,12 @@ function updateShampooPrice(id) {
   const s = SERVICES.find(x => x.id === id);
   const total = state[id].reduce((sum, idx) => sum + s.items[idx].prices[currentVehicle], 0);
   const el = document.getElementById('shampoo-price-' + currentVehicle);
-  if (el) el.textContent = total > 0 ? '$' + total : '$0';
+  if (el) el.textContent = total > 0 ? '$' + total : '€0';
   // update all vehicle prices
   ['sedan','suv','truck'].forEach(v => {
     const t = state[id].reduce((sum, idx) => sum + s.items[idx].prices[v], 0);
     const e = document.getElementById('shampoo-price-' + v);
-    if (e) e.textContent = t > 0 ? '$' + t : '$0';
+    if (e) e.textContent = t > 0 ? '$' + t : '€0';
   });
 }
 
@@ -334,7 +334,7 @@ function renderCard(s) {
       return `
         <div class="price-row">
           <div class="price-vehicle">${VEHICLES[v]}</div>
-          <div class="price-val ${v===currentVehicle?'highlight':''}" id="shampoo-price-${v}">${total > 0 ? '$'+total : '$0'}</div>
+          <div class="price-val ${v===currentVehicle?'highlight':''}" id="shampoo-price-${v}">${total > 0 ? '$'+total : '€0'}</div>
         </div>`;
     }).join('');
   } else {
