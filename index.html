@@ -412,6 +412,9 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
       .nav-center.open a { display: block; padding: 12px 0; }
       .hamburger { display: flex; }
       .nav-cta { display: none; }
+      .services-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .service-card { padding: 22px 18px; }
+      .service-name { font-size: 1.25rem; }
       .gallery-grid { grid-template-columns: 1fr 1fr; }
       /* - */
       .booking-wrap { grid-template-columns: 1fr; gap: 40px; }
@@ -420,7 +423,10 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
       .footer-links { justify-content: center; }
     }
     @media (max-width: 480px) {
-      .gallery-grid { grid-template-columns: 1fr; }
+      section { padding: 64px 5%; }
+      .services-grid { grid-template-columns: 1fr; gap: 12px; }
+      .service-card { padding: 20px 16px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
       /* - */
       .hero-stats { gap: 28px; }
       .lang-btn .flag { display: none; }
