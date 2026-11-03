@@ -665,6 +665,7 @@ const i18n = {
     x_consult_label: "Sob consulta",
     x_consult_msg: "Este serviço é feito sob consulta. Contacte-nos por WhatsApp ou telefone para combinarmos os detalhes e o valor.",
     x_call_btn: "Ligar",
+    x_cargo_label: "Adicionar limpeza da caixa / área de carga",
     x_wa_msg: "Olá! Gostaria de pedir informações sobre:",
     x_basic_note: "Não fazemos limpeza básica apenas do interior ou apenas do exterior — apenas o pacote completo.",
     x_ig_follow: "Seguir @detailing.ns",
@@ -778,6 +779,7 @@ const i18n = {
     x_consult_label: "On request",
     x_consult_msg: "This service is quoted on request. Contact us by WhatsApp or phone to agree on details and price.",
     x_call_btn: "Call",
+    x_cargo_label: "Add cargo bed / cargo area cleaning",
     x_wa_msg: "Hi! I'd like information about:",
     x_basic_note: "Please note: we do not offer basic cleaning for the interior only or the exterior only — only the complete package.",
     x_ig_follow: "Follow @detailing.ns",
@@ -891,6 +893,7 @@ const i18n = {
     x_consult_label: "Consultar",
     x_consult_msg: "Este servicio se realiza bajo consulta. Contáctanos por WhatsApp o teléfono para acordar los detalles y el precio.",
     x_call_btn: "Llamar",
+    x_cargo_label: "Añadir limpieza de caja / zona de carga",
     x_wa_msg: "¡Hola! Me gustaría información sobre:",
     x_basic_note: "Nota: no realizamos limpieza básica solo del interior ni solo del exterior — únicamente el paquete completo.",
     x_ig_follow: "Seguir @detailing.ns",
@@ -1097,7 +1100,6 @@ const BOOK_SERVICES = [
       {label:'Roof Lining',    p:{coupe:30,sedan:30,suv:30,truck:30}},
       {label:'Trunk / Cargo',  p:{coupe:30,sedan:30,suv:30,truck:30}},
     ]},
-  { id:'cargo', truckOnly:true, icon:'🚚', name:'Cargo Area Cleaning', prices:{coupe:'€20',sedan:'€20',suv:'€20',truck:'€20'} },
   { id:'tinting',  consult:true, icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'},
     opts:['Ceramic','High Performance'] },
   { id:'polish',   consult:true, icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
@@ -1108,10 +1110,10 @@ const BOOK_SERVICES = [
   { id:'ceramic',  consult:true, icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'€1,000',sedan:'€1,150',suv:'€1,300',truck:'€1,500'} }
 ];
 
-let bState = { time:'', consultOpen:'', vehicle:'', vehicleLabel:'', services:[], serviceOpts:{}, shampooSel:[], date:'', step:1 };
+let bState = { time:'', consultOpen:'', vehicle:'', vehicleLabel:'', services:[], serviceOpts:{}, shampooSel:[], cargo:false, date:'', step:1 };
 
 function selectVehicle(v, icon, label) {
-  if (v !== 'truck') { bState.services = bState.services.filter(x => x !== 'cargo'); }
+  if (v !== 'truck') bState.cargo = false;
   bState.vehicle = v; bState.vehicleLabel = label; // label kept in English for the form; display uses T()
   document.querySelectorAll('#panel-1 .opt-card').forEach(c => c.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
@@ -1122,7 +1124,7 @@ function selectVehicle(v, icon, label) {
 function renderServiceList() {
   const v = bState.vehicle;
   const list = document.getElementById('service-list');
-  list.innerHTML = BOOK_SERVICES.filter(s => !s.truckOnly || v === 'truck').map(s => {
+  list.innerHTML = BOOK_SERVICES.map(s => {
     const _co = bState.serviceOpts[s.id] || (s.opts && s.opts[0]);
     const price = (s.optPrices && _co) ? s.optPrices[_co][v] : s.prices[v];
     if (s.consult) {
@@ -1153,6 +1155,12 @@ function renderServiceList() {
       subHTML = `<div class="sub-opts" id="subopts-${s.id}">
         ${s.opts.map(o => `<button class="sub-btn ${o===curOpt?'active':''}" onclick="selectSubOpt(event,'${s.id}','${o}')">${optName(o)}</button>`).join('')}
       </div>`;
+    }
+    if ((s.id === 'basic' || s.id === 'full') && v === 'truck') {
+      subHTML += `<div class="shampoo-checks"><div class="shampoo-check">
+        <input type="checkbox" id="cargo-cb-${s.id}" ${bState.cargo?'checked':''} onchange="toggleCargo(this.checked)">
+        <label for="cargo-cb-${s.id}">${T('x_cargo_label')} <span style="color:var(--purple-light)">+€20</span></label>
+      </div></div>`;
     }
     if (s.shampoo) {
       subHTML = `<div class="shampoo-checks" id="shampoo-${s.id}">
@@ -1292,13 +1300,15 @@ const fmtDur = m => (m % 60 === 0 ? (m / 60) + 'h' : Math.floor(m / 60) + 'h' + 
 function bookingDuration() {
   let total = 0;
   bState.services.forEach(id => {
-    if (id === 'cargo') total += 30;
-    else if (id === 'basic') total += 120;
+    if (id === 'basic') total += 120;
     else if (id === 'full') total += (bState.serviceOpts.full || 'Interior + Exterior') === 'Interior + Exterior' ? 180 : 120;
     else total += 60;   // faróis, estofos
   });
+  if (cargoOn()) total += 30;
   return total || 60;
 }
+function cargoOn() { return bState.vehicle === 'truck' && bState.cargo && (bState.services.includes('basic') || bState.services.includes('full')); }
+function toggleCargo(on) { bState.cargo = !!on; renderServiceList(); }
 function endTime(t, dur) { const m = toMin(t) + dur; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
 function slotBlocked(t, D) {
   const st = toMin(t);
@@ -1391,6 +1401,12 @@ function renderSummary() {
     serviceLines = `<div class="summary-row"><span class="summary-label">${s.icon} ${bsName(s.id)}${optLabel}</span><span class="summary-val" style="color:var(--purple-light)">${priceTxt(price)}</span></div>` + serviceLines;
     serviceNames.push(s.name + (s.optPrices && bState.serviceOpts[id] ? ` — ${bState.serviceOpts[id]}` : ''));
   });
+
+  if (cargoOn()) {
+    totalNum += 20;
+    serviceLines += `<div class="summary-row"><span class="summary-label">🚚 ${BS_T[currentLang].cargo}</span><span class="summary-val" style="color:var(--purple-light)">+€20</span></div>`;
+    serviceNames.push('Cargo Area Cleaning (+€20)');
+  }
 
   const totalStr = totalNum > 0 ? '€' + totalNum.toLocaleString() : 'Quote';
   const totalShown = totalNum > 0 ? totalStr : T('x_quote');
