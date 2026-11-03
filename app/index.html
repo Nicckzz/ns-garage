@@ -152,7 +152,14 @@ async function load() {
   if (error) { toast('Erro a carregar: ' + error.message); return; }
   rows = data; render();
 }
-async function setStatus(id, status) { await sb.from('bookings').update({ status }).eq('id', id); await load(); openSheet(id); }
+async function setStatus(id, status) {
+  const { error } = await sb.from('bookings').update({ status }).eq('id', id);
+  if (error) {
+    toast(error.code === '23P01' ? 'Não foi possível reativar: esse horário já está ocupado por outra marcação.' : 'Erro: ' + error.message);
+    return;
+  }
+  await load(); openSheet(id);
+}
 
 // ---------- render ----------
 function filtered() {
@@ -230,7 +237,7 @@ function openSheet(id) {
       <a class="btn sec" style="text-align:center;text-decoration:none" href="tel:${esc(r.phone)}">Ligar</a>
       ${r.status !== 'confirmed' ? '<button class="btn ok" id="bConf">Confirmar</button>' : '<button class="btn sec" id="bPend">Voltar a pendente</button>'}
       <button class="btn ok" id="bDone" style="background:var(--bg3);border:1px solid var(--ok);color:var(--ok)">Concluir</button>
-      <button class="btn bad" id="bCan">Cancelar</button>
+      <button class="btn bad" id="bCan">Recusar / Cancelar</button>
       <button class="btn bad" id="bDel">Apagar</button>
     </div>`;
   $('sheet').classList.remove('hidden');
