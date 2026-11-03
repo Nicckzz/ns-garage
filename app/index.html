@@ -170,12 +170,12 @@ function itemHTML(r) {
     <div class="top"><div><div class="name">${isNew ? '<span class="new-dot"></span>' : ''}${esc(r.name)}</div>
     <div class="meta">${esc(r.vehicle_detail || '')} · ${esc(r.vehicle_type || '')}</div>
     <div class="meta">${esc(r.services || '')}</div></div>
-    <div class="when">${fmtDate(r.booking_date)}<br><span class="badge s-${r.status}">${STATUS[r.status]}</span></div></div>
+    <div class="when">${fmtDate(r.booking_date)}${r.booking_time ? ' · ' + r.booking_time : ''}<br><span class="badge s-${r.status}">${STATUS[r.status]}</span></div></div>
     <div class="meta" style="margin-top:8px">💶 ${esc(r.total || '—')}</div></div>`;
 }
 function bindItems(root) { root.querySelectorAll('.item').forEach(el => el.onclick = () => openSheet(el.dataset.id)); }
 function renderList() {
-  const list = filtered().slice().sort((a, b) => (a.booking_date || '9999').localeCompare(b.booking_date || '9999') || b.created_at.localeCompare(a.created_at));
+  const list = filtered().slice().sort((a, b) => (a.booking_date || '9999').localeCompare(b.booking_date || '9999') || (a.booking_time || '').localeCompare(b.booking_time || '') || b.created_at.localeCompare(a.created_at));
   $('listView').innerHTML = list.length ? list.map(itemHTML).join('') : '<div class="empty">Sem marcações aqui.</div>';
   bindItems($('listView'));
 }
@@ -218,7 +218,7 @@ function openSheet(id) {
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h2 style="font-size:1.15rem">${esc(r.name)}</h2><button class="icon-btn" id="closeSheet">✕</button></div>
     <span class="badge s-${r.status}">${STATUS[r.status]}</span>
     <div style="margin-top:10px">
-    ${line('Data', fmtDate(r.booking_date))}${line('Serviços', r.services)}${line('Opção', r.service_options)}${line('Veículo', (r.vehicle_detail||'') + (r.vehicle_type ? ' (' + r.vehicle_type + ')' : ''))}
+    ${line('Data', fmtDate(r.booking_date))}${line('Horário', r.booking_time)}${line('Serviços', r.services)}${line('Opção', r.service_options)}${line('Veículo', (r.vehicle_detail||'') + (r.vehicle_type ? ' (' + r.vehicle_type + ')' : ''))}
     ${line('Total estimado', r.total)}${line('Morada', r.address)}${line('Telefone', r.phone)}${line('E-mail', r.email)}${line('Notas do cliente', r.notes)}
     ${line('Recebida', new Date(r.created_at).toLocaleString('pt-PT'))}</div>
     <textarea class="field" id="pn" placeholder="Notas privadas (só tu vês)">${esc(r.private_notes || '')}</textarea>
