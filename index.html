@@ -1575,6 +1575,8 @@ function renderSummary() {
 }
 
 // FORM SUBMIT
+const SUPABASE_URL = 'https://plnakzfuakruznxumblm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Rml0RR4dsT0XOcmKhZcTVw_ZqLazEg_';
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('booking-form');
   if (form) {
@@ -1582,19 +1584,29 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const btn = form.querySelector('[type=submit]');
       btn.textContent = T('x_sending'); btn.disabled = true;
-      try {
-        const res = await fetch(form.action, {
-          method:'POST', body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        });
-        if (res.ok) {
-          document.getElementById('bform-body').style.display = 'none';
-          document.querySelector('.bform-steps').style.display = 'none';
-          document.getElementById('bform-success').style.display = 'block';
-        } else {
-          btn.textContent = T('x_error'); btn.disabled = false;
-        }
-      } catch(err) {
+      // Grava a marcação na agenda (Supabase) e envia também o e-mail (Formspree)
+      const fd = new FormData(form);
+      const row = {
+        name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email'),
+        vehicle_type: fd.get('vehicle'), vehicle_detail: fd.get('vehicle_detail'),
+        services: fd.get('service'), service_options: fd.get('service_option') || null,
+        booking_date: fd.get('date') || null, address: fd.get('address'),
+        notes: fd.get('notes') || null, total: fd.get('price'), lang: currentLang
+      };
+      const saveDb = fetch(SUPABASE_URL + '/rest/v1/bookings', {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify(row)
+      }).then(r => r.ok).catch(() => false);
+      const sendMail = fetch(form.action, {
+        method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
+      }).then(r => r.ok).catch(() => false);
+      const [okDb, okMail] = await Promise.all([saveDb, sendMail]);
+      if (okDb || okMail) {
+        document.getElementById('bform-body').style.display = 'none';
+        document.querySelector('.bform-steps').style.display = 'none';
+        document.getElementById('bform-success').style.display = 'block';
+      } else {
         btn.textContent = T('x_error'); btn.disabled = false;
       }
     });
