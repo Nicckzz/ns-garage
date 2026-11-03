@@ -328,6 +328,17 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
     .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
     .opt-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
     .opt-card:hover { border-color: var(--purple); }
+    .consult-box { background: var(--bg3); border: 1px solid var(--purple); border-radius: 10px; padding: 14px; margin: 8px 0 12px; font-size: 0.85rem; color: var(--muted); }
+    .consult-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .consult-btn { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; background: var(--bg2); border: 1px solid var(--border); color: var(--white); }
+    .consult-btn.wa { background: #25d366; border-color: #25d366; color: #04210f; }
+    .time-title { margin: 20px 0 10px; font-size: 0.85rem; font-weight: 600; color: var(--white); }
+    .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+    .time-slot { padding: 10px 0; text-align: center; border-radius: 8px; background: var(--bg3); border: 1px solid var(--border); color: var(--white); font-size: 0.9rem; cursor: pointer; }
+    .time-slot:hover { border-color: var(--purple); }
+    .time-slot.selected { background: var(--purple); border-color: var(--purple); }
+    .time-slot.taken { opacity: 0.3; text-decoration: line-through; cursor: not-allowed; }
+
     .opt-card.selected { border-color: var(--purple); background: var(--purple-glow); }
     .opt-card .oc-icon { font-size: 1.8rem; margin-bottom: 6px; }
     .opt-card .oc-name { font-size: 0.82rem; font-weight: 600; color: var(--white); }
@@ -651,6 +662,10 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
             </div>
             <div class="cal-grid" id="cal-grid"></div>
           </div>
+          <div id="time-wrap" style="display:none">
+            <div class="time-title" data-i18n="x_time_title">Choose a time</div>
+            <div class="time-grid" id="time-grid"></div>
+          </div>
           <div class="bform-nav">
             <button class="btn-back" onclick="goStep(2)" data-i18n="x_back">← Back</button>
             <button class="btn-next" id="btn-next-3" onclick="goStep(4)" disabled data-i18n="x_next">Next →</button>
@@ -667,6 +682,7 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
             <input type="hidden" name="service" id="f-service">
             <input type="hidden" name="service_option" id="f-service-option">
             <input type="hidden" name="date" id="f-date">
+            <input type="hidden" name="time" id="f-time">
             <input type="hidden" name="price" id="f-price">
 
             <div class="bfield-row">
@@ -926,14 +942,20 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
 <script>
 const i18n = {
   pt: {
+    x_time_title: "Escolha o horário",
+    x_slot_taken: "Esse horário acabou de ser reservado por outro cliente. Escolha outro horário, por favor.",
+    x_consult_label: "Sob consulta",
+    x_consult_msg: "Este serviço é feito sob consulta. Contacte-nos por WhatsApp ou telefone para combinarmos os detalhes e o valor.",
+    x_call_btn: "Ligar",
+    x_wa_msg: "Olá! Gostaria de pedir informações sobre:",
     x_basic_note: "Não fazemos limpeza básica apenas do interior ou apenas do exterior — apenas o pacote completo.",
     x_ig_follow: "Seguir @detailing.ns",
     x_s5_name: "Polimento / Correção de Pintura",
     x_s5_desc: "Polimento à máquina para remover riscos, micro-riscos e oxidação. Opções de 1 ou 2 etapas.",
-    x_s5_price: "A partir de €350",
+    x_s5_price: "Sob consulta",
     x_s6_name: "Revestimento Cerâmico",
     x_s6_desc: "Proteção máxima da pintura com camada cerâmica duradoura. Brilho de espelho + propriedades hidrofóbicas.",
-    x_s6_price: "A partir de €1.000",
+    x_s6_price: "Sob consulta",
     x_view_all: "Ver Todos os Serviços e Preços →",
     x_step1: "1. Veículo",
     x_step2: "2. Serviço",
@@ -1031,14 +1053,20 @@ const i18n = {
     alert_required: "Por favor, preencha os campos obrigatórios: nome, telefone, e-mail e serviço."
   },
   en: {
+    x_time_title: "Choose a time",
+    x_slot_taken: "That time slot was just booked by another client. Please choose another time.",
+    x_consult_label: "On request",
+    x_consult_msg: "This service is quoted on request. Contact us by WhatsApp or phone to agree on details and price.",
+    x_call_btn: "Call",
+    x_wa_msg: "Hi! I'd like information about:",
     x_basic_note: "Please note: we do not offer basic cleaning for the interior only or the exterior only — only the complete package.",
     x_ig_follow: "Follow @detailing.ns",
     x_s5_name: "Polish / Paint Correction",
     x_s5_desc: "Machine polish to remove swirl marks, scratches and oxidation. 1-stage or 2-stage options available.",
-    x_s5_price: "Starting at €350",
+    x_s5_price: "On request",
     x_s6_name: "Ceramic Coating",
     x_s6_desc: "Ultimate paint protection with long-lasting ceramic layer. Mirror shine + hydrophobic properties.",
-    x_s6_price: "Starting at €1,000",
+    x_s6_price: "On request",
     x_view_all: "View All Services & Pricing →",
     x_step1: "1. Vehicle",
     x_step2: "2. Service",
@@ -1113,7 +1141,7 @@ const i18n = {
     srv_sub: "High-performance detailing and customization using premium products.",
     s1_name: "Exterior Detailing", s1_desc: "Full wash, decontamination, polish, and protection application. Flawless finish inside and out.", s1_price: "Starting at €70",
     s2_name: "Interior Detailing", s2_desc: "Deep vacuuming, leather and fabric sanitizing, compressed air blow-out in every detail, dashboard and glass cleaning.", s2_price: "Starting at €70",
-    s3_name: "Window Tinting", s3_desc: "Ceramic or high-performance film. UV protection, privacy, and aesthetics with quality guarantee.", s3_price: "Quote",
+    s3_name: "Window Tinting", s3_desc: "Ceramic or high-performance film. UV protection, privacy, and aesthetics with quality guarantee.", s3_price: "On request",
     s4_name: "Full Package", s4_desc: "Exterior + interior in a single appointment. Perfect for getting your car in pristine condition without hassle.", s4_price: "Starting at €90",
     s5_name: "Dealer Program", s5_desc: "Special pricing for dealerships and retailers. Loyalty program with volume-based rates.", s5_price: "Price on request",
     s6_name: "Customization", s6_desc: "Special vehicle personalization projects. Reach out to discuss what you have in mind.", s6_price: "€99",
@@ -1136,14 +1164,20 @@ const i18n = {
     alert_required: "Please fill in the required fields: name, phone, email, and service."
   },
   es: {
+    x_time_title: "Elige el horario",
+    x_slot_taken: "Ese horario acaba de ser reservado por otro cliente. Elige otro horario, por favor.",
+    x_consult_label: "Consultar",
+    x_consult_msg: "Este servicio se realiza bajo consulta. Contáctanos por WhatsApp o teléfono para acordar los detalles y el precio.",
+    x_call_btn: "Llamar",
+    x_wa_msg: "¡Hola! Me gustaría información sobre:",
     x_basic_note: "Nota: no realizamos limpieza básica solo del interior ni solo del exterior — únicamente el paquete completo.",
     x_ig_follow: "Seguir @detailing.ns",
     x_s5_name: "Pulido / Corrección de Pintura",
     x_s5_desc: "Pulido a máquina para eliminar marcas de remolino, arañazos y oxidación. Opciones de 1 o 2 etapas.",
-    x_s5_price: "Desde €350",
+    x_s5_price: "Consultar",
     x_s6_name: "Recubrimiento Cerámico",
     x_s6_desc: "Máxima protección de la pintura con una capa cerámica duradera. Brillo espejo + propiedades hidrofóbicas.",
-    x_s6_price: "Desde €1.000",
+    x_s6_price: "Consultar",
     x_view_all: "Ver Todos los Servicios y Precios →",
     x_step1: "1. Vehículo",
     x_step2: "2. Servicio",
@@ -1332,15 +1366,15 @@ const BOOK_SERVICES = [
       'Interior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65'},
       'Exterior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65'}
     }},
-  { id:'tinting',  icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'},
+  { id:'tinting',  consult:true, icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'},
     opts:['Ceramic','High Performance'] },
   { id:'headlight',icon:'💡', name:'Headlight Restoration',  prices:{coupe:'€50',sedan:'€50',suv:'€50',truck:'€50'} },
-  { id:'polish',   icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
+  { id:'polish',   consult:true, icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
     opts:['1-Stage','2-Stage'], optPrices:{
       '1-Stage':{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
       '2-Stage':{coupe:'€600',sedan:'€700',suv:'€800',truck:'€950'}
     }},
-  { id:'ceramic',  icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'€1,000',sedan:'€1,150',suv:'€1,300',truck:'€1,500'} },
+  { id:'ceramic',  consult:true, icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'€1,000',sedan:'€1,150',suv:'€1,300',truck:'€1,500'} },
   { id:'shampoo',  icon:'🧴', name:'Shampoo Detailing',      prices:{coupe:'Custom',sedan:'Custom',suv:'Custom',truck:'Custom'},
     shampoo:[
       {label:'Front Seats',    p:{coupe:20,sedan:20,suv:20,truck:20}},
@@ -1351,7 +1385,7 @@ const BOOK_SERVICES = [
     ]}
 ];
 
-let bState = { vehicle:'', vehicleLabel:'', services:[], serviceOpts:{}, shampooSel:[], date:'', step:1 };
+let bState = { time:'', consultOpen:'', vehicle:'', vehicleLabel:'', services:[], serviceOpts:{}, shampooSel:[], date:'', step:1 };
 
 function selectVehicle(v, icon, label) {
   bState.vehicle = v; bState.vehicleLabel = label; // label kept in English for the form; display uses T()
@@ -1367,6 +1401,27 @@ function renderServiceList() {
   list.innerHTML = BOOK_SERVICES.map(s => {
     const _co = bState.serviceOpts[s.id] || (s.opts && s.opts[0]);
     const price = (s.optPrices && _co) ? s.optPrices[_co][v] : s.prices[v];
+    if (s.consult) {
+      const open = bState.consultOpen === s.id;
+      const msg = encodeURIComponent(T('x_wa_msg') + ' ' + bsName(s.id));
+      return `
+      <div>
+        <div class="srv-item ${open?'selected':''}" onclick="toggleConsult('${s.id}')">
+          <div class="srv-item-left">
+            <span class="srv-item-icon">${s.icon}</span>
+            <span class="srv-item-name">${bsName(s.id)}</span>
+          </div>
+          <span class="srv-item-price">${T('x_consult_label')}</span>
+        </div>
+        ${open ? `<div class="consult-box">
+          <p>${T('x_consult_msg')}</p>
+          <div class="consult-actions">
+            <a class="consult-btn wa" href="https://wa.me/351912881521?text=${msg}" target="_blank">WhatsApp</a>
+            <a class="consult-btn" href="tel:+351912881521">${T('x_call_btn')}</a>
+          </div>
+        </div>` : ''}
+      </div>`;
+    }
     const isSelected = bState.services.includes(s.id);
     let subHTML = '';
     if (s.opts) {
@@ -1414,6 +1469,11 @@ function renderServiceList() {
     const s = BOOK_SERVICES.find(x=>x.id===bState.service);
     if (s && s.opts && !bState.serviceOpt) bState.serviceOpt = s.opts[0];
   }
+}
+
+function toggleConsult(id) {
+  bState.consultOpen = bState.consultOpen === id ? '' : id;
+  renderServiceList();
 }
 
 function selectService(id) {
@@ -1498,10 +1558,37 @@ function calPrev() {
 }
 function calNext() { calDate.setMonth(calDate.getMonth()+1); renderCal(); }
 
-function selectDate(d) {
-  bState.date = d;
-  document.getElementById('btn-next-3').disabled = false;
+const TIME_SLOTS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'];
+let bookedSlots = [];
+
+async function selectDate(d) {
+  bState.date = d; bState.time = '';
+  document.getElementById('btn-next-3').disabled = true;
   renderCal();
+  document.getElementById('time-wrap').style.display = 'block';
+  bookedSlots = [];
+  renderSlots();
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/rpc/booked_slots', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ d })
+    });
+    if (r.ok && bState.date === d) { bookedSlots = await r.json() || []; renderSlots(); }
+  } catch (e) {}
+}
+
+function renderSlots() {
+  document.getElementById('time-grid').innerHTML = TIME_SLOTS.map(t => {
+    const taken = bookedSlots.includes(t);
+    return `<button type="button" class="time-slot ${t===bState.time?'selected':''} ${taken?'taken':''}" ${taken?'disabled':`onclick="selectTime('${t}')"`}>${t}</button>`;
+  }).join('');
+}
+
+function selectTime(t) {
+  bState.time = t;
+  document.getElementById('btn-next-3').disabled = false;
+  renderSlots();
 }
 
 function refreshWizard() {
@@ -1563,7 +1650,7 @@ function renderSummary() {
   document.getElementById('booking-summary').innerHTML = `
     <div class="summary-row"><span class="summary-label">${T('x_summ_veh')}</span><span class="summary-val">${T('x_v_'+v)}</span></div>
     ${serviceLines}
-    <div class="summary-row"><span class="summary-label">${T('x_summ_date')}</span><span class="summary-val">${dateShown}</span></div>
+    <div class="summary-row"><span class="summary-label">${T('x_summ_date')}</span><span class="summary-val">${dateShown}${bState.time ? ' · ' + bState.time : ''}</span></div>
     <div class="summary-row" style="border-top:1px solid var(--purple);margin-top:4px;padding-top:10px;"><span class="summary-label" style="font-weight:700;color:var(--white)">${T('x_summ_total')}</span><span class="summary-val" style="color:var(--purple-light);font-size:1.1rem">${totalShown}</span></div>
   `;
 
@@ -1571,6 +1658,7 @@ function renderSummary() {
   document.getElementById('f-service').value = serviceNames.join(' + ');
   document.getElementById('f-service-option').value = Object.values(bState.serviceOpts).join(', ');
   document.getElementById('f-date').value = bState.date;
+  document.getElementById('f-time').value = bState.time;
   document.getElementById('f-price').value = totalStr;
 }
 
@@ -1593,15 +1681,28 @@ document.addEventListener('DOMContentLoaded', () => {
         booking_date: fd.get('date') || null, address: fd.get('address'),
         notes: fd.get('notes') || null, total: fd.get('price'), lang: currentLang
       };
-      const saveDb = fetch(SUPABASE_URL + '/rest/v1/bookings', {
-        method: 'POST',
-        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-        body: JSON.stringify(row)
-      }).then(r => r.ok).catch(() => false);
-      const sendMail = fetch(form.action, {
+      row.booking_time = fd.get('time') || null;
+      let dbStatus = 0;
+      try {
+        const r = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify(row)
+        });
+        dbStatus = r.status;
+      } catch (err) { dbStatus = 0; }
+      if (dbStatus === 409) {
+        // horário ocupado entretanto
+        btn.textContent = T('x_send'); btn.disabled = false;
+        alert(T('x_slot_taken'));
+        goStep(3);
+        if (bState.date) selectDate(bState.date);
+        return;
+      }
+      const okDb = dbStatus >= 200 && dbStatus < 300;
+      const okMail = await fetch(form.action, {
         method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
       }).then(r => r.ok).catch(() => false);
-      const [okDb, okMail] = await Promise.all([saveDb, sendMail]);
       if (okDb || okMail) {
         document.getElementById('bform-body').style.display = 'none';
         document.querySelector('.bform-steps').style.display = 'none';

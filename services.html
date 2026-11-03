@@ -62,6 +62,11 @@
     .scard-icon{font-size:2rem;margin-bottom:12px;display:block;}
     .scard-name{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:1px;margin-bottom:8px;}
     .scard-note{margin-top:12px;padding:10px 12px;border:1px solid rgba(168,85,247,0.35);background:rgba(124,58,237,0.1);border-radius:8px;color:var(--white);font-size:0.8rem;line-height:1.5;}
+    .consult-text{color:var(--muted);font-size:0.85rem;line-height:1.6;padding-top:6px;}
+    .consult-actions{display:flex;gap:10px;padding:0 28px 28px;}
+    .consult-actions .scard-cta{flex:1;margin:0;text-align:center;}
+    .scard-cta.wa{background:#25d366;color:#04210f;}
+    .scard-cta.call{background:var(--bg3);border:1px solid var(--border);color:var(--white);}
     .scard-desc{color:var(--muted);font-size:0.87rem;line-height:1.7;}
 
     /* OPTIONS (tinting, polish, shampoo) */
@@ -181,6 +186,7 @@ const I18N = {
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Selecione o Tipo', select_areas:'Selecione as Áreas', pricing_label:'Preço por veículo',
     book_cta:'Reservar Este Serviço →', quote:'Sob consulta', add_photo:'Adicionar foto',
+    consult_msg:"Este serviço é feito sob consulta. Contacte-nos por WhatsApp ou telefone para combinarmos os detalhes e o valor.", call_btn:"Ligar", wa_msg:"Olá! Gostaria de pedir informações sobre:",
     veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedan', suv:'🚙 SUV', truck:'🛻 Pickup'},
     svc:{
       basic:{name:'Limpeza Básica Completa', desc:'Lavagem completa do exterior e do interior numa única marcação: lavagem à mão, aspiração, limpeza de superfícies e vidros. Ideal para manutenção regular.', note:'Não fazemos limpeza básica apenas do interior ou apenas do exterior — apenas o pacote completo.'},
@@ -202,7 +208,8 @@ const I18N = {
     note:'<strong>50% deposit required</strong> at booking. Prices may vary based on vehicle condition. Contact us for custom packages and dealer programs.',
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Select Type', select_areas:'Select Areas', pricing_label:'Pricing by vehicle',
-    book_cta:'Book This Service →', quote:'Quote', add_photo:'Add photo',
+    book_cta:'Book This Service →', quote:'On request', add_photo:'Add photo',
+    consult_msg:"This service is quoted on request. Contact us by WhatsApp or phone to agree on details and price.", call_btn:"Call", wa_msg:"Hi! I'd like information about:",
     veh:{coupe:'🚘 Coupe', sedan:'🚗 Sedan', suv:'🚙 SUV', truck:'🛻 Truck'},
     svc:{
       basic:{name:'Complete Basic Cleaning', desc:'Complete exterior and interior wash in a single appointment: hand wash, vacuum, surface and glass cleaning. Ideal for regular maintenance.', note:'Please note: we do not offer basic cleaning for the interior only or the exterior only — only the complete package.'},
@@ -225,6 +232,7 @@ const I18N = {
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Selecciona el Tipo', select_areas:'Selecciona las Áreas', pricing_label:'Precio por vehículo',
     book_cta:'Reservar Este Servicio →', quote:'Consultar', add_photo:'Añadir foto',
+    consult_msg:"Este servicio se realiza bajo consulta. Contáctanos por WhatsApp o teléfono para acordar los detalles y el precio.", call_btn:"Llamar", wa_msg:"¡Hola! Me gustaría información sobre:",
     veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedán', suv:'🚙 SUV', truck:'🛻 Pickup'},
     svc:{
       basic:{name:'Limpieza Básica Completa', desc:'Lavado completo del exterior e interior en una sola cita: lavado a mano, aspirado, limpieza de superficies y cristales. Ideal para mantenimiento regular.', note:'Nota: no realizamos limpieza básica solo del interior ni solo del exterior — únicamente el paquete completo.'},
@@ -285,13 +293,7 @@ const SERVICES = [
     id: 'tinting',
     icon: '🔮',
     name: 'Window Tinting',
-    desc: 'Professional window film installation for UV protection, heat rejection, and privacy.',
-    type: 'options',
-    options: [
-      { label: 'Ceramic', pricing: { coupe: 'Quote', sedan: 'Quote', suv: 'Quote', truck: 'Quote' } },
-      { label: 'High Performance', pricing: { coupe: 'Quote', sedan: 'Quote', suv: 'Quote', truck: 'Quote' } },
-    ],
-    defaultOption: 0
+    type: 'consult'
   },
   {
     id: 'headlight',
@@ -304,20 +306,13 @@ const SERVICES = [
     id: 'polish',
     icon: '🪄',
     name: 'Polish / Paint Correction',
-    desc: 'Machine polish to eliminate swirl marks, scratches, and oxidation. Choose the level of correction needed.',
-    type: 'options',
-    options: [
-      { label: '1-Stage', pricing: { coupe: '€350', sedan: '€400', suv: '€450', truck: '€500' } },
-      { label: '2-Stage', pricing: { coupe: '€600', sedan: '€700', suv: '€800', truck: '€950' } },
-    ],
-    defaultOption: 0
+    type: 'consult'
   },
   {
     id: 'ceramic',
     icon: '💎',
     name: 'Ceramic Coating Package',
-    desc: 'Ultimate paint protection — 2-stage paint correction + ceramic coating. Mirror shine + long-lasting protection.',
-    pricing: { coupe: '€1,000', sedan: '€1,150', suv: '€1,300', truck: '€1,500' }
+    type: 'consult'
   },
   {
     id: 'shampoo',
@@ -408,6 +403,27 @@ function renderCard(s) {
         <div class="price-vehicle">${VEHICLES[v]}</div>
         <div class="price-val ${v===currentVehicle?'highlight':''}">${p}</div>
       </div>`; }).join('');
+  } else if (s.type === 'consult') {
+    const waMsg = encodeURIComponent(L().wa_msg + ' ' + L().svc[s.id].name);
+    return `
+    <div class="scard">
+      <div class="scard-img">
+        ${SERVICE_IMAGES[s.id] ? `<img src="${SERVICE_IMAGES[s.id]}" alt="${L().svc[s.id].name}" />` : `<div class="scard-img-placeholder"><span>${s.icon}</span><span>${L().add_photo}</span></div>`}
+      </div>
+      <div class="scard-top">
+        <span class="scard-icon">${s.icon}</span>
+        <div class="scard-name">${L().svc[s.id].name}</div>
+        <p class="scard-desc">${L().svc[s.id].desc}</p>
+      </div>
+      <div class="scard-pricing">
+        <div class="pricing-label">${L().quote}</div>
+        <p class="consult-text">${L().consult_msg}</p>
+      </div>
+      <div class="consult-actions">
+        <a href="https://wa.me/351912881521?text=${waMsg}" target="_blank" class="scard-cta wa">WhatsApp</a>
+        <a href="tel:+351912881521" class="scard-cta call">${L().call_btn}</a>
+      </div>
+    </div>`;
   } else if (s.type === 'shampoo') {
     optionsHTML = `
       <div class="scard-options">
