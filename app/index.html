@@ -117,6 +117,8 @@ let rows = [], filter = 'active', view = 'list', calMonth = new Date(), calSel =
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtDate = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('pt-PT', { weekday:'short', day:'numeric', month:'short' }) : 'Sem data';
+const endT = (t, d) => { const m = parseInt(t.slice(0,2))*60 + parseInt(t.slice(3,5)) + (d || 60); return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0'); };
+const timeRange = r => r.booking_time ? r.booking_time.slice(0,5) + '–' + endT(r.booking_time, r.booking_duration) : '';
 const waLink = p => 'https://wa.me/' + String(p).replace(/[^\d]/g, '');
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.remove('hidden'); try { new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=').play(); } catch(e){} setTimeout(() => t.classList.add('hidden'), 5000); }
 
@@ -170,7 +172,7 @@ function itemHTML(r) {
     <div class="top"><div><div class="name">${isNew ? '<span class="new-dot"></span>' : ''}${esc(r.name)}</div>
     <div class="meta">${esc(r.vehicle_detail || '')} · ${esc(r.vehicle_type || '')}</div>
     <div class="meta">${esc(r.services || '')}</div></div>
-    <div class="when">${fmtDate(r.booking_date)}${r.booking_time ? ' · ' + r.booking_time : ''}<br><span class="badge s-${r.status}">${STATUS[r.status]}</span></div></div>
+    <div class="when">${fmtDate(r.booking_date)}${r.booking_time ? ' · ' + timeRange(r) : ''}<br><span class="badge s-${r.status}">${STATUS[r.status]}</span></div></div>
     <div class="meta" style="margin-top:8px">💶 ${esc(r.total || '—')}</div></div>`;
 }
 function bindItems(root) { root.querySelectorAll('.item').forEach(el => el.onclick = () => openSheet(el.dataset.id)); }
@@ -218,7 +220,7 @@ function openSheet(id) {
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h2 style="font-size:1.15rem">${esc(r.name)}</h2><button class="icon-btn" id="closeSheet">✕</button></div>
     <span class="badge s-${r.status}">${STATUS[r.status]}</span>
     <div style="margin-top:10px">
-    ${line('Data', fmtDate(r.booking_date))}${line('Horário', r.booking_time)}${line('Serviços', r.services)}${line('Opção', r.service_options)}${line('Veículo', (r.vehicle_detail||'') + (r.vehicle_type ? ' (' + r.vehicle_type + ')' : ''))}
+    ${line('Data', fmtDate(r.booking_date))}${line('Horário', timeRange(r))}${line('Serviços', r.services)}${line('Opção', r.service_options)}${line('Veículo', (r.vehicle_detail||'') + (r.vehicle_type ? ' (' + r.vehicle_type + ')' : ''))}
     ${line('Total estimado', r.total)}${line('Morada', r.address)}${line('Telefone', r.phone)}${line('E-mail', r.email)}${line('Notas do cliente', r.notes)}
     ${line('Recebida', new Date(r.created_at).toLocaleString('pt-PT'))}</div>
     <textarea class="field" id="pn" placeholder="Notas privadas (só tu vês)">${esc(r.private_notes || '')}</textarea>
