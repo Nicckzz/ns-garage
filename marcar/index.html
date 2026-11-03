@@ -1088,15 +1088,7 @@ const BOOK_SERVICES = [
       'Interior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65'},
       'Exterior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65'}
     }},
-  { id:'tinting',  consult:true, icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'},
-    opts:['Ceramic','High Performance'] },
   { id:'headlight',icon:'💡', name:'Headlight Restoration',  prices:{coupe:'€50',sedan:'€50',suv:'€50',truck:'€50'} },
-  { id:'polish',   consult:true, icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
-    opts:['1-Stage','2-Stage'], optPrices:{
-      '1-Stage':{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
-      '2-Stage':{coupe:'€600',sedan:'€700',suv:'€800',truck:'€950'}
-    }},
-  { id:'ceramic',  consult:true, icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'€1,000',sedan:'€1,150',suv:'€1,300',truck:'€1,500'} },
   { id:'shampoo',  icon:'🧴', name:'Shampoo Detailing',      prices:{coupe:'Custom',sedan:'Custom',suv:'Custom',truck:'Custom'},
     shampoo:[
       {label:'Front Seats',    p:{coupe:20,sedan:20,suv:20,truck:20}},
@@ -1104,7 +1096,15 @@ const BOOK_SERVICES = [
       {label:'Carpet / Floor', p:{coupe:30,sedan:30,suv:30,truck:30}},
       {label:'Roof Lining',    p:{coupe:30,sedan:30,suv:30,truck:30}},
       {label:'Trunk / Cargo',  p:{coupe:30,sedan:30,suv:30,truck:30}},
-    ]}
+    ]},
+  { id:'tinting',  consult:true, icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'},
+    opts:['Ceramic','High Performance'] },
+  { id:'polish',   consult:true, icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
+    opts:['1-Stage','2-Stage'], optPrices:{
+      '1-Stage':{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
+      '2-Stage':{coupe:'€600',sedan:'€700',suv:'€800',truck:'€950'}
+    }},
+  { id:'ceramic',  consult:true, icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'€1,000',sedan:'€1,150',suv:'€1,300',truck:'€1,500'} }
 ];
 
 let bState = { time:'', consultOpen:'', vehicle:'', vehicleLabel:'', services:[], serviceOpts:{}, shampooSel:[], date:'', step:1 };
