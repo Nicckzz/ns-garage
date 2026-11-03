@@ -119,7 +119,17 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const fmtDate = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('pt-PT', { weekday:'short', day:'numeric', month:'short' }) : 'Sem data';
 const endT = (t, d) => { const m = parseInt(t.slice(0,2))*60 + parseInt(t.slice(3,5)) + (d || 60); return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0'); };
 const timeRange = r => r.booking_time ? r.booking_time.slice(0,5) + '–' + endT(r.booking_time, r.booking_duration) : '';
-const waLink = p => 'https://wa.me/' + String(p).replace(/[^\d]/g, '');
+// Junta o indicativo do país quando o cliente só escreveu o número
+function normPhone(p) {
+  const raw = String(p || '').trim();
+  let d = raw.replace(/[^\d]/g, '');
+  if (raw.startsWith('+')) return d;            // já tem indicativo
+  if (d.startsWith('00')) return d.slice(2);    // 00351...
+  if (d.length === 9) return '351' + d;         // número português
+  if (d.length === 10 || d.length === 11) return '55' + d;  // número brasileiro (DDD + número)
+  return d;
+}
+const waLink = p => 'https://wa.me/' + normPhone(p);
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.remove('hidden'); try { new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=').play(); } catch(e){} setTimeout(() => t.classList.add('hidden'), 5000); }
 
 // ---------- auth ----------
@@ -234,7 +244,7 @@ function openSheet(id) {
     <button class="btn sec" id="savePn">Guardar notas</button>
     <div class="grid2">
       <a class="btn wa" style="text-align:center;text-decoration:none" href="${waLink(r.phone)}" target="_blank">WhatsApp</a>
-      <a class="btn sec" style="text-align:center;text-decoration:none" href="tel:${esc(r.phone)}">Ligar</a>
+      <a class="btn sec" style="text-align:center;text-decoration:none" href="tel:+${normPhone(r.phone)}">Ligar</a>
       ${r.status !== 'confirmed' ? '<button class="btn ok" id="bConf">Confirmar</button>' : '<button class="btn sec" id="bPend">Voltar a pendente</button>'}
       <button class="btn ok" id="bDone" style="background:var(--bg3);border:1px solid var(--ok);color:var(--ok)">Concluir</button>
       <button class="btn bad" id="bCan">Recusar / Cancelar</button>
