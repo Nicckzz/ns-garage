@@ -663,7 +663,7 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
             <div class="cal-grid" id="cal-grid"></div>
           </div>
           <div id="time-wrap" style="display:none">
-            <div class="time-title" data-i18n="x_time_title">Choose a time</div>
+            <div class="time-title"><span data-i18n="x_time_title">Choose a time</span> <span id="time-dur" style="color:var(--muted);font-weight:400"></span></div>
             <div class="time-grid" id="time-grid"></div>
           </div>
           <div class="bform-nav">
@@ -942,6 +942,8 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
 <script>
 const i18n = {
   pt: {
+    x_duration: "Duração estimada",
+    x_no_slots: "Não há horários livres neste dia para a duração dos serviços escolhidos. Escolha outro dia.",
     x_time_title: "Escolha o horário",
     x_slot_taken: "Esse horário acabou de ser reservado por outro cliente. Escolha outro horário, por favor.",
     x_consult_label: "Sob consulta",
@@ -1053,6 +1055,8 @@ const i18n = {
     alert_required: "Por favor, preencha os campos obrigatórios: nome, telefone, e-mail e serviço."
   },
   en: {
+    x_duration: "Estimated duration",
+    x_no_slots: "No free time slots on this day for the selected services. Please choose another day.",
     x_time_title: "Choose a time",
     x_slot_taken: "That time slot was just booked by another client. Please choose another time.",
     x_consult_label: "On request",
@@ -1164,6 +1168,8 @@ const i18n = {
     alert_required: "Please fill in the required fields: name, phone, email, and service."
   },
   es: {
+    x_duration: "Duración estimada",
+    x_no_slots: "No hay horarios libres este día para los servicios elegidos. Elige otro día.",
     x_time_title: "Elige el horario",
     x_slot_taken: "Ese horario acaba de ser reservado por otro cliente. Elige otro horario, por favor.",
     x_consult_label: "Consultar",
@@ -1559,30 +1565,54 @@ function calPrev() {
 function calNext() { calDate.setMonth(calDate.getMonth()+1); renderCal(); }
 
 const TIME_SLOTS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'];
-let bookedSlots = [];
+const CLOSE_MIN = 18 * 60;
+let bookedRanges = [];
+const toMin = t => parseInt(t.slice(0, 2), 10) * 60 + parseInt(t.slice(3, 5), 10);
+const fmtDur = m => (m % 60 === 0 ? (m / 60) + 'h' : Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0'));
+
+// Duração estimada de cada serviço (minutos)
+function bookingDuration() {
+  let total = 0;
+  bState.services.forEach(id => {
+    if (id === 'basic') total += 120;
+    else if (id === 'full') total += (bState.serviceOpts.full || 'Interior + Exterior') === 'Interior + Exterior' ? 180 : 120;
+    else total += 60;   // faróis, estofos
+  });
+  return total || 60;
+}
+function endTime(t, dur) { const m = toMin(t) + dur; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
+function slotBlocked(t, D) {
+  const st = toMin(t);
+  if (st + D > CLOSE_MIN) return true;
+  return bookedRanges.some(r => { const bs = toMin(r.t), be = bs + (r.d || 60); return st < be && bs < st + D; });
+}
 
 async function selectDate(d) {
   bState.date = d; bState.time = '';
   document.getElementById('btn-next-3').disabled = true;
   renderCal();
   document.getElementById('time-wrap').style.display = 'block';
-  bookedSlots = [];
+  bookedRanges = [];
   renderSlots();
   try {
-    const r = await fetch(SUPABASE_URL + '/rest/v1/rpc/booked_slots', {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/rpc/booked_ranges', {
       method: 'POST',
       headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({ d })
     });
-    if (r.ok && bState.date === d) { bookedSlots = await r.json() || []; renderSlots(); }
+    if (r.ok && bState.date === d) { bookedRanges = await r.json() || []; renderSlots(); }
   } catch (e) {}
 }
 
 function renderSlots() {
-  document.getElementById('time-grid').innerHTML = TIME_SLOTS.map(t => {
-    const taken = bookedSlots.includes(t);
+  const D = bookingDuration();
+  if (bState.time && slotBlocked(bState.time, D)) { bState.time = ''; document.getElementById('btn-next-3').disabled = true; }
+  const free = TIME_SLOTS.filter(t => !slotBlocked(t, D));
+  document.getElementById('time-dur').textContent = T('x_duration') + ': ' + fmtDur(D);
+  document.getElementById('time-grid').innerHTML = free.length ? TIME_SLOTS.map(t => {
+    const taken = slotBlocked(t, D);
     return `<button type="button" class="time-slot ${t===bState.time?'selected':''} ${taken?'taken':''}" ${taken?'disabled':`onclick="selectTime('${t}')"`}>${t}</button>`;
-  }).join('');
+  }).join('') : `<div style="grid-column:1/-1;color:var(--muted);font-size:0.85rem">${T('x_no_slots')}</div>`;
 }
 
 function selectTime(t) {
@@ -1607,7 +1637,7 @@ function goStep(n) {
     if (i===n-1) s.classList.add('active');
     else if (i<n-1) s.classList.add('done');
   });
-  if (n===3) renderCal();
+  if (n===3) { renderCal(); if (bState.date) renderSlots(); }
   if (n===4) renderSummary();
 }
 
@@ -1650,7 +1680,7 @@ function renderSummary() {
   document.getElementById('booking-summary').innerHTML = `
     <div class="summary-row"><span class="summary-label">${T('x_summ_veh')}</span><span class="summary-val">${T('x_v_'+v)}</span></div>
     ${serviceLines}
-    <div class="summary-row"><span class="summary-label">${T('x_summ_date')}</span><span class="summary-val">${dateShown}${bState.time ? ' · ' + bState.time : ''}</span></div>
+    <div class="summary-row"><span class="summary-label">${T('x_summ_date')}</span><span class="summary-val">${dateShown}${bState.time ? ' · ' + bState.time + '–' + endTime(bState.time, bookingDuration()) : ''}</span></div>
     <div class="summary-row" style="border-top:1px solid var(--purple);margin-top:4px;padding-top:10px;"><span class="summary-label" style="font-weight:700;color:var(--white)">${T('x_summ_total')}</span><span class="summary-val" style="color:var(--purple-light);font-size:1.1rem">${totalShown}</span></div>
   `;
 
@@ -1682,6 +1712,8 @@ document.addEventListener('DOMContentLoaded', () => {
         notes: fd.get('notes') || null, total: fd.get('price'), lang: currentLang
       };
       row.booking_time = fd.get('time') || null;
+      row.booking_duration = bookingDuration();
+      fd.set('duration', fmtDur(row.booking_duration));
       let dbStatus = 0;
       try {
         const r = await fetch(SUPABASE_URL + '/rest/v1/bookings', {
