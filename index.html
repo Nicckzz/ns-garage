@@ -507,18 +507,6 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
   </div>
   <div class="services-grid">
     <div class="service-card">
-      <span class="service-icon">✨</span>
-      <div class="service-name" data-i18n="s1_name"></div>
-      <p class="service-desc" data-i18n="s1_desc"></p>
-      <div class="service-price" data-i18n="s1_price"></div>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🪑</span>
-      <div class="service-name" data-i18n="s2_name"></div>
-      <p class="service-desc" data-i18n="s2_desc"></p>
-      <div class="service-price" data-i18n="s2_price"></div>
-    </div>
-    <div class="service-card">
       <span class="service-icon">🛡️</span>
       <div class="service-name" data-i18n="s4_name"></div>
       <p class="service-desc" data-i18n="s4_desc"></p>
@@ -1338,8 +1326,6 @@ function toggleFaq(el) {
 // ── BOOKING FORM ──────────────────────────────────────────────────────
 const BOOK_SERVICES = [
   { id:'basic', icon:'🧼', name:'Complete Basic Cleaning', prices:{coupe:'€50',sedan:'€55',suv:'€60',truck:'€60'} },
-  { id:'exterior', icon:'✨', name:'Exterior Detailing',     prices:{coupe:'€70',sedan:'€75',suv:'€80',truck:'€85'} },
-  { id:'interior', icon:'🪑', name:'Interior Detailing',     prices:{coupe:'€70',sedan:'€75',suv:'€80',truck:'€85'} },
   { id:'full',     icon:'🛡️', name:'Full Detail Package',    prices:{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110'},
     opts:['Interior + Exterior','Interior','Exterior'], optPrices:{
       'Interior + Exterior':{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110'},
