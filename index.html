@@ -1365,7 +1365,8 @@ function renderServiceList() {
   const v = bState.vehicle;
   const list = document.getElementById('service-list');
   list.innerHTML = BOOK_SERVICES.map(s => {
-    const price = s.prices[v];
+    const _co = bState.serviceOpts[s.id] || (s.opts && s.opts[0]);
+    const price = (s.optPrices && _co) ? s.optPrices[_co][v] : s.prices[v];
     const isSelected = bState.services.includes(s.id);
     let subHTML = '';
     if (s.opts) {
@@ -1435,8 +1436,7 @@ function selectService(id) {
 function selectSubOpt(e, id, opt) {
   e.stopPropagation();
   bState.serviceOpts[id] = opt;
-  document.querySelectorAll(`#subopts-${id} .sub-btn`).forEach(b => b.classList.remove('active'));
-  e.target.classList.add('active');
+  renderServiceList();
 }
 
 function toggleShampooItem(i) {
