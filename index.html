@@ -645,6 +645,7 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
         <div class="bpanel" id="panel-2">
           <p style="color:var(--muted);font-size:0.88rem;margin-bottom:20px;" data-i18n="x_w2">Select the service you need.</p>
           <div class="service-list" id="service-list"></div>
+          <p data-i18n="x_basic_note" style="color:var(--muted);font-size:0.78rem;margin-top:14px;"></p>
           <div class="bform-nav">
             <button class="btn-back" onclick="goStep(1)" data-i18n="x_back">← Back</button>
             <button class="btn-next" id="btn-next-2" onclick="goStep(3)" disabled data-i18n="x_next">Next →</button>
@@ -937,6 +938,7 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
 <script>
 const i18n = {
   pt: {
+    x_basic_note: "Não fazemos limpeza básica apenas do interior ou apenas do exterior — apenas o pacote completo.",
     x_ig_follow: "Seguir @detailing.ns",
     x_s5_name: "Polimento / Correção de Pintura",
     x_s5_desc: "Polimento à máquina para remover riscos, micro-riscos e oxidação. Opções de 1 ou 2 etapas.",
@@ -1041,6 +1043,7 @@ const i18n = {
     alert_required: "Por favor, preencha os campos obrigatórios: nome, telefone, e-mail e serviço."
   },
   en: {
+    x_basic_note: "Please note: we do not offer basic cleaning for the interior only or the exterior only — only the complete package.",
     x_ig_follow: "Follow @detailing.ns",
     x_s5_name: "Polish / Paint Correction",
     x_s5_desc: "Machine polish to remove swirl marks, scratches and oxidation. 1-stage or 2-stage options available.",
@@ -1145,6 +1148,7 @@ const i18n = {
     alert_required: "Please fill in the required fields: name, phone, email, and service."
   },
   es: {
+    x_basic_note: "Nota: no realizamos limpieza básica solo del interior ni solo del exterior — únicamente el paquete completo.",
     x_ig_follow: "Seguir @detailing.ns",
     x_s5_name: "Pulido / Corrección de Pintura",
     x_s5_desc: "Pulido a máquina para eliminar marcas de remolino, arañazos y oxidación. Opciones de 1 o 2 etapas.",
@@ -1252,7 +1256,7 @@ const i18n = {
 
 let currentLang = 'pt';
 
-const BS_T = {"en": {"exterior": "Exterior Detailing", "interior": "Interior Detailing", "full": "Full Detail Package", "tinting": "Window Tinting", "headlight": "Headlight Restoration", "polish": "Polish / Paint Correction", "ceramic": "Ceramic Coating Package", "shampoo": "Shampoo Detailing"}, "pt": {"exterior": "Detalhe Exterior", "interior": "Detalhe Interior", "full": "Pacote Detalhe Completo", "tinting": "Película de Vidros", "headlight": "Restauro de Faróis", "polish": "Polimento / Correção de Pintura", "ceramic": "Pacote Revestimento Cerâmico", "shampoo": "Lavagem de Estofos"}, "es": {"exterior": "Detallado Exterior", "interior": "Detallado Interior", "full": "Paquete de Detallado Completo", "tinting": "Tintado de Lunas", "headlight": "Restauración de Faros", "polish": "Pulido / Corrección de Pintura", "ceramic": "Paquete de Recubrimiento Cerámico", "shampoo": "Lavado de Tapicería"}};
+const BS_T = {"en": {"basic": "Complete Basic Cleaning", "exterior": "Exterior Detailing", "interior": "Interior Detailing", "full": "Full Detail Package", "tinting": "Window Tinting", "headlight": "Headlight Restoration", "polish": "Polish / Paint Correction", "ceramic": "Ceramic Coating Package", "shampoo": "Shampoo Detailing"}, "pt": {"basic": "Limpeza Básica Completa", "exterior": "Detalhe Exterior", "interior": "Detalhe Interior", "full": "Pacote Detalhe Completo", "tinting": "Película de Vidros", "headlight": "Restauro de Faróis", "polish": "Polimento / Correção de Pintura", "ceramic": "Pacote Revestimento Cerâmico", "shampoo": "Lavagem de Estofos"}, "es": {"basic": "Limpieza Básica Completa", "exterior": "Detallado Exterior", "interior": "Detallado Interior", "full": "Paquete de Detallado Completo", "tinting": "Tintado de Lunas", "headlight": "Restauración de Faros", "polish": "Pulido / Corrección de Pintura", "ceramic": "Paquete de Recubrimiento Cerámico", "shampoo": "Lavado de Tapicería"}};
 const OPT_T = {"en": {"Ceramic": "Ceramic", "High Performance": "High Performance", "1-Stage": "1-Stage", "2-Stage": "2-Stage"}, "pt": {"Ceramic": "Cerâmica", "High Performance": "Alto Desempenho", "1-Stage": "1 Etapa", "2-Stage": "2 Etapas"}, "es": {"Ceramic": "Cerámica", "High Performance": "Alto Rendimiento", "1-Stage": "1 Etapa", "2-Stage": "2 Etapas"}};
 const SH_T = {"en": ["Front Seats", "Rear Seats", "Carpet / Floor", "Roof Lining", "Trunk / Cargo"], "pt": ["Bancos Dianteiros", "Bancos Traseiros", "Tapete / Piso", "Tejadilho", "Mala / Bagageira"], "es": ["Asientos Delanteros", "Asientos Traseros", "Alfombra / Suelo", "Techo Interior", "Maletero"]};
 const T = k => (i18n[currentLang] && i18n[currentLang][k] !== undefined) ? i18n[currentLang][k] : (i18n.en[k] || k);
@@ -1333,6 +1337,7 @@ function toggleFaq(el) {
   
 // ── BOOKING FORM ──────────────────────────────────────────────────────
 const BOOK_SERVICES = [
+  { id:'basic', icon:'🧼', name:'Complete Basic Cleaning', prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'} },
   { id:'exterior', icon:'✨', name:'Exterior Detailing',     prices:{coupe:'€70',sedan:'€75',suv:'€80',truck:'€85'} },
   { id:'interior', icon:'🪑', name:'Interior Detailing',     prices:{coupe:'€70',sedan:'€75',suv:'€80',truck:'€85'} },
   { id:'full',     icon:'🛡️', name:'Full Detail Package',    prices:{coupe:'€120',sedan:'€130',suv:'€140',truck:'€150'} },

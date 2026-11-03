@@ -61,6 +61,7 @@
     .scard-top{padding:28px 28px 20px;border-bottom:1px solid var(--border);}
     .scard-icon{font-size:2rem;margin-bottom:12px;display:block;}
     .scard-name{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:1px;margin-bottom:8px;}
+    .scard-note{margin-top:12px;padding:10px 12px;border:1px solid rgba(168,85,247,0.35);background:rgba(124,58,237,0.1);border-radius:8px;color:var(--white);font-size:0.8rem;line-height:1.5;}
     .scard-desc{color:var(--muted);font-size:0.87rem;line-height:1.7;}
 
     /* OPTIONS (tinting, polish, shampoo) */
@@ -182,6 +183,7 @@ const I18N = {
     book_cta:'Reservar Este Serviço →', quote:'Sob consulta', add_photo:'Adicionar foto',
     veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedan', suv:'🚙 SUV', truck:'🛻 Pickup'},
     svc:{
+      basic:{name:'Limpeza Básica Completa', desc:'Lavagem completa do exterior e do interior numa única marcação: lavagem à mão, aspiração, limpeza de superfícies e vidros. Ideal para manutenção regular.', note:'Não fazemos limpeza básica apenas do interior ou apenas do exterior — apenas o pacote completo.'},
       exterior:{name:'Detalhe Exterior', desc:'Descontaminação exterior completa, lavagem à mão, tratamento com clay bar, polimento e proteção. A sua pintura restaurada ao nível de showroom.'},
       interior:{name:'Detalhe Interior', desc:'Limpeza profunda do interior com ar comprimido, vapor e produtos profissionais. Todas as superfícies restauradas e protegidas.'},
       full:{name:'Pacote Detalhe Completo', desc:'Detalhe exterior e interior completo numa única marcação. A melhor relação qualidade-preço para uma transformação total do veículo.'},
@@ -203,6 +205,7 @@ const I18N = {
     book_cta:'Book This Service →', quote:'Quote', add_photo:'Add photo',
     veh:{coupe:'🚘 Coupe', sedan:'🚗 Sedan', suv:'🚙 SUV', truck:'🛻 Truck'},
     svc:{
+      basic:{name:'Complete Basic Cleaning', desc:'Complete exterior and interior wash in a single appointment: hand wash, vacuum, surface and glass cleaning. Ideal for regular maintenance.', note:'Please note: we do not offer basic cleaning for the interior only or the exterior only — only the complete package.'},
       exterior:{name:'Exterior Detailing', desc:'Full exterior decontamination, hand wash, clay bar treatment, polish, and protection. Your paint restored to showroom condition.'},
       interior:{name:'Interior Detailing', desc:'Deep interior cleaning using compressed air, steam, and professional products. Every surface restored and protected.'},
       full:{name:'Full Detail Package', desc:'Complete exterior and interior detailing in one appointment. Best value for a full vehicle transformation.'},
@@ -224,6 +227,7 @@ const I18N = {
     book_cta:'Reservar Este Servicio →', quote:'Consultar', add_photo:'Añadir foto',
     veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedán', suv:'🚙 SUV', truck:'🛻 Pickup'},
     svc:{
+      basic:{name:'Limpieza Básica Completa', desc:'Lavado completo del exterior e interior en una sola cita: lavado a mano, aspirado, limpieza de superficies y cristales. Ideal para mantenimiento regular.', note:'Nota: no realizamos limpieza básica solo del interior ni solo del exterior — únicamente el paquete completo.'},
       exterior:{name:'Detallado Exterior', desc:'Descontaminación exterior completa, lavado a mano, tratamiento con clay bar, pulido y protección. Tu pintura restaurada a nivel de showroom.'},
       interior:{name:'Detallado Interior', desc:'Limpieza profunda del interior con aire comprimido, vapor y productos profesionales. Cada superficie restaurada y protegida.'},
       full:{name:'Paquete de Detallado Completo', desc:'Detallado exterior e interior completo en una sola cita. La mejor relación calidad-precio para una transformación total del vehículo.'},
@@ -252,10 +256,18 @@ function setLang(lang) {
   renderAll();
 }
 
+SERVICE_IMAGES.basic = SERVICE_IMAGES.full;
 const VEHICLES = new Proxy({}, { get:(t,k)=> (typeof k==='string' && L().veh[k]) || undefined, ownKeys:()=>['coupe','sedan','suv','truck'], getOwnPropertyDescriptor:()=>({enumerable:true,configurable:true}) });
 
 // Services data
 const SERVICES = [
+  {
+    id: 'basic',
+    icon: '🧼',
+    name: 'Complete Basic Cleaning',
+    desc: '',
+    pricing: { coupe: 'Quote', sedan: 'Quote', suv: 'Quote', truck: 'Quote' }
+  },
   {
     id: 'exterior',
     icon: '✨',
@@ -429,7 +441,7 @@ function renderCard(s) {
     pricingHTML = Object.entries(s.pricing).map(([v, p]) => `
       <div class="price-row">
         <div class="price-vehicle">${VEHICLES[v]}</div>
-        <div class="price-val ${v===currentVehicle?'highlight':''}">${p}</div>
+        <div class="price-val ${v===currentVehicle?'highlight':''}">${p==='Quote'?L().quote:p}</div>
       </div>`).join('');
   }
 
@@ -445,6 +457,7 @@ function renderCard(s) {
         <span class="scard-icon">${s.icon}</span>
         <div class="scard-name">${L().svc[s.id].name}</div>
         <p class="scard-desc">${L().svc[s.id].desc}</p>
+        ${L().svc[s.id].note ? `<p class="scard-note">⚠️ ${L().svc[s.id].note}</p>` : ''}
       </div>
       ${optionsHTML}
       <div class="scard-pricing">
