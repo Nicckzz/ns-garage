@@ -200,6 +200,7 @@ const I18N = {
       headlight:{name:'Restauro de Faróis', desc:'Lixagem e polimento em várias etapas para devolver clareza e brilho a faróis amarelados ou oxidados.'},
       polish:{name:'Polimento / Correção de Pintura', desc:'Polimento à máquina para eliminar riscos, micro-riscos e oxidação. Escolha o nível de correção necessário.', opts:['1 Etapa','2 Etapas']},
       ceramic:{name:'Pacote Revestimento Cerâmico', desc:'Proteção máxima da pintura — correção de 2 etapas + revestimento cerâmico. Brilho de espelho + proteção duradoura.'},
+      cargo:{name:'Limpeza da Caixa / Área de Carga', desc:'Limpeza da caixa de carga (pickup) ou da área de carga (van). Disponível apenas para Pickup / Van, como adicional a qualquer serviço.'},
       shampoo:{name:'Lavagem de Estofos', desc:'Limpeza profunda dos estofos com extração de água quente e vapor. Selecione as áreas que precisa tratar.', items:['Bancos Dianteiros','Bancos Traseiros','Tapete / Piso','Tejadilho','Mala / Bagageira']}
     }
   },
@@ -223,6 +224,7 @@ const I18N = {
       headlight:{name:'Headlight Restoration', desc:'Multi-stage sanding and polishing to restore yellowed or oxidized headlights to full clarity and brightness.'},
       polish:{name:'Polish / Paint Correction', desc:'Machine polish to eliminate swirl marks, scratches, and oxidation. Choose the level of correction needed.', opts:['1-Stage','2-Stage']},
       ceramic:{name:'Ceramic Coating Package', desc:'Ultimate paint protection — 2-stage paint correction + ceramic coating. Mirror shine + long-lasting protection.'},
+      cargo:{name:'Cargo Bed / Cargo Area Cleaning', desc:'Cleaning of the cargo bed (pickup) or cargo area (van). Available for Pickup / Van only, as an add-on to any service.'},
       shampoo:{name:'Shampoo Detailing', desc:'Deep cleaning of upholstery using hot water extraction and steam. Select which areas you need treated.', items:['Front Seats','Rear Seats','Carpet / Floor','Roof Lining','Trunk / Cargo']}
     }
   },
@@ -246,6 +248,7 @@ const I18N = {
       headlight:{name:'Restauración de Faros', desc:'Lijado y pulido en varias etapas para devolver claridad y brillo a faros amarillentos u oxidados.'},
       polish:{name:'Pulido / Corrección de Pintura', desc:'Pulido a máquina para eliminar marcas de remolino, arañazos y oxidación. Elige el nivel de corrección necesario.', opts:['1 Etapa','2 Etapas']},
       ceramic:{name:'Paquete de Recubrimiento Cerámico', desc:'Máxima protección de la pintura — corrección en 2 etapas + recubrimiento cerámico. Brillo espejo + protección duradera.'},
+      cargo:{name:'Limpieza de Caja / Zona de Carga', desc:'Limpieza de la caja de carga (pickup) o de la zona de carga (furgoneta). Solo para Pickup / Furgoneta, como adicional a cualquier servicio.'},
       shampoo:{name:'Lavado de Tapicería', desc:'Limpieza profunda de la tapicería con extracción de agua caliente y vapor. Selecciona las áreas que necesitas tratar.', items:['Asientos Delanteros','Asientos Traseros','Alfombra / Suelo','Techo Interior','Maletero']}
     }
   }
@@ -268,6 +271,7 @@ function setLang(lang) {
 }
 
 SERVICE_IMAGES.basic = SERVICE_IMAGES.full;
+SERVICE_IMAGES.cargo = SERVICE_IMAGES.full;
 const VEHICLES = new Proxy({}, { get:(t,k)=> (typeof k==='string' && L().veh[k]) || undefined, ownKeys:()=>['coupe','sedan','suv','truck'], getOwnPropertyDescriptor:()=>({enumerable:true,configurable:true}) });
 
 // Services data
@@ -312,6 +316,13 @@ const SERVICES = [
       { label: 'Roof Lining',     prices: { coupe: 30, sedan: 30, suv: 30, truck: 30 } },
       { label: 'Trunk / Cargo',   prices: { coupe: 30, sedan: 30, suv: 30, truck: 30 } },
     ]
+  },
+  {
+    id: 'cargo',
+    icon: '🚚',
+    name: 'Cargo Area Cleaning',
+    truckOnly: true,
+    pricing: { truck: '€20' }
   },
   {
     id: 'tinting',
@@ -374,7 +385,7 @@ function updateShampooPrice(id) {
 
 function renderAll() {
   const grid = document.getElementById('grid');
-  grid.innerHTML = SERVICES.map(s => renderCard(s)).join('');
+  grid.innerHTML = SERVICES.filter(s => !s.truckOnly || currentVehicle === 'truck').map(s => renderCard(s)).join('');
   // Re-attach shampoo listeners
   SERVICES.filter(s => s.type === 'shampoo').forEach(s => {
     s.items.forEach((item, idx) => {
