@@ -641,9 +641,13 @@ body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-
               <div class="oc-icon">🚙</div>
               <div class="oc-name" data-i18n="x_v_suv">SUV / Compact SUV</div>
             </div>
-            <div class="opt-card" onclick="selectVehicle('truck','🛻','Truck / Van')">
+            <div class="opt-card" onclick="selectVehicle('truck','🛻','Pickup')">
               <div class="oc-icon">🛻</div>
-              <div class="oc-name" data-i18n="x_v_truck">Truck / Van</div>
+              <div class="oc-name" data-i18n="x_v_truck">Pickup</div>
+            </div>
+            <div class="opt-card" style="grid-column:1 / -1" onclick="selectVehicle('van','🚐','Van')">
+              <div class="oc-icon">🚐</div>
+              <div class="oc-name" data-i18n="x_v_van">Van</div>
             </div>
           </div>
           <div class="bform-nav">
@@ -981,7 +985,8 @@ const i18n = {
     x_v_coupe: "Coupé / 2 portas",
     x_v_sedan: "Sedan / Carrinha / 5 portas",
     x_v_suv: "SUV / SUV Compacto",
-    x_v_truck: "Pickup / Van",
+    x_v_truck: "Pickup",
+    x_v_van: "Van",
     x_next: "Seguinte →",
     x_back: "← Voltar",
     x_l_name: "Nome",
@@ -1095,7 +1100,8 @@ const i18n = {
     x_v_coupe: "Coupe / 2-door",
     x_v_sedan: "Sedan / Wagon / 5-door",
     x_v_suv: "SUV / Compact SUV",
-    x_v_truck: "Truck / Van",
+    x_v_truck: "Pickup",
+    x_v_van: "Van",
     x_next: "Next →",
     x_back: "← Back",
     x_l_name: "Name",
@@ -1209,7 +1215,8 @@ const i18n = {
     x_v_coupe: "Coupé / 2 puertas",
     x_v_sedan: "Sedán / Familiar / 5 puertas",
     x_v_suv: "SUV / SUV Compacto",
-    x_v_truck: "Pickup / Furgoneta",
+    x_v_truck: "Pickup",
+    x_v_van: "Furgoneta",
     x_next: "Siguiente →",
     x_back: "← Atrás",
     x_l_name: "Nombre",
@@ -1379,36 +1386,36 @@ function toggleFaq(el) {
   
 // ── BOOKING FORM ──────────────────────────────────────────────────────
 const BOOK_SERVICES = [
-  { id:'basic', icon:'🧼', name:'Complete Basic Cleaning', prices:{coupe:'€50',sedan:'€55',suv:'€60',truck:'€60'} },
-  { id:'full',     icon:'🛡️', name:'Full Detail Package',    prices:{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110'},
+  { id:'basic', icon:'🧼', name:'Complete Basic Cleaning', prices:{coupe:'€50',sedan:'€55',suv:'€60',truck:'€60', van: '€60'} },
+  { id:'full',     icon:'🛡️', name:'Full Detail Package',    prices:{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110', van: '€110'},
     opts:['Interior + Exterior','Interior','Exterior'], optPrices:{
-      'Interior + Exterior':{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110'},
-      'Interior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65'},
-      'Exterior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65'}
+      'Interior + Exterior':{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110', van: '€110'},
+      'Interior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65', van: '€65'},
+      'Exterior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65', van: '€65'}
     }},
-  { id:'headlight',icon:'💡', name:'Headlight Restoration',  prices:{coupe:'€50',sedan:'€50',suv:'€50',truck:'€50'} },
-  { id:'shampoo',  icon:'🧴', name:'Shampoo Detailing',      prices:{coupe:'Custom',sedan:'Custom',suv:'Custom',truck:'Custom'},
+  { id:'headlight',icon:'💡', name:'Headlight Restoration',  prices:{coupe:'€50',sedan:'€50',suv:'€50',truck:'€50', van: '€50'} },
+  { id:'shampoo',  icon:'🧴', name:'Shampoo Detailing',      prices:{coupe:'Custom',sedan:'Custom',suv:'Custom',truck:'Custom', van: 'Custom'},
     shampoo:[
-      {label:'Front Seats',    p:{coupe:20,sedan:20,suv:20,truck:20}},
-      {label:'Rear Seats',     p:{coupe:30,sedan:30,suv:30,truck:30}},
-      {label:'Carpet / Floor', p:{coupe:30,sedan:30,suv:30,truck:30}},
-      {label:'Roof Lining',    p:{coupe:30,sedan:30,suv:30,truck:30}},
-      {label:'Trunk / Cargo',  p:{coupe:30,sedan:30,suv:30,truck:30}},
+      {label:'Front Seats',    p:{coupe:20,sedan:20,suv:20,truck:20, van: 20}},
+      {label:'Rear Seats',     p:{coupe:30,sedan:30,suv:30,truck:30, van: 30}},
+      {label:'Carpet / Floor', p:{coupe:30,sedan:30,suv:30,truck:30, van: 30}},
+      {label:'Roof Lining',    p:{coupe:30,sedan:30,suv:30,truck:30, van: 30}},
+      {label:'Trunk / Cargo',  p:{coupe:30,sedan:30,suv:30,truck:30, van: 30}},
     ]},
-  { id:'tinting',  consult:true, icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote'},
+  { id:'tinting',  consult:true, icon:'🔮', name:'Window Tinting',         prices:{coupe:'Quote',sedan:'Quote',suv:'Quote',truck:'Quote', van: 'Quote'},
     opts:['Ceramic','High Performance'] },
-  { id:'polish',   consult:true, icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
+  { id:'polish',   consult:true, icon:'🪄', name:'Polish / Paint Correction', prices:{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500', van: '€500'},
     opts:['1-Stage','2-Stage'], optPrices:{
-      '1-Stage':{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500'},
-      '2-Stage':{coupe:'€600',sedan:'€700',suv:'€800',truck:'€950'}
+      '1-Stage':{coupe:'€350',sedan:'€400',suv:'€450',truck:'€500', van: '€500'},
+      '2-Stage':{coupe:'€600',sedan:'€700',suv:'€800',truck:'€950', van: '€950'}
     }},
-  { id:'ceramic',  consult:true, icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'€1,000',sedan:'€1,150',suv:'€1,300',truck:'€1,500'} }
+  { id:'ceramic',  consult:true, icon:'💎', name:'Ceramic Coating Package',prices:{coupe:'€1,000',sedan:'€1,150',suv:'€1,300',truck:'€1,500', van: '€1,500'} }
 ];
 
 let bState = { time:'', consultOpen:'', vehicle:'', vehicleLabel:'', services:[], serviceOpts:{}, shampooSel:[], cargo:false, date:'', step:1 };
 
 function selectVehicle(v, icon, label) {
-  if (v !== 'truck') bState.cargo = false;
+  if (v !== 'truck' && v !== 'van') bState.cargo = false;
   bState.vehicle = v; bState.vehicleLabel = label; // label kept in English for the form; display uses T()
   document.querySelectorAll('#panel-1 .opt-card').forEach(c => c.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
@@ -1451,7 +1458,7 @@ function renderServiceList() {
         ${s.opts.map(o => `<button class="sub-btn ${o===curOpt?'active':''}" onclick="selectSubOpt(event,'${s.id}','${o}')">${optName(o)}</button>`).join('')}
       </div>`;
     }
-    if ((s.id === 'basic' || s.id === 'full') && v === 'truck') {
+    if ((s.id === 'basic' || s.id === 'full') && (v === 'truck' || v === 'van')) {
       subHTML += `<div class="shampoo-checks"><div class="shampoo-check">
         <input type="checkbox" id="cargo-cb-${s.id}" ${bState.cargo?'checked':''} onchange="toggleCargo(this.checked)">
         <label for="cargo-cb-${s.id}">${T('x_cargo_label')} <span style="color:var(--purple-light)">+€20</span></label>
@@ -1602,7 +1609,7 @@ function bookingDuration() {
   if (cargoOn()) total += 30;
   return total || 60;
 }
-function cargoOn() { return bState.vehicle === 'truck' && bState.cargo && (bState.services.includes('basic') || bState.services.includes('full')); }
+function cargoOn() { return (bState.vehicle === 'truck' || bState.vehicle === 'van') && bState.cargo && (bState.services.includes('basic') || bState.services.includes('full')); }
 function toggleCargo(on) { bState.cargo = !!on; renderServiceList(); }
 function endTime(t, dur) { const m = toMin(t) + dur; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
 function slotBlocked(t, D) {

@@ -150,7 +150,8 @@
   <button class="v-btn active" onclick="setVehicle('coupe',this)" data-i18n="vb_coupe">🚘 Coupe / 2-door</button>
   <button class="v-btn" onclick="setVehicle('sedan',this)" data-i18n="vb_sedan">🚗 Sedan / Wagon / 5-door</button>
   <button class="v-btn" onclick="setVehicle('suv',this)" data-i18n="vb_suv">🚙 SUV / Compact SUV</button>
-  <button class="v-btn" onclick="setVehicle('truck',this)" data-i18n="vb_truck">🛻 Truck / Van</button>
+  <button class="v-btn" onclick="setVehicle('truck',this)" data-i18n="vb_truck">🛻 Pickup</button>
+  <button class="v-btn" onclick="setVehicle('van',this)" data-i18n="vb_van">🚐 Van</button>
 </div>
 
 <div class="services-wrap">
@@ -186,13 +187,13 @@ const I18N = {
     nav_home:'Home', nav_services:'Serviços', nav_gallery:'Galeria', nav_book:'Marcar',
     eyebrow:'Preços Transparentes', title:'Os Nossos Serviços',
     sub:'Selecione o tipo do seu veículo para ver o preço exato de cada serviço.',
-    vb_coupe:'🚘 Coupé / 2 portas', vb_sedan:'🚗 Sedan / Carrinha / 5 portas', vb_suv:'🚙 SUV / SUV Compacto', vb_truck:'🛻 Pickup / Van',
+    vb_coupe:'🚘 Coupé / 2 portas', vb_sedan:'🚗 Sedan / Carrinha / 5 portas', vb_suv:'🚙 SUV / SUV Compacto', vb_truck:'🛻 Pickup', vb_van:'🚐 Van',
     note:'<strong>Sinal de 50%</strong> no momento da reserva. Os preços podem variar conforme o estado do veículo. Fale connosco para pacotes personalizados e programas para revendedores.',
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Selecione o Tipo', select_areas:'Selecione as Áreas', pricing_label:'Preço por veículo', cargo_label:'Adicionar limpeza da caixa / área de carga',
     book_cta:'Reservar Este Serviço →', quote:'Sob consulta', add_photo:'Adicionar foto',
     consult_msg:"Este serviço é feito sob consulta. Contacte-nos por WhatsApp ou telefone para combinarmos os detalhes e o valor.", call_btn:"Ligar", wa_msg:"Olá! Gostaria de pedir informações sobre:",
-    veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedan / Carrinha', suv:'🚙 SUV', truck:'🛻 Pickup'},
+    veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedan / Carrinha', suv:'🚙 SUV', truck:'🛻 Pickup', van:'🚐 Van'},
     svc:{
       basic:{name:'Limpeza Básica Completa', desc:'Lavagem completa do exterior e do interior numa única marcação: lavagem à mão, aspiração, limpeza de superfícies e vidros. Ideal para manutenção regular.', note:'Não fazemos limpeza básica apenas do interior ou apenas do exterior — apenas o pacote completo.'},
       exterior:{name:'Detalhe Exterior', desc:'Descontaminação exterior completa, lavagem à mão, tratamento com clay bar, polimento e proteção. A sua pintura restaurada ao nível de showroom.'},
@@ -209,13 +210,13 @@ const I18N = {
     nav_home:'Home', nav_services:'Services', nav_gallery:'Gallery', nav_book:'Book Now',
     eyebrow:'Transparent Pricing', title:'Our Services',
     sub:'Select your vehicle type to see exact pricing for each service.',
-    vb_coupe:'🚘 Coupe / 2-door', vb_sedan:'🚗 Sedan / Wagon / 5-door', vb_suv:'🚙 SUV / Compact SUV', vb_truck:'🛻 Truck / Van',
+    vb_coupe:'🚘 Coupe / 2-door', vb_sedan:'🚗 Sedan / Wagon / 5-door', vb_suv:'🚙 SUV / Compact SUV', vb_truck:'🛻 Pickup', vb_van:'🚐 Van',
     note:'<strong>50% deposit required</strong> at booking. Prices may vary based on vehicle condition. Contact us for custom packages and dealer programs.',
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Select Type', select_areas:'Select Areas', pricing_label:'Pricing by vehicle', cargo_label:'Add cargo bed / cargo area cleaning',
     book_cta:'Book This Service →', quote:'On request', add_photo:'Add photo',
     consult_msg:"This service is quoted on request. Contact us by WhatsApp or phone to agree on details and price.", call_btn:"Call", wa_msg:"Hi! I'd like information about:",
-    veh:{coupe:'🚘 Coupe', sedan:'🚗 Sedan / Wagon', suv:'🚙 SUV', truck:'🛻 Truck'},
+    veh:{coupe:'🚘 Coupe', sedan:'🚗 Sedan / Wagon', suv:'🚙 SUV', truck:'🛻 Pickup', van:'🚐 Van'},
     svc:{
       basic:{name:'Complete Basic Cleaning', desc:'Complete exterior and interior wash in a single appointment: hand wash, vacuum, surface and glass cleaning. Ideal for regular maintenance.', note:'Please note: we do not offer basic cleaning for the interior only or the exterior only — only the complete package.'},
       exterior:{name:'Exterior Detailing', desc:'Full exterior decontamination, hand wash, clay bar treatment, polish, and protection. Your paint restored to showroom condition.'},
@@ -232,13 +233,13 @@ const I18N = {
     nav_home:'Inicio', nav_services:'Servicios', nav_gallery:'Galería', nav_book:'Reservar',
     eyebrow:'Precios Transparentes', title:'Nuestros Servicios',
     sub:'Selecciona el tipo de tu vehículo para ver el precio exacto de cada servicio.',
-    vb_coupe:'🚘 Coupé / 2 puertas', vb_sedan:'🚗 Sedán / Familiar / 5 puertas', vb_suv:'🚙 SUV / SUV Compacto', vb_truck:'🛻 Pickup / Furgoneta',
+    vb_coupe:'🚘 Coupé / 2 puertas', vb_sedan:'🚗 Sedán / Familiar / 5 puertas', vb_suv:'🚙 SUV / SUV Compacto', vb_truck:'🛻 Pickup', vb_van:'🚐 Furgoneta',
     note:'<strong>Depósito del 50%</strong> al reservar. Los precios pueden variar según el estado del vehículo. Contáctanos para paquetes personalizados y programas para concesionarios.',
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Selecciona el Tipo', select_areas:'Selecciona las Áreas', pricing_label:'Precio por vehículo', cargo_label:'Añadir limpieza de caja / zona de carga',
     book_cta:'Reservar Este Servicio →', quote:'Consultar', add_photo:'Añadir foto',
     consult_msg:"Este servicio se realiza bajo consulta. Contáctanos por WhatsApp o teléfono para acordar los detalles y el precio.", call_btn:"Llamar", wa_msg:"¡Hola! Me gustaría información sobre:",
-    veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedán / Familiar', suv:'🚙 SUV', truck:'🛻 Pickup'},
+    veh:{coupe:'🚘 Coupé', sedan:'🚗 Sedán / Familiar', suv:'🚙 SUV', truck:'🛻 Pickup', van:'🚐 Furgoneta'},
     svc:{
       basic:{name:'Limpieza Básica Completa', desc:'Lavado completo del exterior e interior en una sola cita: lavado a mano, aspirado, limpieza de superficies y cristales. Ideal para mantenimiento regular.', note:'Nota: no realizamos limpieza básica solo del interior ni solo del exterior — únicamente el paquete completo.'},
       exterior:{name:'Detallado Exterior', desc:'Descontaminación exterior completa, lavado a mano, tratamiento con clay bar, pulido y protección. Tu pintura restaurada a nivel de showroom.'},
@@ -270,7 +271,7 @@ function setLang(lang) {
 }
 
 SERVICE_IMAGES.basic = SERVICE_IMAGES.full;
-const VEHICLES = new Proxy({}, { get:(t,k)=> (typeof k==='string' && L().veh[k]) || undefined, ownKeys:()=>['coupe','sedan','suv','truck'], getOwnPropertyDescriptor:()=>({enumerable:true,configurable:true}) });
+const VEHICLES = new Proxy({}, { get:(t,k)=> (typeof k==='string' && L().veh[k]) || undefined, ownKeys:()=>['coupe','sedan','suv','truck','van'], getOwnPropertyDescriptor:()=>({enumerable:true,configurable:true}) });
 
 // Services data
 const SERVICES = [
@@ -280,7 +281,7 @@ const SERVICES = [
     icon: '🧼',
     name: 'Complete Basic Cleaning',
     desc: '',
-    pricing: { coupe: '€50', sedan: '€55', suv: '€60', truck: '€60' }
+    pricing: { coupe: '€50', sedan: '€55', suv: '€60', truck: '€60', van: '€60' }
   },
   {
     id: 'full',
@@ -290,9 +291,9 @@ const SERVICES = [
     desc: 'Complete exterior and interior detailing in one appointment. Best value for a full vehicle transformation.',
     type: 'options',
     options: [
-      { label: 'Interior + Exterior', pricing: { coupe: '€90', sedan: '€100', suv: '€110', truck: '€110' } },
-      { label: 'Interior', pricing: { coupe: '€55', sedan: '€60', suv: '€65', truck: '€65' } },
-      { label: 'Exterior', pricing: { coupe: '€55', sedan: '€60', suv: '€65', truck: '€65' } },
+      { label: 'Interior + Exterior', pricing: { coupe: '€90', sedan: '€100', suv: '€110', truck: '€110', van: '€110' } },
+      { label: 'Interior', pricing: { coupe: '€55', sedan: '€60', suv: '€65', truck: '€65', van: '€65' } },
+      { label: 'Exterior', pricing: { coupe: '€55', sedan: '€60', suv: '€65', truck: '€65', van: '€65' } },
     ],
     defaultOption: 0
   },
@@ -301,7 +302,7 @@ const SERVICES = [
     icon: '💡',
     name: 'Headlight Restoration',
     desc: 'Multi-stage sanding and polishing to restore yellowed or oxidized headlights to full clarity and brightness.',
-    pricing: { coupe: '€50', sedan: '€50', suv: '€50', truck: '€50' }
+    pricing: { coupe: '€50', sedan: '€50', suv: '€50', truck: '€50', van: '€50' }
   },
   {
     id: 'shampoo',
@@ -310,11 +311,11 @@ const SERVICES = [
     desc: 'Deep cleaning of upholstery using hot water extraction and steam. Select which areas you need treated.',
     type: 'shampoo',
     items: [
-      { label: 'Front Seats',     prices: { coupe: 20, sedan: 20, suv: 20, truck: 20 } },
-      { label: 'Rear Seats',      prices: { coupe: 30, sedan: 30, suv: 30, truck: 30 } },
-      { label: 'Carpet / Floor',  prices: { coupe: 30, sedan: 30, suv: 30, truck: 30 } },
-      { label: 'Roof Lining',     prices: { coupe: 30, sedan: 30, suv: 30, truck: 30 } },
-      { label: 'Trunk / Cargo',   prices: { coupe: 30, sedan: 30, suv: 30, truck: 30 } },
+      { label: 'Front Seats',     prices: { coupe: 20, sedan: 20, suv: 20, truck: 20, van: 20 } },
+      { label: 'Rear Seats',      prices: { coupe: 30, sedan: 30, suv: 30, truck: 30, van: 30 } },
+      { label: 'Carpet / Floor',  prices: { coupe: 30, sedan: 30, suv: 30, truck: 30, van: 30 } },
+      { label: 'Roof Lining',     prices: { coupe: 30, sedan: 30, suv: 30, truck: 30, van: 30 } },
+      { label: 'Trunk / Cargo',   prices: { coupe: 30, sedan: 30, suv: 30, truck: 30, van: 30 } },
     ]
   },
   {
@@ -372,7 +373,7 @@ function updateShampooPrice(id) {
   const el = document.getElementById('shampoo-price-' + currentVehicle);
   if (el) el.textContent = total > 0 ? '€' + total : '€0';
   // update all vehicle prices
-  ['coupe','sedan','suv','truck'].forEach(v => {
+  ['coupe','sedan','suv','truck','van'].forEach(v => {
     const t = state[id].reduce((sum, idx) => sum + s.items[idx].prices[v], 0);
     const e = document.getElementById('shampoo-price-' + v);
     if (e) e.textContent = t > 0 ? '€' + t : '€0';
@@ -395,9 +396,9 @@ function renderAll() {
 }
 
 function renderCard(s) {
-  const cargoOn = !!(s.cargoAddon && currentVehicle === 'truck' && cargoState[s.id]);
-  const adj = (v, p) => (cargoOn && v === 'truck' && /^€\d+$/.test(p)) ? '€' + (parseInt(p.slice(1), 10) + 20) : p;
-  const cargoHTML = (s.cargoAddon && currentVehicle === 'truck') ? `
+  const cargoOn = !!(s.cargoAddon && (currentVehicle === 'truck' || currentVehicle === 'van') && cargoState[s.id]);
+  const adj = (v, p) => (cargoOn && (v === 'truck' || v === 'van') && /^€\d+$/.test(p)) ? '€' + (parseInt(p.slice(1), 10) + 20) : p;
+  const cargoHTML = (s.cargoAddon && (currentVehicle === 'truck' || currentVehicle === 'van')) ? `
       <div class="scard-options"><div class="check-row"><div class="check-item">
         <input type="checkbox" id="cargo-${s.id}" ${cargoState[s.id]?'checked':''} onchange="toggleCargo('${s.id}',this.checked)">
         <label for="cargo-${s.id}">${L().cargo_label} <span style="color:var(--purple-light);font-size:0.8rem">(+€20)</span></label>
