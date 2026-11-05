@@ -97,6 +97,7 @@
     .price-vehicle{display:flex;align-items:center;gap:8px;font-size:0.87rem;color:var(--muted);}
     .price-val{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;color:#555;transition:color 0.2s,font-size 0.2s;}
     .price-val.highlight{color:var(--purple-light);font-size:1.5rem;}
+    .price-val::after{content:var(--iva-txt);font-family:'DM Sans',sans-serif;font-size:0.6rem;font-weight:500;letter-spacing:0.3px;color:var(--muted);margin-left:6px;white-space:nowrap;}
 
     .scard-cta{display:block;margin:16px 28px 24px;text-align:center;background:var(--purple);color:#fff;padding:12px;border-radius:8px;font-weight:600;font-size:0.9rem;text-decoration:none;transition:background 0.2s;}
     .scard-cta:hover{background:var(--purple-light);}
@@ -265,6 +266,7 @@ function setLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const v = L()[el.dataset.i18n]; if (v !== undefined) { if (el.dataset.i18n === 'sub') el.innerHTML = v; else el.textContent = v; }
   });
+  document.documentElement.style.setProperty('--iva-txt', JSON.stringify(({pt:'IVA incl.',en:'VAT incl.',es:'IVA incl.'})[lang]));
   document.getElementById('pageNote').innerHTML = L().note;
   ['pt','en','es'].forEach(l => document.getElementById('btn-'+l).classList.toggle('active', l===lang));
   renderAll();
