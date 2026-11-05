@@ -1329,7 +1329,7 @@ const T = k => (i18n[currentLang] && i18n[currentLang][k] !== undefined) ? i18n[
 const LOCALES = { pt:'pt-PT', en:'en-US', es:'es-ES' };
 const bsName = id => BS_T[currentLang][id];
 const optName = o => OPT_T[currentLang][o] || o;
-const priceTxt = p => p === 'Quote' ? T('x_quote') : p === 'Custom' ? T('x_custom') : p;
+const priceTxt = p => p === 'Quote' ? T('x_quote') : p === 'Custom' ? T('x_custom') : (currentLang === 'en' ? p : String(p).replace('.', ','));
 
 function setLang(lang) {
   if (!i18n[lang]) lang = 'en';
@@ -1404,11 +1404,11 @@ function toggleFaq(el) {
 // ── BOOKING FORM ──────────────────────────────────────────────────────
 const BOOK_SERVICES = [
   { id:'basic', icon:'🧼', name:'Complete Basic Cleaning', prices:{coupe:'€50',sedan:'€55',suv:'€60',truck:'€60', van1: '€50', van2: '€55', van3: '€60'} },
-  { id:'full',     icon:'🛡️', name:'Full Detail Package',    prices:{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110', van1: '€100', van2: '€110', van3: '€120'},
+  { id:'full',     icon:'🛡️', name:'Full Detail Package',    prices:{coupe:'€90',sedan:'€100',suv:'€105',truck:'€110', van1: '€100', van2: '€110', van3: '€120'},
     opts:['Interior + Exterior','Interior','Exterior'], optPrices:{
-      'Interior + Exterior':{coupe:'€90',sedan:'€100',suv:'€110',truck:'€110', van1: '€100', van2: '€110', van3: '€120'},
-      'Interior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65', van1: '€60', van2: '€65', van3: '€70'},
-      'Exterior':{coupe:'€55',sedan:'€60',suv:'€65',truck:'€65', van1: '€60', van2: '€65', van3: '€70'}
+      'Interior + Exterior':{coupe:'€90',sedan:'€100',suv:'€105',truck:'€110', van1: '€100', van2: '€110', van3: '€120'},
+      'Interior':{coupe:'€55',sedan:'€60',suv:'€62.50',truck:'€65', van1: '€60', van2: '€65', van3: '€70'},
+      'Exterior':{coupe:'€55',sedan:'€60',suv:'€62.50',truck:'€65', van1: '€60', van2: '€65', van3: '€70'}
     }},
   { id:'headlight',icon:'💡', name:'Headlight Restoration',  prices:{coupe:'€50',sedan:'€50',suv:'€50',truck:'€50', van1: '€50', van2: '€50', van3: '€50'} },
   { id:'shampoo',  icon:'🧴', name:'Shampoo Detailing',      prices:{coupe:'Custom',sedan:'Custom',suv:'Custom',truck:'Custom', van1: 'Custom', van2: 'Custom', van3: 'Custom'},
@@ -1727,7 +1727,8 @@ function renderSummary() {
     serviceNames.push('Cargo Area Cleaning (+€20)');
   }
 
-  const totalStr = totalNum > 0 ? '€' + totalNum.toLocaleString() : 'Quote';
+  const fmtTot = n => Number.isInteger(n) ? n.toLocaleString() : n.toFixed(2);
+  const totalStr = totalNum > 0 ? '€' + fmtTot(totalNum) : 'Quote';
   const totalShown = totalNum > 0 ? totalStr : T('x_quote');
 
   const dateShown = bState.date ? new Date(bState.date + 'T12:00:00').toLocaleDateString(LOCALES[currentLang], { day:'numeric', month:'long', year:'numeric' }) : '';
@@ -1735,7 +1736,7 @@ function renderSummary() {
     <div class="summary-row"><span class="summary-label">${T('x_summ_veh')}</span><span class="summary-val">${T('x_v_'+v)}</span></div>
     ${serviceLines}
     <div class="summary-row"><span class="summary-label">${T('x_summ_date')}</span><span class="summary-val">${dateShown}${bState.time ? ' · ' + bState.time + '–' + endTime(bState.time, bookingDuration()) : ''}</span></div>
-    <div class="summary-row" style="border-top:1px solid var(--purple);margin-top:4px;padding-top:10px;"><span class="summary-label" style="font-weight:700;color:var(--white)">${T('x_summ_total')}</span><span class="summary-val" style="color:var(--purple-light);font-size:1.1rem">${totalShown}${totalNum > 0 ? ` <small style="font-size:.68rem;font-weight:500;color:var(--muted);letter-spacing:.3px">· ${T('x_vat')}</small>` : ''}</span></div>
+    <div class="summary-row" style="border-top:1px solid var(--purple);margin-top:4px;padding-top:10px;"><span class="summary-label" style="font-weight:700;color:var(--white)">${T('x_summ_total')}</span><span class="summary-val" style="color:var(--purple-light);font-size:1.1rem">${currentLang === 'en' ? totalShown : totalShown.replace('.', ',')}${totalNum > 0 ? ` <small style="font-size:.68rem;font-weight:500;color:var(--muted);letter-spacing:.3px">· ${T('x_vat')}</small>` : ''}</span></div>
   `;
 
   document.getElementById('f-vehicle').value = bState.vehicleLabel;

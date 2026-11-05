@@ -293,9 +293,9 @@ const SERVICES = [
     desc: 'Complete exterior and interior detailing in one appointment. Best value for a full vehicle transformation.',
     type: 'options',
     options: [
-      { label: 'Interior + Exterior', pricing: { coupe: '€90', sedan: '€100', suv: '€110', truck: '€110', van1: '€100', van2: '€110', van3: '€120' } },
-      { label: 'Interior', pricing: { coupe: '€55', sedan: '€60', suv: '€65', truck: '€65', van1: '€60', van2: '€65', van3: '€70' } },
-      { label: 'Exterior', pricing: { coupe: '€55', sedan: '€60', suv: '€65', truck: '€65', van1: '€60', van2: '€65', van3: '€70' } },
+      { label: 'Interior + Exterior', pricing: { coupe: '€90', sedan: '€100', suv: '€105', truck: '€110', van1: '€100', van2: '€110', van3: '€120' } },
+      { label: 'Interior', pricing: { coupe: '€55', sedan: '€60', suv: '€62.50', truck: '€65', van1: '€60', van2: '€65', van3: '€70' } },
+      { label: 'Exterior', pricing: { coupe: '€55', sedan: '€60', suv: '€62.50', truck: '€65', van1: '€60', van2: '€65', van3: '€70' } },
     ],
     defaultOption: 0
   },
@@ -401,9 +401,12 @@ function renderAll() {
   });
 }
 
+const fmtNum = n => Number.isInteger(n) ? String(n) : n.toFixed(2);
+const showP = p => currentLang === 'en' ? p : String(p).replace('.', ',');
+
 function renderCard(s) {
   const cargoOn = !!(s.cargoAddon && (currentVehicle === 'truck' || currentVehicle === 'van') && cargoState[s.id]);
-  const adj = (v, p) => (cargoOn && (v === 'truck' || v.startsWith('van')) && /^€\d+$/.test(p)) ? '€' + (parseInt(p.slice(1), 10) + 20) : p;
+  const adj = (v, p) => (cargoOn && (v === 'truck' || v.startsWith('van')) && /^€\d+(\.\d+)?$/.test(p)) ? '€' + fmtNum(parseFloat(p.slice(1)) + 20) : p;
   const cargoHTML = (s.cargoAddon && (currentVehicle === 'truck' || currentVehicle === 'van')) ? `
       <div class="scard-options"><div class="check-row"><div class="check-item">
         <input type="checkbox" id="cargo-${s.id}" ${cargoState[s.id]?'checked':''} onchange="toggleCargo('${s.id}',this.checked)">
@@ -425,7 +428,7 @@ function renderCard(s) {
     pricingHTML = Object.entries(prices).filter(([v]) => rowKeys().includes(v)).map(([v, p0]) => { const p = p0==='Quote' ? L().quote : adj(v, p0); return `
       <div class="price-row">
         <div class="price-vehicle">${VEHICLES[v]}</div>
-        <div class="price-val ${v===currentVehicle?'highlight':''}">${p}</div>
+        <div class="price-val ${v===currentVehicle?'highlight':''}">${showP(p)}</div>
       </div>`; }).join('');
   } else if (s.type === 'consult') {
     const waMsg = encodeURIComponent(L().wa_msg + ' ' + L().svc[s.id].name);
@@ -473,7 +476,7 @@ function renderCard(s) {
     pricingHTML = Object.entries(s.pricing).filter(([v]) => rowKeys().includes(v)).map(([v, p]) => `
       <div class="price-row">
         <div class="price-vehicle">${VEHICLES[v]}</div>
-        <div class="price-val ${v===currentVehicle?'highlight':''}">${p==='Quote'?L().quote:adj(v,p)}</div>
+        <div class="price-val ${v===currentVehicle?'highlight':''}">${p==='Quote'?L().quote:showP(adj(v,p))}</div>
       </div>`).join('');
   }
 
