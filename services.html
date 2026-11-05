@@ -186,9 +186,9 @@ const I18N = {
   pt: {
     nav_home:'Home', nav_services:'Serviços', nav_gallery:'Galeria', nav_book:'Marcar',
     eyebrow:'Preços Transparentes', title:'Os Nossos Serviços',
-    sub:'Selecione o tipo do seu veículo para ver o preço exato de cada serviço.',
+    sub:'Selecione o tipo do seu veículo para ver o preço exato de cada serviço. <strong>Todos os valores já incluem IVA.</strong>',
     vb_coupe:'🚘 Coupé / 2 portas', vb_sedan:'🚗 Sedan / Carrinha / 5 portas', vb_suv:'🚙 SUV / Crossover', vb_truck:'🛻 Pick-up', vb_van:'🚐 Van',
-    note:'<strong>Sinal de 50%</strong> no momento da reserva. Os preços podem variar conforme o estado do veículo. Fale connosco para pacotes personalizados e programas para revendedores.',
+    note:'<strong>Todos os valores incluem IVA.</strong> <strong>Sinal de 50%</strong> no momento da reserva. Os preços podem variar conforme o estado do veículo. Fale connosco para pacotes personalizados e programas para revendedores.',
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Selecione o Tipo', select_areas:'Selecione as Áreas', pricing_label:'Preço por veículo', cargo_label:'Adicionar limpeza da caixa / área de carga',
     book_cta:'Reservar Este Serviço →', quote:'Sob consulta', add_photo:'Adicionar foto',
@@ -209,9 +209,9 @@ const I18N = {
   en: {
     nav_home:'Home', nav_services:'Services', nav_gallery:'Gallery', nav_book:'Book Now',
     eyebrow:'Transparent Pricing', title:'Our Services',
-    sub:'Select your vehicle type to see exact pricing for each service.',
+    sub:'Select your vehicle type to see exact pricing for each service. <strong>All prices include VAT.</strong>',
     vb_coupe:'🚘 Coupe / 2-door', vb_sedan:'🚗 Sedan / Wagon / 5-door', vb_suv:'🚙 SUV / Compact SUV', vb_truck:'🛻 Pickup', vb_van:'🚐 Van',
-    note:'<strong>50% deposit required</strong> at booking. Prices may vary based on vehicle condition. Contact us for custom packages and dealer programs.',
+    note:'<strong>All prices include VAT.</strong> <strong>50% deposit required</strong> at booking. Prices may vary based on vehicle condition. Contact us for custom packages and dealer programs.',
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Select Type', select_areas:'Select Areas', pricing_label:'Pricing by vehicle', cargo_label:'Add cargo bed / cargo area cleaning',
     book_cta:'Book This Service →', quote:'On request', add_photo:'Add photo',
@@ -232,9 +232,9 @@ const I18N = {
   es: {
     nav_home:'Inicio', nav_services:'Servicios', nav_gallery:'Galería', nav_book:'Reservar',
     eyebrow:'Precios Transparentes', title:'Nuestros Servicios',
-    sub:'Selecciona el tipo de tu vehículo para ver el precio exacto de cada servicio.',
+    sub:'Selecciona el tipo de tu vehículo para ver el precio exacto de cada servicio. <strong>Todos los precios incluyen IVA.</strong>',
     vb_coupe:'🚘 Coupé / 2 puertas', vb_sedan:'🚗 Sedán / Familiar / 5 puertas', vb_suv:'🚙 SUV / SUV Compacto', vb_truck:'🛻 Pickup', vb_van:'🚐 Furgoneta',
-    note:'<strong>Depósito del 50%</strong> al reservar. Los precios pueden variar según el estado del vehículo. Contáctanos para paquetes personalizados y programas para concesionarios.',
+    note:'<strong>Todos los precios incluyen IVA.</strong> <strong>Depósito del 50%</strong> al reservar. Los precios pueden variar según el estado del vehículo. Contáctanos para paquetes personalizados y programas para concesionarios.',
     footer:'© 2025 NS Garage · Portugal',
     select_type:'Selecciona el Tipo', select_areas:'Selecciona las Áreas', pricing_label:'Precio por vehículo', cargo_label:'Añadir limpieza de caja / zona de carga',
     book_cta:'Reservar Este Servicio →', quote:'Consultar', add_photo:'Añadir foto',
@@ -263,7 +263,7 @@ function setLang(lang) {
   try { localStorage.setItem('nsLang', lang); } catch(e){}
   document.documentElement.lang = lang === 'pt' ? 'pt-PT' : lang;
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const v = L()[el.dataset.i18n]; if (v !== undefined) el.textContent = v;
+    const v = L()[el.dataset.i18n]; if (v !== undefined) { if (el.dataset.i18n === 'sub') el.innerHTML = v; else el.textContent = v; }
   });
   document.getElementById('pageNote').innerHTML = L().note;
   ['pt','en','es'].forEach(l => document.getElementById('btn-'+l).classList.toggle('active', l===lang));
