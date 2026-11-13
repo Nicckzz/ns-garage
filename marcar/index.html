@@ -1315,7 +1315,8 @@ function calPrev() {
 }
 function calNext() { calDate.setMonth(calDate.getMonth()+1); renderCal(); }
 
-const TIME_SLOTS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'];
+const TIME_SLOTS = (() => { const a = []; for (let m = 8 * 60; m <= 16 * 60 + 30; m += 30) a.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); return a; })();
+const BUFFER_MIN = 30;   // 30 min livres antes/depois de cada serviço
 let bookedRanges = [];
 const toMin = t => parseInt(t.slice(0, 2), 10) * 60 + parseInt(t.slice(3, 5), 10);
 const fmtDur = m => (m % 60 === 0 ? (m / 60) + 'h' : Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0'));
@@ -1336,7 +1337,7 @@ function toggleCargo(on) { bState.cargo = !!on; renderServiceList(); }
 function endTime(t, dur) { const m = toMin(t) + dur; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
 function slotBlocked(t, D) {
   const st = toMin(t);
-  return bookedRanges.some(r => { const bs = toMin(r.t), be = bs + (r.d || 60); return st < be && bs < st + D; });
+  return bookedRanges.some(r => { const bs = toMin(r.t), be = bs + (r.d || 60); return st < be + BUFFER_MIN && bs < st + D + BUFFER_MIN; });
 }
 
 async function selectDate(d) {
