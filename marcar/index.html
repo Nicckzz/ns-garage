@@ -1316,7 +1316,6 @@ function calPrev() {
 function calNext() { calDate.setMonth(calDate.getMonth()+1); renderCal(); }
 
 const TIME_SLOTS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'];
-const CLOSE_MIN = 18 * 60;
 let bookedRanges = [];
 const toMin = t => parseInt(t.slice(0, 2), 10) * 60 + parseInt(t.slice(3, 5), 10);
 const fmtDur = m => (m % 60 === 0 ? (m / 60) + 'h' : Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0'));
@@ -1337,7 +1336,6 @@ function toggleCargo(on) { bState.cargo = !!on; renderServiceList(); }
 function endTime(t, dur) { const m = toMin(t) + dur; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
 function slotBlocked(t, D) {
   const st = toMin(t);
-  if (st + D > CLOSE_MIN) return true;
   return bookedRanges.some(r => { const bs = toMin(r.t), be = bs + (r.d || 60); return st < be && bs < st + D; });
 }
 
